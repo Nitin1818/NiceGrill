@@ -2,7 +2,7 @@ import os
 import sys
 import asyncio
 import logging
-from database.allinone import add_status, del_status, get_status
+from database.allinone import add_status, del_status, get_status, get_storage, backup
 from telethon.errors import rpcerrorlist
 
 class Misc:
@@ -16,8 +16,8 @@ class Misc:
             del_status()
         await add_status(True, msg.chat_id, msg.id)
         os.execl(sys.executable, sys.executable, *sys.argv)
-        exit()
-         
+
+
     async def shutdownxxx(message):
         await message.edit("<b>Shutting down...</b>")
         await message.client.disconnect()
@@ -40,6 +40,6 @@ class Misc:
             stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await update.communicate()
         if stdout:
-            await message.edit("<b>Updated</b>")
-        else:
-            await message.edit("<b>All is up to date</b>")
+            await message.edit(f"<b>{stdout.decode()}</b>")
+        elif stderr:
+            await message.edit("<b>stderr.decode()</b>")
