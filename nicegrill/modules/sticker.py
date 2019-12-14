@@ -112,9 +112,6 @@ class Stickers:
             to_do = await conv.send_message(task)
             await message.client.send_read_acknowledge(conv.chat_id)
             id = None if not packid else await conv.send_message(packid)
-            if "Invalid pack" not in (await conv.get_response()).text:
-                await message.edit("<b>Something's wrong with your pack id</b>")
-                return
             await message.client.send_read_acknowledge(conv.chat_id)
             packname = None if name is True else await conv.send_message(
                 "{}'s Kang Pack".format(message.sender.first_name))
