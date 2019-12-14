@@ -34,12 +34,14 @@ class Misc:
             return
 
     async def updatexxx(message):
+        await message.edit("<b>Updating</b>")
         update = await asyncio.create_subprocess_shell(
-            "git pull && restart",
+            "git init && git remote add origin https://github.com/erenmetesar/NiceGrill &&"
+            "git pull origin master && restart",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await update.communicate()
         if stdout:
-            await message.edit(f"<b>{stdout.decode()}</b>")
+            await message.edit("<b>Updated</b>")
         elif stderr:
             await message.edit(f"<b>stderr.decode()</b>")
