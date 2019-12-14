@@ -20,7 +20,7 @@ class Downloader:
         """Sets a download path, make sure to add / in the end"""
         pathname = utils.get_arg(message)
         if not os.path.exists(pathname):
-            pathname = os.mkdir(pathname, 0o755)
+            os.mkdir(pathname, 0o755)
         add =  f"INSERT INTO downloader (path) VALUES ('{pathname}')"
         delete = "DELETE FROM downloader"
         setpath(delete)
