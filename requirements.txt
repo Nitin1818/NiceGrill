@@ -1,0 +1,13 @@
+telethon
+meval
+mtranslate
+urbandict
+pygdrive3fixed
+google-api-python-client
+oauthclient
+oweatherm
+requests
+pillow
+langdetect
+pySmartDL
+youtube_dl
