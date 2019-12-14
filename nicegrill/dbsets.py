@@ -13,5 +13,5 @@ if not get_auth() or not getPM():
 if not getStats():
     setStats("INSERT INTO stats (id, name, msg) VALUES (1, False, False)")
     
-if not getPath():
-    setPath("INSERT INTO downloader (path) VALUES ('./')")
+if not getpath():
+    setpath("INSERT INTO downloader (path) VALUES ('./')")

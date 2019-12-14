@@ -7,7 +7,7 @@ from database.allinone import setpath, getpath
 from datetime import datetime
 
 DOWNLOADS = {}
-shell = "○"*19
+shell = "◯"*19
 bar = ""
 
 class Downloader:
@@ -42,12 +42,12 @@ class Downloader:
                 f"<b>Downloaded: </b> <i>{dl.get_dl_size(human=True)}</i>\n"
                 f"<b>Estimated: </b> <i>{dl.get_eta(human=True)}</i>\n"
                 f"<b>Status: </b> <i>{dl.get_status().capitalize()}</i>\n"
-                f"<i>{dl.get_progress_bar().replace('-', '○').replace('#', '●').replace('[', '').replace(']', '')}</i>")
+                f"<i>{dl.get_progress_bar().replace('-', '◯').replace('#', '⬤').replace('[', '').replace(']', '')}</i>")
 
     async def tgstatus(message, rec, tot, media, btime, process):
         perc= round((rec/tot)*100)
         if str((tot/rec)/1024) not in message.text:
-            bar = str("●"*int(perc//5) + shell[int(perc//5)::])
+            bar = str("⬤"*int(perc//5) + shell[int(perc//5)::])
             rec = (
                 f"{round(rec/1024, 2)}KB" if not (rec/1024) > 1024
                 else f"{round(rec/1048576, 2)}MB")
