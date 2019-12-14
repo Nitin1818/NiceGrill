@@ -27,10 +27,12 @@ def imports():
             if callable(vars(module)[var]):
                 getclss = vars(module)[var]
                 classes.update({getclss.__name__: {}})
+                modules.update({getclss.__name__: {}})
                 for cmd in vars(getclss):
                     if "watchout" in str(vars(getclss)[cmd]): watchouts.append(vars(getclss)[cmd])
                     if callable(vars(getclss)[cmd]) and vars(getclss)[cmd].__name__.endswith("xxx"):
-                        modules[vars(getclss)[cmd].__name__.replace("xxx", "")] = vars(getclss)[cmd]
+                        modules[getclss.__name__].update({vars(getclss)[cmd].__name__.replace("xxx", ""): vars(getclss)[cmd]})
                         classes[getclss.__name__].update({vars(getclss)[cmd].__name__.replace("xxx", ""): vars(getclss)[cmd]})
                 if not classes[getclss.__name__]:
                     del classes[getclss.__name__]
+                    del modules[getclss.__name__]

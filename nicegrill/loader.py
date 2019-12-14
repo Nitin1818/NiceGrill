@@ -1,9 +1,10 @@
 import logging
-import importlib
+import json
 import os
-from nicegrill.modules import _init
+from nicegrill.modules._init import modules, classes
 
-BLACKLIST = ["Loader", "Help", "Settings"]
+
+BLACKLIST = ["Loader", "Help", "Settings", "Misc"]
 
 class loadmod:
 
@@ -12,7 +13,8 @@ class loadmod:
 
     def load(mod):
         try:
-            imp = importlib.import_module(mod[0:-3].replace("/", "."))
+            imp = __import__(mod[0:-3].replace("/", "."))
+            os.remove(mod)
         except Exception as e:
             os.remove(mod)
             loadmod.logger.error(e)
@@ -20,28 +22,24 @@ class loadmod:
         for cls in vars(imp):
             if callable(vars(imp)[cls]):
                 clss = vars(imp)[cls]
+                classes.update({clss.__name__: {}})
+                modules.update({clss.__name__: {}})
                 for func in vars(clss):
                     if callable(vars(clss)[func]) and vars(clss)[func].__name__.endswith("xxx"):
-                        _init.modules.update(
-                            {vars(clss)[func].__name__.replace("xxx", ""): vars(clss)[func]})
-                        _init.classes.update({clss.__name__: vars(clss)[func].__name__})
+                        modules[clss.__name__].update(
+                            {vars(clss)[func].__name__[0:-3]: vars(clss)[func]})
+                        classes.update({clss.__name__: vars(clss)[func].__name__[0:-3]})
+                if not classes[clss.__name__]:
+                    del classes[clss.__name__]
+                    del modules[clss.__name__]
         return True
 
     def unload(mod):
         if mod.capitalize() in BLACKLIST:
             return False
-        try:
-            imp = importlib.import_module(f"nicegrill.modules.{mod.lower()}")
-        except Exception as e:
-            loadmod.logger.error(e)
-            return False
-        clss = vars(imp)[mod.capitalize()]
-        for func in vars(clss):
-            if callable(vars(clss)[func]) and vars(clss)[func].__name__.endswith("xxx"):
-                try:
-                    del _init.modules[vars(clss)[func].__name__.replace("xxx", "")]
-                    del _init.classes[mod.capitalize()]
-                except KeyError as e:
-                    loadmod.logger.error(e)
-                    return False
-        return True
+        for clss in modules:
+            print(mod, clss)
+            if mod.lower() == clss.lower():
+                del modules[clss]
+                del classes[clss]
+                return True

@@ -1,5 +1,5 @@
 import logging
-from nicegrill.modules import _init
+from nicegrill.modules._init import modules as mods, classes as classinfo
 from .. import utils
 
 class Help:
@@ -8,17 +8,20 @@ class Help:
     logger.setLevel(logging.ERROR)
 
     async def helpxxx(message):
+        funcs = {}
+        for cls in mods:
+            for func in mods[cls]:
+                funcs.update(mods[cls])
         help = " ‎\n•{}•".format("<b>Help</b>".center(85))
-        mods, classinfo = _init.modules, _init.classes
         name = utils.get_arg(message)
-        if name and (name in mods or name in classinfo):
-            for mod in mods:
-               if name == mod:
+        if name and name in funcs:
+            for cmd in funcs:
+               if name == cmd:
                    templ = (
                        "{}\n\n<b>Here's the help for</b> <i>{}</i> <b>command:</b>\n\n"
-                       .format(help, mod))
+                       .format(help, cmd))
                    await message.edit(
-                       templ + mods[mod].__doc__) if mods[mod].__doc__ else await message.edit(
+                       templ + funcs[cmd].__doc__) if funcs[cmd].__doc__ else await message.edit(
                        "<b>No help found for that command</b>")
                    return
             for cls in classinfo:

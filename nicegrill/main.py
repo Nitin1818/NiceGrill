@@ -20,7 +20,10 @@ logger.addHandler(file_handler)
 class main:
 
     async def outgoing(message):
-        mods = _init.modules
+        mods = {}
+        ls = [_init.modules[obj] for obj in _init.modules]
+        for item in ls:
+            mods.update(item)
         prefix = "." if not get_pref() else get_pref()[0][0]
         if getattr(message, "message") and message.text.startswith(prefix):
             if message.text.startswith(prefix*2):

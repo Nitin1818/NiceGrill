@@ -15,12 +15,7 @@ class Loader:
         await message.edit("<b>Module loading...</b>")
         if reply.document and reply.document.attributes[-1].file_name.endswith(".py"):
             file = await reply.download_media()
-            try:
-                path = shutil.move(file, "nicegrill/modules/")
-            except shutil.Error as e:
-                os.remove("nicegrill/modules/" + file)
-                path = shutil.move(file, "nicegrill/modules/")
-            if loader.loadmod.load(path):
+            if loader.loadmod.load(file):
                 await message.edit("<b>Module loaded</b>")
             else:
                 await message.edit("<b>Loading failed</b>")
@@ -29,7 +24,6 @@ class Loader:
         mod = utils.get_arg(message)
         await message.edit("<b>Module unloading...</b>")
         if loader.loadmod.unload(mod):
-            os.remove(f"nicegrill/modules/{mod}.py".lower())
             await message.edit("<b>Module unloaded</b>")
         else:
             Loader.logger.error("")
