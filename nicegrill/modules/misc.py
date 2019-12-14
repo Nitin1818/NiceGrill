@@ -27,7 +27,7 @@ class Misc:
             await message.client.send_file(entity=message.chat_id, file="error.log",
             caption="<b>Here's logs in ERROR level.</b>")
             await message.delete()
-            with open('error.log', 'w'):
+            with open('error.txt', 'w'):
                 pass
         except rpcerrorlist.FilePartsInvalidError as e:
             await message.edit("<b>There is no log in ERROR level</b>")
@@ -42,10 +42,8 @@ class Misc:
             stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await update.communicate()
         if stdout:
-            await message.edit("<b>Updated</b>")
+            await message.edit(f"<b>{stdout.decode()}</b>")
         elif stderr:
             await message.edit(f"<b>{stderr.decode()}</b>")
-            await asyncio.sleep(1)
-            await message.edit("<b>Updated</b>")
         else:
             await message.edit("<b>Update Failed</b>")

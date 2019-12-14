@@ -134,7 +134,7 @@ class Stickers:
             await message.client.send_read_acknowledge(conv.chat_id)
             id = await conv.send_message(
                 "{}sKangPack_{}.{}".format(
-                message.sender.username.capitalize(), message.sender.id, random.randint(99999999)))
+                message.sender.username.capitalize(), message.sender.id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
             set_Packid(id)
             await message.edit(result)

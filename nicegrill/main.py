@@ -8,10 +8,10 @@ from database.allinone import *
 from telethon.sync import TelegramClient
 from nicegrill.modules import _init
 
-logging.basicConfig(filename = 'error.log', level = logging.ERROR, format = '%(asctime)s  %(name)s  %(levelname)s: %(message)s')
+logging.basicConfig(filename = 'error.txt', level = logging.ERROR, format = '%(asctime)s  %(name)s  %(levelname)s: %(message)s')
 
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('error.log')
+file_handler = logging.FileHandler('error.txt')
 file_handler.setLevel(logging.ERROR)
 formatter = logging.Formatter('%(asctime)s  %(name)s  %(levelname)s: %(message)s')
 logger.addHandler(file_handler)
@@ -42,7 +42,7 @@ class main:
                         await message.client.send_file(entity=message.chat_id, message=message, file="error.log",
                             caption="<b>NiceGrill has crashed. Command was .{}.\nCheck logs for more information.</b>".format(cmd))
                         await message.delete()
-                        with open('error.log', 'w'):
+                        with open('error.txt', 'w'):
                             pass
 
     def read(client):
