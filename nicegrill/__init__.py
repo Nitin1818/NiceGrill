@@ -8,7 +8,7 @@ from nicegrill import dbsets
 
 
 API_ID = 1234
-API_HASH = 1234
+API_HASH = "1234"
 
 
 with TelegramClient('NiceGrill', API_ID, API_HASH) as client:
