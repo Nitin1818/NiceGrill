@@ -11,9 +11,6 @@ class Misc:
     logger.setLevel(logging.ERROR)
 
     async def restartxxx(message):
-        if get_storage():
-            up = await message.client.upload_file("database/database.db")
-            await message.client.send_file(get_storage()[0][0], up)
         msg = await message.edit("<b>Restarting...</b>")
         if get_status():
             del_status()
@@ -38,7 +35,7 @@ class Misc:
 
     async def updatexxx(message):
         update = await asyncio.create_subprocess_shell(
-            "git pull",
+            "git pull && restart",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await update.communicate()
