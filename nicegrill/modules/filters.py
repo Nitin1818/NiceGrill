@@ -27,7 +27,7 @@ class Filters:
         name = args[0]
         chatid = message.chat_id
         filters = await get_filters(chatid)
-        if reply and reply.media:
+        if reply and reply.media and not reply.web_preview:
             media = (await message.client.send_file(entity=storage, file=reply.media)).id
         try:
             await del_filter(chatid, name)
