@@ -5,12 +5,16 @@ from nicegrill.main import main
 from nicegrill.modules import _init
 from nicegrill import loader
 from nicegrill import dbsets
+from config import API_HASH, API_ID
 from database.allinone import get_storage
 
 
-API_ID = 1234
-API_HASH = "1234"
-
+if not API_KEY or API_HASH:
+    API_ID = int(input("Enter your API ID:"))
+    API_HASH = input("Enter your API HASH:")
+    file = open("config.py", "w")
+    file.write(f"API_KEY={API_KEY}\nAPI_HASH=\"{API_HASH}\"")
+    file.close()
 
 with TelegramClient('NiceGrill', API_ID, API_HASH) as client:
     client.parse_mode = 'html'
