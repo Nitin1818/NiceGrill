@@ -10,7 +10,7 @@ class Quote:
 
     async def process(msg, reply, client):
         if not os.path.isdir(".tmp"):
-            os.mkdir(".tmp", 0755)
+            os.mkdir(".tmp", 0o755)
             urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/pfp.jpg', '.tmp/pfp.jpg')
             urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/top.jpg', '.tmp/top.jpg')
             urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/mid.jpg', '.tmp/mid.jpg')
