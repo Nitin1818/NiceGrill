@@ -39,7 +39,7 @@ class Downloader:
                 f"<b>Size: </b> <i>{dl.get_final_filesize(human=True)}</i>\n"
                 f"<b>Speed: </b> <i>{dl.get_speed(human=True)}</i>\n"
                 f"<b>Time Passed: </b> <i>{str(datetime.now()-btime)[0:-7]}</i>\n"
-                f"<b>Downloaded: </b> <i>{dl.get_final_filesize(human=True)}</i>\n"
+                f"<b>Downloaded: </b> <i>{dl.get_dl_size(human=True)}</i>\n"
                 f"<b>Estimated: </b> <i>{dl.get_eta(human=True)}</i>\n"
                 f"<b>Status: </b> <i>{dl.get_status().capitalize()}</i>\n"
                 f"<i>{dl.get_progress_bar().replace('-', '○').replace('#', '●').replace('[', '').replace(']', '')}</i>")
@@ -66,7 +66,7 @@ class Downloader:
 
     async def dlxxx(message):
         """Downloads the replied media or input url with a nice progressbar"""
-        path = "" if not getpath() else getpath()[0][0]
+        path = getpath()[0][0]
         target = (
             utils.get_arg(message) if not message.is_reply
             else (await message.get_reply_message()).media)
