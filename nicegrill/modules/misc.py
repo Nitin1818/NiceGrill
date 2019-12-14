@@ -42,7 +42,7 @@ class Misc:
             stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await update.communicate()
         if stdout:
-            await message.edit(f"<b>{stdout.decode()}</b>")
+            await message.edit("<b>All is up to date</b>")
         elif stderr:
             await message.edit(f"<b>{stderr.decode()}</b>")
         else:
