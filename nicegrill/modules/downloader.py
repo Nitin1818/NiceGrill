@@ -12,6 +12,7 @@ bar = ""
 
 class Downloader:
 
+    name = ""
     counter = 0
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
@@ -93,12 +94,14 @@ class Downloader:
                 asyncio.get_event_loop().create_task(
                     Downloader.tgstatus(message, rec, tot, name, time, "Downloaded:")))
             await message.edit(f"<b>Downloaded in:</b> <i>{media}</i>\n")
+            Downloader.name = media.split("/")[-1]
         else:
             dl = SmartDL(target, path, progress_bar=False)
             dl.start(blocking=False)
+            Downloader.name = dl.get_dest().split("/")[-1]
             DOWNLOADS[message.id] = dl
             await Downloader.status(message, dl, message, time)
-        return name
+        return os.path.join(path, Downloader.name)
 
     async def dlstopxxx(message):
         """Stops the ongoing download, only works with url downloads"""

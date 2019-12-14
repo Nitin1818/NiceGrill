@@ -15,7 +15,12 @@ class GoogleDrive:
         """Uploads the replied media or input url to your gdrive with a progressbar"""
         GoogleDrive.drive_service.auth()
         # await message.edit("<b>Check your terminal screen for authorization link</b>")
-        name = await dl.dlxxx(message)
+        arg = utils.get_arg(message)
+        if message.is_reply or arg.startswith("http") or arg.startswith("www"):
+            file = (await dl.dlxxx(message)).split("/")
+        else:
+            if "/" not in arg:
+                file = arg.split("/")
         if getGFolder():
             folder = getGFolder()[0][0]
         elif GoogleDrive.drive_service.list_folders_by_name('Telegram'):
@@ -23,10 +28,10 @@ class GoogleDrive:
         else:
             folder = GoogleDrive.drive_service.create_folder('Telegram')
         await message.edit("<i>Uploading to GDrive</i>")
-        file = GoogleDrive.drive_service.upload_file(name, name, folder)
+        up = GoogleDrive.drive_service.upload_file(file[-1], "/".join(file), folder)
         await message.edit(
-            f"<i>{name}</i> <b>uploaded to your GDrive folder. </b>"
-            f"<a href={GoogleDrive.drive_service.anyone_permission(file)}>Click Here</a> <b>to access it</b>")
+            f"<i>{file[-1]}</i> <b>uploaded to your GDrive folder. </b>"
+            f"<a href={GoogleDrive.drive_service.anyone_permission(up)}>Click Here</a> <b>to access it</b>")
         os.remove(name)
 
 
