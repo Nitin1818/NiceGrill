@@ -97,7 +97,7 @@ class Downloader:
         else:
             dl = SmartDL(target, path, progress_bar=False)
             dl.start(blocking=False)
-            DOWNLOADS[dl.get_dest()] = dl
+            DOWNLOADS[message.id] = dl
             await Downloader.status(message, dl, message, time)
         return name
 
@@ -112,7 +112,7 @@ class Downloader:
         reply = await message.get_reply_message()
         await message.edit("<i>Stopping...</i>")
         for dl in DOWNLOADS:
-            if dl in reply.text:
+            if dl == reply.id:
                 DOWNLOADS[dl].stop()
                 await message.edit("<i>Stopped</i>")
                 del DOWNLOADS[dl]
@@ -139,7 +139,7 @@ class Downloader:
             return
         reply = await message.get_reply_message()
         await message.edit("<i>Pausing...</i>")
-        for dl in DOWNLOADS:
+        for dl == reply.id:
             if dl in reply.text:
                 DOWNLOADS[dl].pause()
                 await message.edit("<i>Paused</i>")
@@ -155,7 +155,7 @@ class Downloader:
         reply = await message.get_reply_message()
         await message.edit("<i>Resuming...</i>")
         for dl in DOWNLOADS:
-            if dl in reply.text:
+            if dl == reply.id:
                 DOWNLOADS[dl].resume()
                 await message.edit("<i>Resumed</i>")
 
