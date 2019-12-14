@@ -2,7 +2,7 @@ import os
 import sys
 import asyncio
 import logging
-from database.allinone import add_status, del_status, get_status, get_storage, backup
+from database.allinone import add_status, del_status, get_status, get_storage
 from telethon.errors import rpcerrorlist
 
 class Misc:
