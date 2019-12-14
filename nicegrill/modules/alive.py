@@ -22,8 +22,8 @@ class Stats:
 
     async def alivexxx(message):
         """Show off to people with my bot using this command"""
-        username = "<i>NiceGrill bot</i>" if not getStats()[0][1] else getStats()[0][1]
-        msg = "<i>Hold on...Whaaa.. I'm alive</i> 🤥🤥" if not getStats()[0][2] else getStats()[0][2]
+        username = getStats()[0][1]
+        msg = getStats()[0][2]
         tot = (
             "<i>{}</i>".format(msg) +
             "<b>\n\nUser's name:</b> <i>{}</i>\n<b>Python version:</b> <i>{}</i>\n"

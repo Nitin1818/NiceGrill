@@ -44,4 +44,8 @@ class Misc:
         if stdout:
             await message.edit("<b>Updated</b>")
         elif stderr:
-            await message.edit(f"<b>stderr.decode()</b>")
+            await message.edit(f"<b>{stderr.decode()}</b>")
+            await asyncio.sleep(1)
+            await message.edit("<b>Updated</b>")
+        else:
+            await message.edit("<b>Update Failed</b>")
