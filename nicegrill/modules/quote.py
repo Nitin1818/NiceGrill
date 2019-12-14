@@ -10,12 +10,13 @@ class Quote:
 
     async def process(msg, reply, client):
         if not os.path.isdir(".tmp"):
-            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/pfp.jpg', 'pfp.jpg')
-            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/top.jpg', 'top.jpg')
-            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/mid.jpg', 'mid.jpg')
-            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/bottom.jpg', 'bottom.jpg')
-            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf', 'Roboto-Medium.ttf')
-            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf', 'Roboto-Regular.ttf')
+            os.mkdir(".tmp", 0755)
+            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/pfp.jpg', '.tmp/pfp.jpg')
+            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/top.jpg', '.tmp/top.jpg')
+            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/mid.jpg', '.tmp/mid.jpg')
+            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/bottom.jpg', '.tmp/bottom.jpg')
+            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf', '.tmp/Roboto-Medium.ttf')
+            urllib.request.urlretrieve('https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf', '.tmp/Roboto-Regular.ttf')
         top = Image.open(".tmp/top.jpg", "r").convert('RGBA') 
         mid = Image.open(".tmp/mid.jpg", "r").convert('RGBA') 
         bottom = Image.open(".tmp/bottom.jpg", "r").convert('RGBA') 
