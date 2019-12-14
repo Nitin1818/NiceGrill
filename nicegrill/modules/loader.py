@@ -20,7 +20,7 @@ class Loader:
             except shutil.Error as e:
                 os.remove("nicegrill/modules/" + file)
                 path = shutil.move(file, "nicegrill/modules/")
-            if nicegrill.loadmod.load(path):
+            if loader.loadmod.load(path):
                 await message.edit("<b>Module loaded</b>")
             else:
                 await message.edit("<b>Loading failed</b>")
@@ -28,7 +28,7 @@ class Loader:
     async def unloadxxx(message):
         mod = utils.get_arg(message)
         await message.edit("<b>Module unloading...</b>")
-        if nicegrill.loadmod.unload(mod):
+        if loader.loadmod.unload(mod):
             os.remove(f"nicegrill/modules/{mod}.py".lower())
             await message.edit("<b>Module unloaded</b>")
         else:
