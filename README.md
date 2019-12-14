@@ -2,7 +2,7 @@
 
 - install the requirements with the line below:
 
-  cd NiceGrill
+  cd NiceGrill\n
   pip install -r requirements.txt
 
 - Run the bot:
