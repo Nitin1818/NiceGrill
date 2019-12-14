@@ -12,7 +12,7 @@ bar = ""
 
 class Downloader:
 
-    counter = -1
+    counter = 0
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
 
@@ -61,7 +61,7 @@ class Downloader:
                 await message.edit(down)
                 Downloader.counter += 1
             else:
-                Downloader.counter = -1
+                Downloader.counter = 0
 
 
     async def dlxxx(message):
