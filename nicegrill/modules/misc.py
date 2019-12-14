@@ -32,3 +32,14 @@ class Misc:
         except rpcerrorlist.FilePartsInvalidError as e:
             await message.edit("<b>There is no log in ERROR level</b>")
             return
+
+    async def updatexxx(message):
+        update = await asyncio.create_subprocess_shell(
+            "git pull",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE)
+        stdout, stderr = await update.communicate()
+        if stdout:
+            await message.edit("<b>Updated</b>")
+        else:
+            await message.edit("<b>All is up to date</b>")
