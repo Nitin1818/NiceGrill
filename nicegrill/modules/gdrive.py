@@ -28,7 +28,17 @@ class GoogleDrive:
         else:
             folder = GoogleDrive.drive_service.create_folder('Telegram')
         await message.edit("<i>Uploading to GDrive</i>")
-        up = GoogleDrive.drive_service.upload_file(file[-1], "/".join(file), folder)
+        try:
+            up = GoogleDrive.drive_service.upload_file(file[-1], "/".join(file), folder)
+        except MemoryError:
+            await message.edit("<b>Your drive is full</b>")
+            return
+        except NameError:
+            await message.edit("<b>This file type is not supported</b>")
+            return
+        except FileNotFoundError:
+            await message.edit("<b>This file doesn't exist</b>")
+            return
         await message.edit(
             f"<i>{file[-1]}</i> <b>uploaded to your GDrive folder. </b>"
             f"<a href={GoogleDrive.drive_service.anyone_permission(up)}>Click Here</a> <b>to access it</b>")
