@@ -6,6 +6,6 @@
   • pip install -r requirements.txt
 
 - Run the bot:
-  • python -m NiceGrill login.py
+  • python -m NiceGrill login
 
 If there are issues while installing the requirements, make sure to install clang and libjpeg-turbo
