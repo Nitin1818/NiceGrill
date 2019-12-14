@@ -15,7 +15,7 @@ async def dbrestore(client):
     if get_storage():
         async for msg in client.iter_messages(get_storage()[0][0]):
             if msg.document and msg.document.attributes[0].file_name == "database.db":
-                client.download_media(msg, "database/database.db")
+                await client.download_media(msg, "database/database.db")
 
 
 with TelegramClient('NiceGrill', API_ID, API_HASH) as client:

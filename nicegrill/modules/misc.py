@@ -45,4 +45,4 @@ class Misc:
         if stdout:
             await message.edit(f"<b>{stdout.decode()}</b>")
         elif stderr:
-            await message.edit("<b>stderr.decode()</b>")
+            await message.edit(f"<b>stderr.decode()</b>")
