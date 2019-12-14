@@ -139,8 +139,8 @@ class Downloader:
             return
         reply = await message.get_reply_message()
         await message.edit("<i>Pausing...</i>")
-        for dl == reply.id:
-            if dl in reply.text:
+        for dl in DOWNLOADS:
+            if dl == reply.id:
                 DOWNLOADS[dl].pause()
                 await message.edit("<i>Paused</i>")
 
