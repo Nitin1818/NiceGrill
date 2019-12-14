@@ -37,7 +37,7 @@ class Misc:
         await message.edit("<b>Updating</b>")
         update = await asyncio.create_subprocess_shell(
             "git init && git remote add origin https://github.com/erenmetesar/NiceGrill &&"
-            "git pull origin master && restart",
+            "git pull origin master",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE)
         stdout, stderr = await update.communicate()
