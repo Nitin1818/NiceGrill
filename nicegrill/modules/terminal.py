@@ -23,7 +23,7 @@ class Terminal:
             "\n<b>⬤ Input:</b>\n\n<i>{}</i>\n\n<b>⬤ Output:</b>\n\n<code>"
                 .format(cmd))
         if process._transport._closed is not False:
-            out, der = await process.communicate()
+            der, out = await process.communicate()
             output += (
                 "<i>{}</i>".format(out.decode()))
             await template.edit(
