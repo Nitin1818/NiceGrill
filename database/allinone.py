@@ -272,7 +272,7 @@ def auth(command):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS auth (id PRIMARY KEY)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS auth (id)")
         cursor.execute(command)
         connection.commit()
     except Exception:
@@ -445,3 +445,22 @@ def getGFolder():
         return folderid
     except Exception:
         return None
+
+# FUNCS
+
+def store_func(command):
+    connection = sqlite3.connect("database/database.db")
+    cursor = connection.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS loadmods (funcs, classes)")
+    cursor.execute(command)
+    connection.commit()
+
+def get_func():
+    try:
+        connection = sqlite3.connect("database/database.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM loadmods")
+        all = cursor.fetchall()
+        return all
+    except Exception:
+        return {}

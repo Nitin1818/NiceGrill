@@ -162,7 +162,7 @@ will be deleted when the idiot passes the message limit"""
 
     async def watchout(message):
         if message.sender_id != (await message.client.get_me()).id and type(message.to_id) is tl.types.PeerUser:
-            if message.sender.bot:
+            if getattr(message.sender, "bot", True):
                 return
             AntiPM.ALLOWED.clear()
             [AntiPM.ALLOWED.append(ls[0]) for ls in get_auth()]
