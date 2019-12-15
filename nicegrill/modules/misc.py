@@ -17,7 +17,7 @@ class Misc:
         await add_status(True, msg.chat_id, msg.id)
         if os.path.isfile("database/database.db") and not os.path.getsize("database/database.db") == 0:
             db = await message.client.upload_file("database/database.db")
-            await message.client.send_file(message.sender.id, db)
+            await message.client.send_file((await message.client.get_me()).id, db)
         os.execl(sys.executable, sys.executable, *sys.argv)
 
 
