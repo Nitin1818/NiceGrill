@@ -18,16 +18,16 @@ class Terminal:
         process = await asyncio.create_subprocess_shell(
             cmd, 
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,)  
+            stderr=asyncio.subprocess.STDOUT,)  
         template = await message.edit(
             "\n<b>⬤ Input:</b>\n\n<i>{}</i>\n\n<b>⬤ Output:</b>\n\n<code>"
                 .format(cmd))
         if process._transport._closed is not False:
             out, der = await process.communicate()
             output += (
-                "<i>{}{}</i>".format(out.decode()))
+                "<i>{}</i>".format(out.decode()))
             await template.edit(
-                template.text + output if out.decode() and not der.decode()
+                template.text + output if out.decode()
                 else template.text + "\n\n<i>Process exited with code {}</i>"
                 .format(process.returncode))
             return
