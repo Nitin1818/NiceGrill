@@ -9,7 +9,7 @@ from config import API_HASH, API_ID
 from database.allinone import get_storage
 
 
-if not API_ID or API_HASH:
+if not API_ID or not API_HASH:
     API_ID = int(input("Enter your API ID:"))
     API_HASH = input("Enter your API HASH:")
     file = open("config.py", "w")
