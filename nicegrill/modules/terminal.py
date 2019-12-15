@@ -25,7 +25,7 @@ class Terminal:
         if process._transport._closed is not False:
             out, der = await process.communicate()
             output += (
-                "<i>{}{}</i>".format(out.decode(), der.decode()))
+                "<i>{}{}</i>".format(out.decode()))
             await template.edit(
                 template.text + output if out.decode() and not der.decode()
                 else template.text + "\n\n<i>Process exited with code {}</i>"
