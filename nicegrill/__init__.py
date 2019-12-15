@@ -12,6 +12,7 @@ import sqlite3
 import time
 import os
 
+
 if not API_ID or not API_HASH:
     API_ID = int(input("Enter your API ID:"))
     API_HASH = input("Enter your API HASH:")
@@ -25,6 +26,8 @@ async def restore(client):
             await client.download_media(msg)
     qtables = "SELECT * FROM sqlite_master WHERE type='table'"
     os.remove("database/database.db")
+    if not os.path.isfile("database.db"):
+        return
     olddb = sqlite3.connect("database.db")
     tables = pd.read_sql(qtables, olddb)
     newdb = sqlite3.connect("database/database.db")
