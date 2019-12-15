@@ -18,7 +18,7 @@ class Terminal:
         process = await asyncio.create_subprocess_shell(
             cmd, 
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,)  
+            stderr=asyncio.subprocess.STDOUT,)  
         template = await message.edit(
             "\n<b>⬤ Input:</b>\n\n<i>{}</i>\n\n<b>⬤ Output:</b>\n\n<code>"
                 .format(cmd))
