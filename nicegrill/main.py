@@ -39,7 +39,7 @@ class main:
                     except TypeError:
                         logger.exception("")
                         await message.edit("<b>Loading..</b>")
-                        await message.client.send_file(entity=message.chat_id, message=message, file="error.log",
+                        await message.client.send_file(entity=message.chat_id, message=message, file="error.txt",
                             caption="<b>NiceGrill has crashed. Command was .{}.\nCheck logs for more information.</b>".format(cmd))
                         await message.delete()
                         with open('error.txt', 'w'):

@@ -11,3 +11,6 @@ pillow
 langdetect
 pySmartDL
 youtube_dl
+cython
+numpy
+pandas

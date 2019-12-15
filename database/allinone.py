@@ -345,7 +345,7 @@ def set_Packid(id):
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS stickers (id TEXT)")
-        cursor.execute("INSERT INTO stickers (id) VALUES (?)", (id,))
+        cursor.execute(f"INSERT INTO stickers (id) VALUES ('{id}')")
         connection.commit()
     except Exception:
         logger.exception("")
@@ -357,8 +357,8 @@ def get_Packid():
     cursor = connection.cursor()
     try:
         cursor.execute("SELECT * FROM stickers")
-        msg = cursor.fetchall()
-        return msg
+        id = cursor.fetchall()
+        return id
     except sqlite3.OperationalError as e:
         return None
 
