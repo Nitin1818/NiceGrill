@@ -12,7 +12,7 @@ async def add_note(chatid, key, value, file):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS notes (chat, key PRIMARY KEY, value, id)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS notes (chat, key, value, id)")
         cursor.execute("INSERT INTO notes (chat , key, value, id) VALUES (?, ?, ?, ?)", (chatid, key, value, file))
         connection.commit()
     except Exception:
@@ -71,7 +71,7 @@ async def add_filter(chatid, key, value, file):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS filters (chat, key PRIMARY KEY, value, id)")
+        cursor.execute("CREATE TABLE IF NOT EXISTS filters (chat, key, value, id)")
         cursor.execute("INSERT INTO filters (chat , key, value, id) VALUES (?, ?, ?, ?)", (chatid, key, value, file))
         connection.commit()
     except Exception:
