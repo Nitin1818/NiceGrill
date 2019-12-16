@@ -38,7 +38,7 @@ class Misc:
             return
 
     async def updatexxx(message):
-        if not utils.get_arg(message):
+        if not utils.get_arg(message).strip():
             updates = os.popen(
                 "git log --pretty=format:'%s by %an (%cr)' --abbrev-commit"
                 " --date=relative master..origin/master").read()
