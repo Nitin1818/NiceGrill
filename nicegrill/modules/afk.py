@@ -69,7 +69,7 @@ them later. Check your storage channel."""
             time = str(timedelta(seconds=delta.seconds)).split(":")
             days = "" if delta.days == 0 else str(delta.days) + " days"
             hours = "" if time[0] == "0" else time[0] + " hours"
-            minutes = "" if time[1] == "00" else time[1] + " minutes and"
+            minutes = "" if time[1] == "00" else time[1] + " minutes and "
             then = then.strftime('%Y-%m-%d %H:%M:%S')
             afkmsg = ("<b>I'm AFK for the moment\nReason:</b> <i>{}</i>\n\n"
                    "<b>I've been AFK for {}{}{}{} seconds.\nAFK time:</b> <i>{}</i>"
