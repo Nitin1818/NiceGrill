@@ -38,14 +38,17 @@ class Misc:
             return
 
     async def updatexxx(message):
-        if not utils.get_arg(message).strip():
+        if not utils.get_arg(message):
             updates = os.popen(
                 "git log --pretty=format:'%s by %an (%cr)' --abbrev-commit"
                 " --date=relative master..origin/master").read()
             if updates:
                 await message.edit(
                     f"<b>⬤ Updates:\n\n</b>\n\n<i>{updates}</i>\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
-                return
+            else:
+                await message.edit("<i>Well, no updates yet</i>")
+            return
+        print(utils.get_arg(message))
         await message.edit("<i>Updating</i>")
         update = os.popen("git pull").read()
         if update:

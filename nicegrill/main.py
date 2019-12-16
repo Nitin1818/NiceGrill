@@ -64,9 +64,7 @@ class main:
         if status:
             try:
                 await client.edit_message(entity=chat, text="<b>Restarted</b>", message=status[0][1])
-            except ValueError:
-                pass
-            except errors.MessageNotModifiedError:
+            except Exception:
                 pass
 
     async def storage(client):
