@@ -1,9 +1,10 @@
 import os
 import sys
-import asyncio
+import os
 import logging
 from database.allinone import add_status, del_status, get_status
 from telethon.errors import rpcerrorlist
+from .. import utils
 
 class Misc:
 
@@ -37,15 +38,17 @@ class Misc:
             return
 
     async def updatexxx(message):
-        await message.edit("<b>Updating</b>")
-        update = await asyncio.create_subprocess_shell(
-            "git pull",
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE)
-        stdout, stderr = await update.communicate()
-        if stdout:
-            await message.edit("<b>All is up to date</b>")
-        elif stderr:
-            await message.edit(f"<b>{stderr.decode()}</b>")
+        if not utils.get_arg(message):
+            updates = os.popen(
+                "git log --pretty=format:'%s by %an (%cr)' --abbrev-commit"
+                " --date=relative master..origin/master").read()
+            if updates:
+                await message.edit(
+                    f"<b>⬤ Updates:\n\n</b>\n\n<i>{updates}</i>\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
+                return
+        await message.edit("<i>Updating</i>")
+        update = os.popen("git pull").read()
+        if update:
+            await message.edit(f"<i>{update}</i>")
         else:
-            await message.edit("<b>Update Failed</b>")
+            await message.edit("<i>Update Failed</i>")
