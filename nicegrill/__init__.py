@@ -34,7 +34,8 @@ async def restore(client):
     newdb = sqlite3.connect("database/database.db")
     newcur = newdb.cursor()
     for table in tables.index:
-        oldcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
+        newcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
+        newdb.commit()
         newcur.execute(tables.sql[table])
         qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
         qcols.to_sql(tables.name[table], newdb, index=False, if_exists="append")
