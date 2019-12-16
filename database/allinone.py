@@ -498,7 +498,7 @@ def getGFolder():
 def store_func(command):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS loadmods (funcs, classes)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS loadmods (name, links)")
     cursor.execute(command)
     connection.commit()
 

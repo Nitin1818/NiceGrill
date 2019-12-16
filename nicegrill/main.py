@@ -47,9 +47,9 @@ class main:
 
     def read(client):
         watchouts = _init.watchouts
-        for ind in range(len(watchouts)):
+        for watchout in watchouts:
             client.add_event_handler(functools.partial(
-                watchouts[ind]),
+                watchout),
                 events.NewMessage(outgoing=True, incoming=True, forwards=False))
         loop = asyncio.get_event_loop()
         rest = loop.create_task(main.restart(client))

@@ -1,5 +1,6 @@
 from .. import utils, loader
 from nicegrill.modules import _init
+from database.allinone import store_func, get_func
 import logging
 import urllib
 import shutil
@@ -15,7 +16,7 @@ class Loader:
         await message.edit("<b>Module loading...</b>")
         if reply.document and reply.document.attributes[-1].file_name.endswith(".py"):
             file = await reply.download_media()
-            if loader.loadmod.load(file):
+            if loader.loadmod.load(file, message.client):
                 await message.edit("<b>Module loaded</b>")
             else:
                 await message.edit("<b>Loading failed</b>")
@@ -23,7 +24,9 @@ class Loader:
     async def unloadxxx(message):
         mod = utils.get_arg(message)
         await message.edit("<b>Module unloading...</b>")
-        if loader.loadmod.unload(mod):
+        if loader.loadmod.unload(mod, message.client):
+            if mod.lower() +".py" in str(get_func()):
+                store_func(f"DELETE FROM loadmods WHERE name='{mod.lower()}.py'")
             await message.edit("<b>Module unloaded</b>")
         else:
             Loader.logger.error("")
@@ -31,4 +34,14 @@ class Loader:
 
 
     async def dloadxxx(message):
-        pass
+        link = utils.get_arg(message)
+        name = link.split("/")[-1].lower()
+        mod = urllib.request.urlretrieve(link, "./" + name)
+        if loader.loadmod.load(name, message.client):
+            if get_func() and link in str(get_func):
+                store_func(f"UPDATE loadmods SET name='{name}', links='{link}'")
+            else:
+                store_func(f"INSERT INTO loadmods (name, links) VALUES ('{name}','{link}')")
+            await message.edit("<b>Module loaded</b>")
+        else:
+            await message.edit("<b>Loading failed</b>")
