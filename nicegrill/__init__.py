@@ -29,14 +29,13 @@ async def restore(client):
     if not os.path.isfile("database.db"):
         return
     olddb = sqlite3.connect("database.db")
+    oldcur = olddb.cursor()
     tables = pd.read_sql(qtables, olddb)
     newdb = sqlite3.connect("database/database.db")
     newcur = newdb.cursor()
     for table in tables.index:
-        try:
-            newcur.execute(tables.sql[table])
-        except Exception:
-            pass
+        oldcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
+        newcur.execute(tables.sql[table])
         qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
         qcols.to_sql(tables.name[table], newdb, index=False, if_exists="append")
     os.system("rm *.db*")

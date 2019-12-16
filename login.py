@@ -24,18 +24,18 @@ async def restore(client):
     async for msg in client.iter_messages((await client.get_me()).id, limit=2):
         if msg.document and msg.document.attributes[0].file_name == "database.db":
             await client.download_media(msg)
+            await msg.delete()
     qtables = "SELECT * FROM sqlite_master WHERE type='table'"
     if not os.path.isfile("database.db"):
         return
     olddb = sqlite3.connect("database.db")
+    oldcur = olddb.cursor()
     tables = pd.read_sql(qtables, olddb)
     newdb = sqlite3.connect("database/database.db")
     newcur = newdb.cursor()
     for table in tables.index:
-        try:
-            newcur.execute(tables.sql[table])
-        except Exception:
-            pass
+        oldcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
+        newcur.execute(tables.sql[table])
         qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
         qcols.to_sql(tables.name[table], newdb, index=False, if_exists="append")
     os.system("rm *.db*")
