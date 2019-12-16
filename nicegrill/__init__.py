@@ -24,6 +24,7 @@ async def restore(client):
     async for msg in client.iter_messages((await client.get_me()).id, limit=2):
         if msg.document and msg.document.attributes[0].file_name == "database.db":
             await client.download_media(msg)
+            await msg.delete()
     qtables = "SELECT * FROM sqlite_master WHERE type='table'"
     if not os.path.isfile("database.db"):
         return
