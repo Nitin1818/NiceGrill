@@ -64,6 +64,53 @@ async def get_note(chatid, key):
         logger.exception("")
 
 
+
+#  SNIPS
+
+def set_snip(command):
+    try:
+        connection = sqlite3.connect("database/database.db")
+        cursor = connection.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS snips (name, value, media BOOL)")
+        cursor.execute(command)
+        connection.commit()
+    except Exception:
+        logger.exception("")
+
+
+def get_snip():
+    connection = sqlite3.connect("database/database.db")
+    cursor = connection.cursor()
+    try:
+        cursor.execute("SELECT * FROM snips")
+        snips = cursor.fetchall()
+        return snips
+    except sqlite3.OperationalError as e:
+        return None
+
+def others(command):
+    try:
+        connection = sqlite3.connect("database/database.db")
+        cursor = connection.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS others (other)")
+        cursor.execute(command)
+        connection.commit()
+    except Exception:
+        logger.exception("")
+
+
+def get_others():
+    connection = sqlite3.connect("database/database.db")
+    cursor = connection.cursor()
+    try:
+        cursor.execute("SELECT * FROM others")
+        others = cursor.fetchall()
+        return others
+    except sqlite3.OperationalError as e:
+        return None
+
+
+
 #  Filters
 
 
