@@ -58,6 +58,6 @@ class Misc:
         if "up to date" not in update:
             await message.edit(f"<i>Succesfully Updated</i>")
             await asyncio.sleep(1.5)
-            await Misc.restart(message)
+            await Misc.restartxxx(message)
         else:
             await message.edit(f"<i>{update}</i>")
