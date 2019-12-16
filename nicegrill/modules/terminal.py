@@ -12,13 +12,12 @@ class Terminal:
     FWCONTROL = 0
 
     async def termxxx(message):
-        """Allows you to use terminal commands"""
         output = "\n\n"
         cmd = utils.get_arg(message)
         process = await asyncio.create_subprocess_shell(
             cmd, 
             stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.STDOUT,)  
+            stderr=asyncio.subprocess.PIPE,)  
         template = await message.edit(
             "\n<b>⬤ Input:</b>\n\n<i>{}</i>\n\n<b>⬤ Output:</b>\n\n<code>"
                 .format(cmd))
