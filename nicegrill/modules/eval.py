@@ -3,6 +3,7 @@ from .. import utils
 import logging
 import traceback
 import sys
+import html
 
 class Python:
 
@@ -23,7 +24,7 @@ class Python:
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
 
-        await message.edit(caption + "<code>" + str(res) + "</code>")
+        await message.edit(caption + "<code>" + html.escape(str(res)) + "</code>")
 
     async def execxxx(message):
         """A nice tool (like you 🥰) to test python codes
