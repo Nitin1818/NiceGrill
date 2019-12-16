@@ -1,5 +1,6 @@
 import time
 import asyncio
+import subprocess
 import logging
 from .. import utils
 from telethon.errors.rpcerrorlist import MessageTooLongError
@@ -22,13 +23,9 @@ class Terminal:
             "\n<b>⬤ Input:</b>\n\n<i>{}</i>\n\n<b>⬤ Output:</b>\n\n<code>"
                 .format(cmd))
         if process._transport._closed is not False:
-            out, der = await process.communicate()
             output += (
-                "<i>{}{}</i>".format(out.decode(), der.decode()))
-            await template.edit(
-                template.text + output if out.decode() and not der.decode()
-                else template.text + "\n\n<i>Process exited with code {}</i>"
-                .format(process.returncode))
+                "<i>{}</i>".format(subprocess.getstatusoutput(cmd)[1]))
+            await template.edit(template.text + output)
             return
         while process._transport._closed is False:  
             output += (await process.stdout.readline()).decode().rstrip() + "\n\n"
