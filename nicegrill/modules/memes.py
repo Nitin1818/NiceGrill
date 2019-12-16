@@ -19,6 +19,14 @@ class Memes:
                  msg[chr] = msg[chr].lower()
         await message.edit("".join(msg))
 
+
+    async def ratexxx(message):
+        if not message.is_reply:
+            await message.edit("<i>Reply to a message first</i>")
+            return
+        await message.edit(f"<i>This person is {random.randint(0,101)}% gay</i>")
+
+
     async def watchout(message):
         if message.text.lower() == "yey":
             for i in range(10):
