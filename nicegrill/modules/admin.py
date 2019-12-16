@@ -136,7 +136,7 @@ class Admin:
         add(command)
         try:
             await message.client(EditBannedRequest(chat, user, MUTE))
-            await message.edit("<b>Successfully muted</b>")
+            await message.edit("<b>Muted</b>")
         except TypeError:
             await message.edit("<b>You need to be in a chat to do this</b>")
             return
@@ -165,7 +165,7 @@ class Admin:
         try:
             await message.client(EditBannedRequest(chat, user, UNMUTE))
             # add_unmuted(user)
-            await message.edit("<b>Successfully unmuted</b>")
+            await message.edit("<b>Unmuted</b>")
         except TypeError:
             await message.edit("<b>You need to be in a chat to do this</b>")
             return
@@ -250,16 +250,6 @@ class Admin:
     async def pinxxx(message):
         reply = await message.get_reply_message()
         loud = True if utils.get_arg(message) == "loud" else False
-        if not reply:
-            await message.edit("<b>Reply to a message first.</b>")
-            return
-        await message.client.pin_message(
-            message.input_chat, reply.id, notify=loud)
-        await message.edit("<b>Pinned succesfully.</b>")
-
-
-    async def unpinxxx(message):
-        reply = await message.get_reply_message()
         if not reply:
             await message.edit("<b>Reply to a message first.</b>")
             return
