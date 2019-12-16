@@ -18,7 +18,7 @@ class Stats:
         a = datetime.now()
         await message.edit("<i>Ping...</i>")
         b = datetime.now()
-        await message.edit("<i>Pong... {}ms</i>".format((b - a).microseconds / 1000))
+        await message.edit("<i>Pong... {}ms</i>".format(round((b - a).microseconds / 1000)))
 
     async def alivexxx(message):
         """Show off to people with my bot using this command"""
