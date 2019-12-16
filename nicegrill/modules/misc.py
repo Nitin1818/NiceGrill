@@ -40,8 +40,10 @@ class Misc:
     async def updatexxx(message):
         if not utils.get_arg(message):
             os.popen("git fetch")
+            await message.edit("<i>Checking...</i>")
+            await asyncio.sleep(1)
             updates = os.popen(
-                "git log --pretty=format:'%s by %an (%cr)' --abbrev-commit"
+                "git log --pretty=format:'%s - %an (%cr)' --abbrev-commit"
                 " --date=relative master..origin/master").readlines()
             if updates:
                 ls = "<b>Updates:</b>\n\n"
