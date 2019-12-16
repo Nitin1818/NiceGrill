@@ -44,7 +44,7 @@ class Misc:
                 " --date=relative master..origin/master").read()
             if updates:
                 await message.edit(
-                    f"<b>⬤ Updates:\n\n</b>\n\n<i>{updates}</i>\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
+                    f"<b>⬤ Updates:\n\n</b><i>{updates}</i>\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
             else:
                 await message.edit("<i>Well, no updates yet</i>")
             return
