@@ -1,6 +1,6 @@
 import os
 import sys
-import os
+import asyncio
 import logging
 from database.allinone import add_status, del_status, get_status
 from telethon.errors import rpcerrorlist
@@ -39,19 +39,25 @@ class Misc:
 
     async def updatexxx(message):
         if not utils.get_arg(message):
+            os.popen("git fetch")
             updates = os.popen(
                 "git log --pretty=format:'%s by %an (%cr)' --abbrev-commit"
-                " --date=relative master..origin/master").read()
+                " --date=relative master..origin/master").readlines()
             if updates:
+                ls = "<b>Updates:</b>\n\n"
+                for i in updates:
+                    ls +=f"◍  <i>{i.capitalize()}</i>"
                 await message.edit(
-                    f"<b>⬤ Updates:\n\n</b><i>{updates}</i>\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
+                    f"{ls}\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
             else:
                 await message.edit("<i>Well, no updates yet</i>")
             return
         print(utils.get_arg(message))
         await message.edit("<i>Updating</i>")
         update = os.popen("git pull").read()
-        if update:
-            await message.edit(f"<i>{update}</i>")
+        if "up to date" not in update:
+            await message.edit(f"<i>Succesfully Updated</i>")
+            await asyncio.sleep(1.5)
+            await Misc.restart(message)
         else:
-            await message.edit("<i>Update Failed</i>")
+            await message.edit(f"<i>{update}</i>")
