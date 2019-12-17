@@ -68,6 +68,12 @@ class main:
                 pass
 
     async def storage(client):
+        storages = []
+        for storage in get_storage():
+            storages.append((await client.get_entity(storage[0])).id)
+        del_storage()
+        for storage in storages:
+            add_storage(storage)
         controller = None if not get_storage() else get_storage()
         if not controller:
             channel = await client(functions.channels.CreateChannelRequest(
@@ -76,5 +82,5 @@ class main:
             add_storage(channel.updates[1].channel_id)
             controller = get_storage()
         async for chat in client.iter_dialogs():
-            if chat.id == (-100 + controller[0][0]):
+            if chat.id == int(str(-100) + str(controller[0][0])):
                 return
