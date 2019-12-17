@@ -9,7 +9,7 @@ class Snips:
     """Saves some texts to call on them literally anywhere and anytime"""
 
     async def snipxxx(message):
-        """Adds a snip into the list."""
+        """Adds a snip into the list. Separate it with comma(,)"""
         args = utils.arg_split_with(message, ",")
         reply = await message.get_reply_message()
         name = args[0]
