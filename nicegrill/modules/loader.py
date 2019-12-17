@@ -30,7 +30,7 @@ class Loader:
             await message.edit("<b>Module unloaded</b>")
         else:
             Loader.logger.error("")
-            await message.edit("<b>Unloading failed</b>")
+            await message.edit("<b>Module not unloaded</b>")
 
 
     async def dloadxxx(message):
