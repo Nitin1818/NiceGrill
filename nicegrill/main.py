@@ -78,9 +78,3 @@ class main:
         async for chat in client.iter_dialogs():
             if chat.id == (-100 + controller[0][0]):
                 return
-            else:
-                del_storage()
-                channel = await client(functions.channels.CreateChannelRequest(
-                    title='NiceGrill Storage(DO NOT DELETE)',
-                    about='Storage channel for your files'))
-                add_storage(channel.updates[1].channel_id)
