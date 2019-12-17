@@ -35,11 +35,11 @@ async def restore(client):
     newcur = newdb.cursor()
     for table in tables.index:
         newcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
-        newdb.commit()
         newcur.execute(tables.sql[table])
         qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
         qcols.to_sql(tables.name[table], newdb, index=False, if_exists="append")
     os.system("rm *.db*")
+    newdb.commit()
     olddb.close()
     newdb.close()
 

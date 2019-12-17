@@ -78,11 +78,9 @@ class main:
         async for chat in client.iter_dialogs():
             if chat.id == (-100 + controller[0][0]):
                 return
-        try:
-            (await client.get_entity(controller[0][0]))
-        except Exception:
-            del_storage()
-            channel = await client(functions.channels.CreateChannelRequest(
-                title='NiceGrill Storage(DO NOT DELETE)',
-                about='Storage channel for your files'))
-            add_storage(channel.updates[1].channel_id)
+            else:
+                del_storage()
+                channel = await client(functions.channels.CreateChannelRequest(
+                    title='NiceGrill Storage(DO NOT DELETE)',
+                    about='Storage channel for your files'))
+                add_storage(channel.updates[1].channel_id)
