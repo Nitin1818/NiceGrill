@@ -28,7 +28,7 @@ class Python:
         try:
             await message.edit(send.format(res))
         except MessageTooLongError:
-            sent = await message.edit(send.format(res[0:4000]))
+            sent = await message.edit(send.format(res[0:4096]))
             for i in range(len(res)//4096):
                 res = res[0:4096]
                 await message.reply(f"<code>{res}</code>")
