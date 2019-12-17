@@ -70,7 +70,10 @@ class main:
     async def storage(client):
         storages = []
         for storage in get_storage():
-            storages.append((await client.get_entity(storage[0])).id)
+            try:
+                storages.append((await client.get_entity(storage[0])).id)
+            except:
+                pass
         del_storage()
         for storage in storages:
             add_storage(storage)
