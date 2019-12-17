@@ -31,7 +31,7 @@ class Python:
             sent = await message.edit(send.format(res[0:4000]))
             for i in range(len(res)//4096):
                 res = res[0:4096]
-                await message.reply(f"<code>{res}</code>")
+                await message.reply(f"<code>{html.escape(res)}</code>")
 
     async def execxxx(message):
         """A nice tool (like you 🥰) to test python codes
