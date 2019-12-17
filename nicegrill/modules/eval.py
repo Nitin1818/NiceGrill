@@ -1,6 +1,7 @@
 from meval import meval
 from .. import utils
 from telethon.errors.rpcerrorlist import MessageTooLongError
+from nicegrill.modules._init import cmds
 import logging
 import traceback
 import sys
@@ -20,7 +21,7 @@ class Python:
         caption = "<b>⬤ Evaluated expression:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(args)
         try:
             res = html.escape(str(await meval(args, globals(), **await Python.funcs(message))))
-        except Exception as e:
+        except Exception:
             caption = "<b>⬤ Evaluation failed:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(args)
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
@@ -46,6 +47,10 @@ There's no output on this one tho"""
     async def funcs(message):
         Python.reply = await message.get_reply_message()
         Python.message = message
-        print(Python.reply)
         return {"message": message, "reply": await message.get_reply_message(),
-               "client": message.client, "getme": (await message.client.get_me()).id, "run": utils.run}
+               "client": message.client, "getme": (await message.client.get_me()).id, "run": utils.run,
+               "dispatch": Python.dispatch}
+
+
+    def dispatch(cmd, msg):
+        return cmds[cmd](msg)
