@@ -19,19 +19,19 @@ class Python:
         args = utils.get_arg(message).strip()
         caption = "<b>⬤ Evaluated expression:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(args)
         try:
-            res = str(await meval(args, globals(), **await Python.funcs(message)))
+            res = html.escape(str(await meval(args, globals(), **await Python.funcs(message))))
         except Exception as e:
             caption = "<b>⬤ Evaluation failed:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(args)
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
-        send = caption + "<code>" + html.escape("{}") + "</code>"
+        send = caption + "<code>{}</code>"
         try:
             await message.edit(send.format(res))
         except MessageTooLongError:
             sent = await message.edit(send.format(res[0:4000]))
             for i in range(len(res)//4096):
                 res = res[0:4096]
-                await message.reply(f"<code>{html.escape(res)}</code>")
+                await message.reply(f"<code>{res}</code>")
 
     async def execxxx(message):
         """A nice tool (like you 🥰) to test python codes
