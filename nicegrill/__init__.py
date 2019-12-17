@@ -39,7 +39,7 @@ async def restore(client):
         newcur.execute(tables.sql[table])
         qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
         qcols.to_sql(tables.name[table], newdb, index=False, if_exists="append")
-    os.system("rm ../*.db*")
+    os.system("rm *.db*")
     olddb.close()
     newdb.close()
 
