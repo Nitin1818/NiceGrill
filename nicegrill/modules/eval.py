@@ -1,7 +1,7 @@
 from meval import meval
 from .. import utils
 from telethon.errors.rpcerrorlist import MessageTooLongError
-from nicegrill.modules._init import cmds
+from ._init  import cmds
 import logging
 import traceback
 import sys
