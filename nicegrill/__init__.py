@@ -48,9 +48,9 @@ with TelegramClient('NiceGrill', API_ID, API_HASH) as client:
     asyncio.get_event_loop().create_task(restore(client))
     client.parse_mode = 'html'
     _init.loads()
-    loop = asyncio.get_event_loop()
-    task = loop.create_task(main.storage(client))
-    loop.run_until_complete(task)
+    #loop = asyncio.get_event_loop()
+    #task = loop.create_task(main.storage(client))
+    #loop.run_until_complete(task)
     main.read(client)
     client.add_event_handler(
        functools.partial(main.outgoing),
