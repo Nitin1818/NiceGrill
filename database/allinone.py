@@ -237,6 +237,7 @@ def add_storage(channel):
         cursor.execute("CREATE TABLE IF NOT EXISTS storage (id)")
         cursor.execute("INSERT INTO storage (id) VALUES (?)", (channel,))
         connection.commit()
+        connection.close()
     except Exception:
         logger.exception("")
         return None
