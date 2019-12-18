@@ -74,22 +74,16 @@ class main:
                 pass
 
     async def storage(client):
-        storages = []
-        for storage in get_storage() if get_storage() else []:
+        if get_storage():
             try:
-                storages.append((await client.get_entity(storage[0])).id)
-            except BaseException:
-                pass
-        del_storage()
-        for storage in storages:
-            add_storage(storage)
-        controller = None if not get_storage() else get_storage()
-        if not controller:
+                await client.get_entity(get_storage[0][0])
+            except ValueError:
+                 channel = await client(functions.channels.CreateChannelRequest(
+                     title='NiceGrill Storage(DO NOT DELETE)',
+                     about='Storage channel for your files'))
+        else:
             channel = await client(functions.channels.CreateChannelRequest(
-                title='NiceGrill Storage(DO NOT DELETE)',
-                about='Storage channel for your files'))
-            add_storage(channel.updates[1].channel_id)
-            controller = get_storage()
-        async for chat in client.iter_dialogs():
-            if chat.id == int(str(-100) + str(controller[0][0])):
-                return
+                     title='NiceGrill Storage(DO NOT DELETE)',
+                     about='Storage channel for your files'))
+        del_storage()
+        add_storage(channel.updates[1].channel_id)
