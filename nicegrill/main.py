@@ -76,7 +76,7 @@ class main:
     async def storage(client):
         if get_storage():
             try:
-                await client.get_entity(get_storage[0][0])
+                await client.get_entity(get_storage()[0][0])
             except ValueError:
                  channel = await client(functions.channels.CreateChannelRequest(
                      title='NiceGrill Storage(DO NOT DELETE)',
@@ -86,4 +86,4 @@ class main:
                      title='NiceGrill Storage(DO NOT DELETE)',
                      about='Storage channel for your files'))
         del_storage()
-        add_storage(channel.updates[1].channel_id)
+         add_storage(channel.updates[1].channel_id)
