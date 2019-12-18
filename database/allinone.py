@@ -261,6 +261,7 @@ def del_storage():
     try:
         cursor.execute("DELETE FROM storage")
         connection.commit()
+        connection.close()
     except sqlite3.OperationalError:
         logger.exception("")
         return None
