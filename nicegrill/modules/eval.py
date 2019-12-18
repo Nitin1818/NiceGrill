@@ -20,14 +20,14 @@ class Python:
         args = utils.get_arg(message).strip()
         caption = "<b>⬤ Evaluated expression:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(args)
         try:
-            res = html.escape(str(await meval(args, globals(), **await Python.funcs(message))))
+            res = str(await meval(args, globals(), **await Python.funcs(message)))
         except Exception:
             caption = "<b>⬤ Evaluation failed:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(args)
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
         send = caption + "<code>{}</code>"
         try:
-            await message.edit(send.format(res))
+            await message.edit(send.format(html.escape(res)))
         except MessageTooLongError:
             sent = await message.edit(send.format(res[0:4096]))
             for i in range(len(res)//4096):

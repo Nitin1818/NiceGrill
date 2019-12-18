@@ -2,6 +2,7 @@ telethon
 meval
 mtranslate
 urbandict
+cython
 pygdrive3fixed
 google-api-python-client
 oauthclient
@@ -12,7 +13,7 @@ langdetect
 pySmartDL
 youtube_dl
 youtube2mp3
+youtube-search
 ffmpeg
-cython
 numpy
 pandas
