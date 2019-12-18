@@ -19,6 +19,7 @@ class Loader:
                 await message.edit("<b>Module loaded</b>")
             else:
                 await message.edit("<b>Loading failed</b>")
+            os.remove(mod)
 
     async def unloadxxx(message):
         mod = utils.get_arg(message)
