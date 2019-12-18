@@ -11,6 +11,7 @@ pillow
 langdetect
 pySmartDL
 youtube_dl
+youtube2mp3
 cython
 numpy
 pandas
