@@ -27,11 +27,10 @@ class Python:
                 args)
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
-        send = caption + "<code>{}</code>"
         try:
-            await message.edit(send.format(html.escape(res)))
+            await message.edit(caption + f"<code>{html.escape(res)}</code>")
         except MessageTooLongError:
-            await message.edit(send.format(res[0:4096]))
+            await message.edit(caption + f"<code>{res[0:4096]}</code>")
             for i in range(len(res) // 4096):
                 res = res[0:4096]
                 await message.reply(f"<code>{res}</code>")
