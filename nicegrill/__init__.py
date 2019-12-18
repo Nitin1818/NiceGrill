@@ -5,11 +5,8 @@ from nicegrill.main import main
 from nicegrill.modules import _init
 from nicegrill import loader
 from config import API_HASH, API_ID
-from database.allinone import get_storage
-from nicegrill import dbsets
 import pandas as pd
 import sqlite3
-import time
 import os
 
 
@@ -30,7 +27,6 @@ async def restore(client):
     if not os.path.isfile("database.db"):
         return
     olddb = sqlite3.connect("database.db")
-    oldcur = olddb.cursor()
     tables = pd.read_sql(qtables, olddb)
     newdb = sqlite3.connect("database/database.db")
     newcur = newdb.cursor()

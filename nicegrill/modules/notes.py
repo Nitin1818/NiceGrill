@@ -1,7 +1,7 @@
 from database.allinone import *
 from .. import utils
 import sqlite3
-
+import logging
 
 class Notes:
 
@@ -22,7 +22,6 @@ class Notes:
         value = reply.text if message.is_reply else " ".join(args[1:])
         name = args[0]
         chatid = message.chat_id
-        notes = await get_notes(chatid)
         if reply and reply.media and not reply.web_preview:
             media = (await message.client.send_file(entity=storage, file=reply.media)).id
         try:

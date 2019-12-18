@@ -62,7 +62,7 @@ class Stickers:
         reply = await message.get_reply_message()
         if not reply.photo and not reply.sticker:
             await message.edit("<b>Reply to an image or get out</b>")
-            refurn
+            return
         img = await reply.download_media()
         await Stickers.resize(message, img)
         packid = None if not get_Packid() else get_Packid()[0][0]
@@ -106,19 +106,19 @@ class Stickers:
             if not check_sticker_chat:
                 await conv.send_message("/start")
             await message.edit(msg)
-            to_do = await conv.send_message(task)
+            await conv.send_message(task)
             await message.client.send_read_acknowledge(conv.chat_id)
             id = None if not packid else await conv.send_message(packid)
             await message.client.send_read_acknowledge(conv.chat_id)
             packname = None if name is True else await conv.send_message(
-                "{}'s Kang Pack".format(message.sender.first_name))
+                "{}'s Kang Pack Vol".format(message.sender.first_name))
             await message.client.send_read_acknowledge(conv.chat_id)
-            sticker = await message.client.send_file(
+            await message.client.send_file(
                 entity=429000, file="sticker.png", force_document=True)
             await message.client.send_read_acknowledge(conv.chat_id)
             os.remove("sticker.png")
             pickemoji = random.choice(Stickers.EMOJI) if not emoji else emoji
-            sendemoji = await conv.send_message(pickemoji)
+            await conv.send_message(pickemoji)
             await message.client.send_read_acknowledge(conv.chat_id)
             if done:
                 await conv.send_message("/done")
@@ -127,10 +127,10 @@ class Stickers:
                 return
             await conv.send_message("/publish")
             await message.client.send_read_acknowledge(conv.chat_id)
-            skip = await conv.send_message("/skip")
+            await conv.send_message("/skip")
             await message.client.send_read_acknowledge(conv.chat_id)
             id = await conv.send_message(
-                "{}sKangPack_{}.{}".format(
+                "{}sKangPack_{}_{}".format(
                     message.sender.username.capitalize(), message.sender.id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
             set_Packid(id)

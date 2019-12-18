@@ -1,7 +1,6 @@
 import time
 import logging
 import platform
-import logging
 from telethon import version
 from .. import utils
 from database.allinone import setStats, getStats

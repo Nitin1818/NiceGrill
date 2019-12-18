@@ -160,6 +160,7 @@ will be deleted when the idiot passes the message limit"""
                 "INSERT INTO antipm (supblock) VALUES (0)" if not getPM()
                 else "UPDATE antipm SET mute = 0")
             await message.edit("<b>Chats from unapproved PMs will not be removed anymore</b>")
+        setPM(command)
 
     async def watchout(message):
         if message.sender_id != (await message.client.get_me()).id and isinstance(message.to_id, tl.types.PeerUser):

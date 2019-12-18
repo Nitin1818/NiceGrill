@@ -9,6 +9,9 @@ import subprocess
 
 class YouTube:
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
     async def ytxxx(message):
         args = utils.get_arg(message)
         if not args:

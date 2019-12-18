@@ -105,8 +105,8 @@ class Snips:
                         else await message.client.get_messages(get_storage()[0][0], ids=key[2]))
                     if isinstance(value, str):
                         if message.sender_id == (await message.client.get_me()).id:
-                            respond = await message.edit(value)
+                            await message.edit(value)
                         else:
-                            respond = await message.reply(value)
+                            await message.reply(value)
                     else:
                         await message.client.send_message(message.chat_id, value)

@@ -10,6 +10,9 @@ class GoogleDrive:
 
     drive_service = service.DriveService('./client_secret.json')
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    
     async def gdrivexxx(message):
         """Uploads the replied media or input url to your gdrive with a progressbar"""
         GoogleDrive.drive_service.auth()
@@ -44,7 +47,7 @@ class GoogleDrive:
         await message.edit(
             f"<i>{file[-1]}</i> <b>uploaded to your GDrive folder. </b>"
             f"<a href={GoogleDrive.drive_service.anyone_permission(up)}>Click Here</a> <b>to access it</b>")
-        os.remove(name)
+        os.remove("/".join(file))
 
     async def setgfolderxxx(message):
         """Specifies what folder your downloads go in in your drive"""

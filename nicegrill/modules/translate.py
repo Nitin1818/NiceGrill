@@ -1,7 +1,6 @@
 from mtranslate import translate
 from langdetect import detect
 from .. import utils
-import six
 import logging
 
 

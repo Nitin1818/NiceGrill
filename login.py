@@ -5,11 +5,8 @@ from nicegrill.main import main
 from nicegrill.modules import _init
 from nicegrill import loader
 from config import API_HASH, API_ID
-from database.allinone import get_storage
-from nicegrill import dbsets
 import pandas as pd
 import sqlite3
-import time
 import os
 
 
@@ -30,12 +27,11 @@ async def restore(client):
     if not os.path.isfile("database.db"):
         return
     olddb = sqlite3.connect("database.db")
-    oldcur = olddb.cursor()
     tables = pd.read_sql(qtables, olddb)
     newdb = sqlite3.connect("database/database.db")
     newcur = newdb.cursor()
     for table in tables.index:
-        oldcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
+        newcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
         newcur.execute(tables.sql[table])
         qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
         qcols.to_sql(
@@ -44,12 +40,14 @@ async def restore(client):
             index=False,
             if_exists="append")
     os.system("rm *.db*")
+    newdb.commit()
     olddb.close()
     newdb.close()
 
 
 with TelegramClient('NiceGrill', API_ID, API_HASH) as client:
     asyncio.get_event_loop().create_task(restore(client))
+    time.sleep(2)
     client.parse_mode = 'html'
     _init.loads()
     loop = asyncio.get_event_loop()

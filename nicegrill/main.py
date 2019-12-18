@@ -1,9 +1,7 @@
 import logging
-import types
-import logging
 import functools
 import asyncio
-from telethon import events, functions, types, errors
+from telethon import events, functions
 from database.allinone import *
 from telethon.sync import TelegramClient
 from nicegrill.modules import _init

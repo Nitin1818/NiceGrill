@@ -1,6 +1,4 @@
 import logging
-import json
-import os
 import functools
 from nicegrill.modules._init import modules, classes, watchouts
 from telethon import events

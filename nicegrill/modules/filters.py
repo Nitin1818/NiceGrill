@@ -27,7 +27,6 @@ class Filters:
             value = " ".join(args[1:])
         name = args[0]
         chatid = message.chat_id
-        filters = await get_filters(chatid)
         if reply and reply.media and not reply.web_preview:
             media = (await message.client.send_file(entity=storage, file=reply.media)).id
         try:

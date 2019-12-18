@@ -34,7 +34,7 @@ class Misc:
             await message.delete()
             with open('error.txt', 'w'):
                 pass
-        except rpcerrorlist.FilePartsInvalidError as e:
+        except rpcerrorlist.FilePartsInvalidError:
             await message.edit("<b>There is no log in ERROR level</b>")
             return
 

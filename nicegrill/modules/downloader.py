@@ -124,7 +124,6 @@ class Downloader:
         if not DOWNLOADS:
             await message.edit("<b>There is no ongoing download</b>")
             return
-        reply = await message.get_reply_message()
         await message.edit("<i>Processing...</i>")
         for dl in DOWNLOADS:
             ls += f"● <b>{dl}:\nSize:</b> <i>{DOWNLOADS[dl].get_final_filesize(human=True)}</i>\n<b>Status:</b> <i>{DOWNLOADS[dl].get_status().capitalize()}</i>\n\n"

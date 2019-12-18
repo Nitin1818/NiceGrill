@@ -1,11 +1,7 @@
 from .. import utils, loader
-from nicegrill.modules import _init
 from database.allinone import store_func, get_func
 import logging
 import urllib
-import shutil
-import os
-
 
 class Loader:
 
@@ -38,7 +34,7 @@ class Loader:
     async def dloadxxx(message):
         link = utils.get_arg(message)
         name = link.split("/")[-1].lower()
-        mod = urllib.request.urlretrieve(link, "./" + name)
+        urllib.request.urlretrieve(link, "./" + name)
         if loader.loadmod.load(name, message.client):
             if get_func() and link in str(get_func):
                 store_func(

@@ -9,6 +9,9 @@ import os
 
 class Quote:
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
     async def process(msg, reply, client):
         if not os.path.isdir(".tmp"):
             os.mkdir(".tmp", 0o755)

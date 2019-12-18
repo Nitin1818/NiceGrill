@@ -59,6 +59,9 @@ UNMUTE = ChatBannedRights(
 
 class Admin:
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
     async def promotexxx(message):
         await message.edit("<b>Promoting...</b>")
         chat = message.input_chat
@@ -258,7 +261,6 @@ class Admin:
         await message.edit("<b>Pinned succesfully.</b>")
 
     async def gbanxxx(message):
-        chat = message.input_chat
         try:
             user = (
                 (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
@@ -274,7 +276,6 @@ class Admin:
         await message.edit("<b>Globally banned...</b>")
 
     async def ungbanxxx(message):
-        chat = message.input_chat
         try:
             user = (
                 (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
@@ -292,7 +293,6 @@ class Admin:
 
     async def gmutexxx(message):
         await message.edit("<b>Muting...</b>")
-        chat = message.input_chat
         try:
             user = (
                 (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
@@ -309,7 +309,6 @@ class Admin:
 
     async def ungmutexxx(message):
         await message.edit("<b>Unmuting...</b>")
-        chat = message.input_chat
         try:
             user = (
                 (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
