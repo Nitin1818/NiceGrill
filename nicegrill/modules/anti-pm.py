@@ -142,6 +142,7 @@ PMs and when they go beyond it, bamm!"""
                 "INSERT INTO antipm (max) VALUES (0)" if not getPM()
                 else "UPDATE antipm SET max = 0")
             await message.edit("<b>Max. PM message limit successfully updated</b>")
+        setPM(command)
 
     async def superblockxxx(message):
         """If unwanted users spams your chat, the chat

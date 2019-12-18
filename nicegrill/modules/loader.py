@@ -5,6 +5,7 @@ import urllib
 
 class Loader:
 
+
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
 

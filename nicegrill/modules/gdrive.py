@@ -12,7 +12,7 @@ class GoogleDrive:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
-    
+
     async def gdrivexxx(message):
         """Uploads the replied media or input url to your gdrive with a progressbar"""
         GoogleDrive.drive_service.auth()

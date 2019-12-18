@@ -31,7 +31,7 @@ async def get_notes(chatid):
         cursor.execute("SELECT key FROM notes WHERE chat = {}".format(chatid))
         notes = cursor.fetchall()
         return notes
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -44,7 +44,7 @@ async def del_note(chatid, key):
                 chatid, key))
         connection.commit()
         return True
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return False
         logger.exception("")
 
@@ -56,7 +56,7 @@ async def del_notes(chatid):
         cursor.execute("DELETE FROM notes WHERE chat = {}".format(chatid))
         connection.commit()
         return True
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return False
         logger.exception("")
 
@@ -70,7 +70,7 @@ async def get_note(chatid, key):
                 chatid, key))
         note = cursor.fetchall()
         return note
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
         logger.exception("")
 
@@ -96,7 +96,7 @@ def get_snip():
         cursor.execute("SELECT * FROM snips")
         snips = cursor.fetchall()
         return snips
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -118,7 +118,7 @@ def get_others():
         cursor.execute("SELECT * FROM others")
         others = cursor.fetchall()
         return others
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -149,7 +149,7 @@ async def get_filters(chatid):
         cursor.execute("SELECT * FROM filters WHERE chat = {}".format(chatid))
         filters = cursor.fetchall()
         return filters
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -162,7 +162,7 @@ async def del_filter(chatid, key):
                 chatid, key))
         connection.commit()
         return True
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return False
         logger.exception("")
 
@@ -174,7 +174,7 @@ async def del_filters(chatid):
         cursor.execute("DELETE FROM filters WHERE chat = {}".format(chatid))
         connection.commit()
         return True
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return False
         logger.exception("")
 
@@ -239,7 +239,7 @@ def get_storage():
         cursor.execute("SELECT * FROM storage")
         id = cursor.fetchall()
         return id
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -249,7 +249,7 @@ def del_storage():
     try:
         cursor.execute("DELETE FROM storage")
         connection.commit()
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         logger.exception("")
         return None
 
@@ -274,7 +274,7 @@ def getpath():
         cursor.execute("SELECT * FROM downloader")
         path = cursor.fetchall()
         return path
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -299,7 +299,7 @@ def get_pref():
         cursor.execute("SELECT * FROM core")
         prefix = cursor.fetchall()
         return prefix
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         pass
 
 
@@ -325,7 +325,7 @@ async def get_afk():
         cursor.execute("SELECT * FROM afk")
         afk = cursor.fetchall()
         return afk
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -335,7 +335,7 @@ async def clr_afk():
     try:
         cursor.execute("DELETE  FROM afk")
         connection.commit()
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         logger.exception("")
         return
 
@@ -360,7 +360,7 @@ def get_auth():
         cursor.execute("SELECT * FROM auth")
         notes = cursor.fetchall()
         return notes
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -384,7 +384,7 @@ def getPM():
         cursor.execute("SELECT * FROM antipm")
         getpm = cursor.fetchall()
         return getpm
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -409,7 +409,7 @@ def getStats():
         cursor.execute("SELECT * FROM stats")
         msg = cursor.fetchall()
         return msg
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -434,7 +434,7 @@ def get_Packid():
         cursor.execute("SELECT * FROM stickers")
         id = cursor.fetchall()
         return id
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         return None
 
 
@@ -444,7 +444,7 @@ def del_Packid():
     try:
         cursor.execute("DELETE FROM stickers")
         connection.commit()
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         logger.exception("")
         return None
 

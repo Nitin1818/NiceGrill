@@ -3,7 +3,6 @@ import functools
 import asyncio
 from nicegrill.main import main
 from nicegrill.modules import _init
-from nicegrill import loader
 from config import API_HASH, API_ID
 import pandas as pd
 import sqlite3
@@ -47,7 +46,6 @@ async def restore(client):
 
 with TelegramClient('NiceGrill', API_ID, API_HASH) as client:
     asyncio.get_event_loop().create_task(restore(client))
-    time.sleep(2)
     client.parse_mode = 'html'
     _init.loads()
     loop = asyncio.get_event_loop()
