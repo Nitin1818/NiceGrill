@@ -76,15 +76,18 @@ class main:
     async def storage(client):
         if get_storage():
             try:
+                print("Tring to get")
                 await client.get_entity(get_storage()[0][0])
                 return
             except ValueError:
-                 channel = await client(functions.channels.CreateChannelRequest(
-                     title='NiceGrill Storage(DO NOT DELETE)',
-                     about='Storage channel for your files'))
-                 del_storage()
-                 pass
+                print("Couldnt get it")
+                channel = await client(functions.channels.CreateChannelRequest(
+                    title='NiceGrill Storage(DO NOT DELETE)',
+                    about='Storage channel for your files'))
+                del_storage()
+                pass
         else:
+            print("No chat")
             channel = await client(functions.channels.CreateChannelRequest(
                       title='NiceGrill Storage(DO NOT DELETE)',
                      about='Storage channel for your files'))
