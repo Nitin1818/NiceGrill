@@ -86,6 +86,6 @@ class main:
             channel = await client(functions.channels.CreateChannelRequest(
                       title='NiceGrill Storage(DO NOT DELETE)',
                      about='Storage channel for your files'))
-                 pass
+            pass 
         del_storage()
         add_storage(channel.updates[1].channel_id)
