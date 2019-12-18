@@ -76,7 +76,7 @@ class main:
     async def storage(client):
         if get_storage():
             try:
-                await client.get_entity(int(str(100) + str(get_storage()[0][0])))
+                await client.get_entity(int(str(-100) + str(get_storage()[0][0])))
                 return
             except ValueError:
                  channel = await client(functions.channels.CreateChannelRequest(
