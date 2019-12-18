@@ -4,7 +4,7 @@ mtranslate
 urbandict
 cython
 pygdrive3fixed
-googleapiclient
+google-api-python-client
 oauthclient
 gtts
 oweatherm
