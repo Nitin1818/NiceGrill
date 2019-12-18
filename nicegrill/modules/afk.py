@@ -53,7 +53,8 @@ them later. Check your storage channel."""
                 chat = message.chat
                 link = "<a href=https://t.me/c/{}/{}>Here</a>".format(
                     chat.id, message.id)
-                await message.client.send_message(entity=storage.id, link_preview=False, message="<b>YOU GOT THIS MESSAGE WHEN YOU WERE UNAVAILABLE</b>\n\n"
+                await message.client.send_message(entity=storage.id, link_preview=False, message=
+                                                  "<b>YOU GOT THIS MESSAGE WHEN YOU WERE UNAVAILABLE</b>\n\n"
                                                   "<b># User: </b><a href=tg://user?id={}>{}</a>\n"
                                                   "<b># Chat: </b><a href=https://t.me/c/{}>{}</a>\n"
                                                   "<b># Message Link: </b>{}\n\n"

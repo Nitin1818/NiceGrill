@@ -3,7 +3,6 @@ import functools
 import asyncio
 from telethon import events, functions
 from database.allinone import *
-from telethon.sync import TelegramClient
 from nicegrill.modules import _init
 
 logging.basicConfig(
@@ -43,7 +42,8 @@ class main:
                         logger.exception("")
                         await message.edit("<b>Loading..</b>")
                         await message.client.send_file(entity=message.chat_id, message=message, file="error.txt",
-                                                       caption="<b>NiceGrill has crashed. Command was .{}.\nCheck logs for more information.</b>".format(cmd))
+                                                       caption="<b>NiceGrill has crashed. Command was .{}.\n"
+                                                       "Check logs for more information.</b>".format(cmd))
                         await message.delete()
                         with open('error.txt', 'w'):
                             pass

@@ -3,8 +3,8 @@ from database.allinone import store_func, get_func
 import logging
 import urllib
 
-class Loader:
 
+class Loader:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)

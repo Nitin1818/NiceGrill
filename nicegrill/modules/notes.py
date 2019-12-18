@@ -5,7 +5,6 @@ import logging
 
 class Notes:
 
-
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
 
