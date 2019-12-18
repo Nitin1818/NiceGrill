@@ -20,7 +20,6 @@ async def add_note(chatid, key, value, file):
              value,
              file))
         connection.commit()
-    connection.close()
         connection.close()
     except Exception:
         logger.exception("")
@@ -47,7 +46,6 @@ async def del_note(chatid, key):
             "DELETE  FROM notes WHERE chat = {} AND key = '{}'".format(
                 chatid, key))
         connection.commit()
-    connection.close()
         connection.close()
         return True
     except sqlite3.OperationalError:
@@ -61,7 +59,6 @@ async def del_notes(chatid):
     try:
         cursor.execute("DELETE FROM notes WHERE chat = {}".format(chatid))
         connection.commit()
-    connection.close()
         connection.close()
         return True
     except sqlite3.OperationalError:
@@ -94,7 +91,6 @@ def set_snip(command):
             "CREATE TABLE IF NOT EXISTS snips (name, value, media BOOL)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
 
@@ -118,7 +114,6 @@ def others(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS others (other)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
 
@@ -151,7 +146,6 @@ async def add_filter(chatid, key, value, file):
              value,
              file))
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
 
@@ -176,7 +170,6 @@ async def del_filter(chatid, key):
             "DELETE  FROM filters WHERE chat = {} AND key = '{}'".format(
                 chatid, key))
         connection.commit()
-    connection.close()
         return True
     except sqlite3.OperationalError:
         return False
@@ -189,7 +182,6 @@ async def del_filters(chatid):
     try:
         cursor.execute("DELETE FROM filters WHERE chat = {}".format(chatid))
         connection.commit()
-    connection.close()
         return True
     except sqlite3.OperationalError:
         return False
@@ -209,7 +201,6 @@ async def add_status(status, chat, msgid):
              chat,
              msgid))
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -233,7 +224,6 @@ def del_status():
     try:
         cursor.execute("DELETE FROM restart")
         connection.commit()
-    connection.close()
     except sqlite3.OperationalError:
         return None
 
@@ -247,7 +237,6 @@ def add_storage(channel):
         cursor.execute("CREATE TABLE IF NOT EXISTS storage (id)")
         cursor.execute("INSERT INTO storage (id) VALUES (?)", (channel,))
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -271,7 +260,6 @@ def del_storage():
     try:
         cursor.execute("DELETE FROM storage")
         connection.commit()
-    connection.close()
     except sqlite3.OperationalError:
         logger.exception("")
         return None
@@ -284,7 +272,6 @@ def setpath(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS downloader (path)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
         return True
     except Exception:
         logger.exception("")
@@ -312,7 +299,6 @@ def set_pref(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS core (prefix)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -340,7 +326,6 @@ async def set_afk(status, msg, time):
         cursor.execute(
             "INSERT INTO afk (status, msg, time) VALUES (?, ?, ?)", (status, msg, time))
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -364,7 +349,6 @@ async def clr_afk():
     try:
         cursor.execute("DELETE  FROM afk")
         connection.commit()
-    connection.close()
     except sqlite3.OperationalError:
         logger.exception("")
         return
@@ -379,7 +363,6 @@ def auth(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS auth (id)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
 
@@ -404,7 +387,6 @@ def setPM(command):
             "CREATE TABLE IF NOT EXISTS antipm (mute, max, supblock)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -431,7 +413,6 @@ def setStats(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS stats (id, name, msg)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -458,7 +439,6 @@ def set_Packid(id):
         cursor.execute("CREATE TABLE IF NOT EXISTS stickers (id TEXT)")
         cursor.execute(f"INSERT INTO stickers (id) VALUES ('{id}')")
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -482,7 +462,6 @@ def del_Packid():
     try:
         cursor.execute("DELETE FROM stickers")
         connection.commit()
-    connection.close()
     except sqlite3.OperationalError:
         logger.exception("")
         return None
@@ -498,7 +477,6 @@ def add(command):
             "CREATE TABLE IF NOT EXISTS admin (id INT, mute INT, gmute INT, gban INT, chatid INT)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -525,7 +503,6 @@ def setcity(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS weather (city)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -552,7 +529,6 @@ def setGFolder(command):
         cursor.execute("CREATE TABLE IF NOT EXISTS gdrive (folderid)")
         cursor.execute(command)
         connection.commit()
-    connection.close()
     except Exception:
         logger.exception("")
         return None
@@ -578,7 +554,6 @@ def store_func(command):
     cursor.execute("CREATE TABLE IF NOT EXISTS loadmods (name, links)")
     cursor.execute(command)
     connection.commit()
-    connection.close()
 
 
 def get_func():
