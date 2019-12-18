@@ -77,6 +77,7 @@ class main:
         if get_storage():
             try:
                 await client.get_entity(get_storage()[0][0])
+                return
             except ValueError:
                  channel = await client(functions.channels.CreateChannelRequest(
                      title='NiceGrill Storage(DO NOT DELETE)',
