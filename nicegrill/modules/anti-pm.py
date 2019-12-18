@@ -12,22 +12,25 @@ class AntiPM:
     FLOOD_CTRL = 0
     ALLOWED = []
     USERS_AND_WARNS = {}
-    
-    WARNING = ("<b>I have not allowed you to PM, please ask or say whatever</b>"
-                 "<b> it is in a group chat or at least ask for my permission to PM</b>\n\n"
-                 "<b>I'm letting you off the hook for this time but be warned that </b>"
-                 "<b>you will be blocked & reported spam if you continue.</b>")
 
-    BLOCKED = ("<b>I have warned you several times now. However, you did not stop</b>"
-                 "<b>spamming my chat. Therefore, you have been blocked and reported</b>"
-                 "<b>as spam. Good luck!</b>")
+    WARNING = (
+        "<b>I have not allowed you to PM, please ask or say whatever</b>"
+        "<b> it is in a group chat or at least ask for my permission to PM</b>\n\n"
+        "<b>I'm letting you off the hook for this time but be warned that </b>"
+        "<b>you will be blocked & reported spam if you continue.</b>")
+
+    BLOCKED = (
+        "<b>I have warned you several times now. However, you did not stop</b>"
+        "<b>spamming my chat. Therefore, you have been blocked and reported</b>"
+        "<b>as spam. Good luck!</b>")
 
     async def approvexxx(message):
         """Allows that person to PM you, you can either reply to user,
 type their username or use this in their chat"""
         id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id
         reply = None if not message.is_reply else (await message.get_reply_message()).sender_id
-        chat = None if not hasattr(message.to_id, "user_id") else message.chat_id
+        chat = None if not hasattr(
+            message.to_id, "user_id") else message.chat_id
         if not reply and not id and not chat:
             await message.edit("<b>No user found</b>")
             return
@@ -44,13 +47,13 @@ type their username or use this in their chat"""
             "<a href=tg://user?id={}>{}</a> <b>is approved to PM you now</b>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
 
-
     async def disapprovexxx(message):
         """Prevents that person to PM you, you can either reply to user,
 type their username or use this in their chat"""
-        id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id 
+        id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id
         reply = None if not message.is_reply else (await message.get_reply_message()).sender_id
-        chat = None if not hasattr(message.to_id, "user_id") else message.chat_id
+        chat = None if not hasattr(
+            message.to_id, "user_id") else message.chat_id
         if not reply and not id and not chat:
             await message.edit("<b>No user found</b>")
             return
@@ -68,12 +71,12 @@ type their username or use this in their chat"""
             "<a href=tg://user?id={}>{}</a> <b>is disapproved to PM you now</b>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
 
-
     async def blockxxx(message):
         """Simply blocks the person..duh!!"""
-        id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id 
+        id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id
         reply = None if not message.is_reply else (await message.get_reply_message()).sender_id
-        chat = None if not hasattr(message.to_id, "user_id") else message.chat_id
+        chat = None if not hasattr(
+            message.to_id, "user_id") else message.chat_id
         if not reply and not id and not chat:
             await message.edit("<b>No user found</b>")
             return
@@ -89,12 +92,12 @@ type their username or use this in their chat"""
             "<a href=tg://user?id={}>{}</a> <b>has been blocked</b>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
 
-
     async def unblockxxx(message):
         """Simply unblocks the person..duh!!"""
-        id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id 
+        id = None if not utils.get_arg(message) else (await message.client.get_entity(utils.get_arg(message))).id
         reply = None if not message.is_reply else (await message.get_reply_message()).sender_id
-        chat = None if not hasattr(message.to_id, "user_id") else message.chat_id
+        chat = None if not hasattr(
+            message.to_id, "user_id") else message.chat_id
         if not reply and not id and not chat:
             await message.edit("<b>No user found</b>")
             return
@@ -106,7 +109,6 @@ type their username or use this in their chat"""
         await message.edit(
             "<a href=tg://user?id={}>{}</a> <b>has been unblocked</b>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
-
 
     async def notifsxxx(message):
         """Ah this one again...It turns on/off tag notification
@@ -141,9 +143,8 @@ PMs and when they go beyond it, bamm!"""
                 else "UPDATE antipm SET max = 0")
             await message.edit("<b>Max. PM message limit successfully updated</b>")
 
-
     async def superblockxxx(message):
-        """If unwanted users spams your chat, the chat 
+        """If unwanted users spams your chat, the chat
 will be deleted when the idiot passes the message limit"""
         val = utils.get_arg(message)
         if not val:
@@ -160,10 +161,9 @@ will be deleted when the idiot passes the message limit"""
                 else "UPDATE antipm SET mute = 0")
             await message.edit("<b>Chats from unapproved PMs will not be removed anymore</b>")
 
-
     async def watchout(message):
-        if message.sender_id != (await message.client.get_me()).id and type(message.to_id) is tl.types.PeerUser:
-            if getattr(message.sender, "bot", None) == True:
+        if message.sender_id != (await message.client.get_me()).id and isinstance(message.to_id, tl.types.PeerUser):
+            if getattr(message.sender, "bot", None):
                 return
             AntiPM.ALLOWED.clear()
             [AntiPM.ALLOWED.append(ls[0]) for ls in get_auth()]
@@ -172,7 +172,8 @@ will be deleted when the idiot passes the message limit"""
             if not getPM()[0][0]:
                 await message.client.send_read_acknowledge(message.chat_id)
             user = message.sender_id
-            user_warns = 0 if user not in AntiPM.USERS_AND_WARNS else AntiPM.USERS_AND_WARNS[user]
+            user_warns = 0 if user not in AntiPM.USERS_AND_WARNS else AntiPM.USERS_AND_WARNS[
+                user]
             if user_warns <= getPM()[0][1] - 2:
                 user_warns += 1
                 AntiPM.USERS_AND_WARNS.update({user: user_warns})

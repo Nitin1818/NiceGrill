@@ -6,6 +6,7 @@ from database.allinone import add_status, del_status, get_status
 from telethon.errors import rpcerrorlist
 from .. import utils
 
+
 class Misc:
 
     logger = logging.getLogger(__name__)
@@ -16,11 +17,11 @@ class Misc:
         if get_status():
             del_status()
         await add_status(True, msg.chat_id, msg.id)
-        if os.path.isfile("database/database.db") and not os.path.getsize("database/database.db") == 0:
+        if os.path.isfile(
+                "database/database.db") and not os.path.getsize("database/database.db") == 0:
             db = await message.client.upload_file("database/database.db")
             await message.client.send_file((await message.client.get_me()).id, db)
         os.execl(sys.executable, sys.executable, *sys.argv)
-
 
     async def shutdownxxx(message):
         await message.edit("<b>Shutting down...</b>")
@@ -29,7 +30,7 @@ class Misc:
     async def logsxxx(message):
         try:
             await message.client.send_file(entity=message.chat_id, file="error.txt",
-            caption="<b>Here's logs in ERROR level.</b>")
+                                           caption="<b>Here's logs in ERROR level.</b>")
             await message.delete()
             with open('error.txt', 'w'):
                 pass
@@ -48,7 +49,7 @@ class Misc:
             if updates:
                 ls = "<b>Updates:</b>\n\n"
                 for i in updates:
-                    ls +=f"◍  <i>{i.capitalize()}</i>"
+                    ls += f"◍  <i>{i.capitalize()}</i>"
                 await message.edit(
                     f"{ls}\n\n<b>Type</b> <i>.update now</i> <b>to update</b>")
             else:

@@ -4,6 +4,7 @@ import sqlite3
 
 BLACKLIST = [".stop", ".stopall", ".filter"]
 
+
 class Filters:
 
     logger = logging.getLogger(__name__)
@@ -38,7 +39,6 @@ class Filters:
         await message.edit("<b>Filter succesfully saved</b>")
         message.message = ""
 
-
     async def filtersxxx(message):
         chatid = message.chat_id
         filters = await get_filters(chatid)
@@ -53,7 +53,6 @@ class Filters:
         await message.edit(caption)
         message.message = ""
 
-
     async def stopxxx(message):
         args = utils.get_arg(message)
         chatid = message.chat_id
@@ -64,7 +63,6 @@ class Filters:
         await message.edit("<b>Filters deleted successfully</b>")
         message.message = ""
 
-
     async def stopallxxx(message):
         chatid = message.chat_id
         filters = await del_filters(chatid)
@@ -73,7 +71,6 @@ class Filters:
             return
         await message.edit("<b>Filters cleared out successfully</b>")
         message.message = ""
-
 
     async def watchout(message):
         for i in BLACKLIST:

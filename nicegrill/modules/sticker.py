@@ -5,29 +5,29 @@ import random
 import logging
 import os
 
+
 class Stickers:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
 
     EMOJI = [
-    "😀","😃","😄","😁","😆","😅","😂","🤣","☺","😊","😇","🙂",
-    "🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝",
-    "😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔",
-    "😟","😕","🙁","☹","😣","😖","😫","😩","🥺","😢","😭","😤",
-    "😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓",
-    "🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦",
-    "😧","😮","😲","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧",
-    "😷","🤒","🤕","🤑","🤠","😈","👿","🎃","😺","😸","😹","😼",
-    "😽","🙀","😿","😾"]
-    
-    STRINGS = [
-    "<i>Whatcha doin'! Stop lookin' at me while i kang, that's rude..!</i>",
-    "<i>Hello, hey, I'mma just steal this sticker for a sec and be gone with it. Would you mind..?</i>",
-    "<i>Woah, nice sticker! Look! A fish is flying! Look at the sky! While I kang 😈...</i>",
-    "<i>Yea, I'm kanging this, so what? Oh shit! Run, run, run..!</i>",
-    "<i>Aww, baby..! Who is a nice little sticker, yes you are, yes you are! Come over here...</i>"]
+        "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "☺", "😊", "😇", "🙂",
+        "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚", "😋", "😛", "😝",
+        "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩", "🥳", "😏", "😒", "😞", "😔",
+        "😟", "😕", "🙁", "☹", "😣", "😖", "😫", "😩", "🥺", "😢", "😭", "😤",
+        "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓",
+        "🤗", "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦",
+        "😧", "😮", "😲", "😴", "🤤", "😪", "😵", "🤐", "🥴", "🤢", "🤮", "🤧",
+        "😷", "🤒", "🤕", "🤑", "🤠", "😈", "👿", "🎃", "😺", "😸", "😹", "😼",
+        "😽", "🙀", "😿", "😾"]
 
+    STRINGS = [
+        "<i>Whatcha doin'! Stop lookin' at me while i kang, that's rude..!</i>",
+        "<i>Hello, hey, I'mma just steal this sticker for a sec and be gone with it. Would you mind..?</i>",
+        "<i>Woah, nice sticker! Look! A fish is flying! Look at the sky! While I kang 😈...</i>",
+        "<i>Yea, I'm kanging this, so what? Oh shit! Run, run, run..!</i>",
+        "<i>Aww, baby..! Who is a nice little sticker, yes you are, yes you are! Come over here...</i>"]
 
     async def dumpitxxx(message):
         reply = await message.get_reply.message()
@@ -56,7 +56,6 @@ class Stickers:
             del_Packid()
             set_Packid(packid)
             await message.edit("<b>Pack saved successfully</b>")
-
 
     async def kangxxx(message):
         """Kangs a sticker or photo into you pack"""
@@ -89,7 +88,6 @@ class Stickers:
             await Stickers.kang(
                 message, msg, task, name, emoji, done, packid, result)
 
-
     async def resize(message, img):
         file = Image.open(img)
         file.thumbnail((512, 512), Image.ANTIALIAS)
@@ -97,7 +95,6 @@ class Stickers:
             os.remove(img)
         file.save("sticker.png")
         return True
-
 
     async def kang(message, msg, task, name, emoji, done, packid, result):
         check_sticker_chat = False
@@ -134,7 +131,7 @@ class Stickers:
             await message.client.send_read_acknowledge(conv.chat_id)
             id = await conv.send_message(
                 "{}sKangPack_{}.{}".format(
-                message.sender.username.capitalize(), message.sender.id, random.randint(0, 99999999)))
+                    message.sender.username.capitalize(), message.sender.id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
             set_Packid(id)
             await message.edit(result)

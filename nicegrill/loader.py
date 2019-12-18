@@ -8,6 +8,7 @@ from telethon import events
 
 BLACKLIST = ["Loader", "Help", "Settings", "Misc"]
 
+
 class loadmod:
 
     logger = logging.getLogger(__name__)
@@ -28,18 +29,20 @@ class loadmod:
                 for func in vars(clss):
                     if "watchout" in str(vars(clss)[func]):
                         watchouts.append(vars(clss)[func])
-                        client.add_event_handler(functools.partial(
-                            vars(clss)[func]),
-                            events.NewMessage(outgoing=True, incoming=True, forwards=False))
-                    if callable(vars(clss)[func]) and vars(clss)[func].__name__.endswith("xxx"):
+                        client.add_event_handler(
+                            functools.partial(
+                                vars(clss)[func]), events.NewMessage(
+                                outgoing=True, incoming=True, forwards=False))
+                    if callable(vars(clss)[func]) and vars(
+                            clss)[func].__name__.endswith("xxx"):
                         modules[clss.__name__].update(
                             {vars(clss)[func].__name__[0:-3]: vars(clss)[func]})
-                        classes.update({clss.__name__: vars(clss)[func].__name__[0:-3]})
+                        classes.update(
+                            {clss.__name__: vars(clss)[func].__name__[0:-3]})
                 if not classes[clss.__name__]:
                     del classes[clss.__name__]
                     del modules[clss.__name__]
         return True
-
 
     def unload(mod, client):
         if mod.capitalize() in BLACKLIST:

@@ -7,8 +7,9 @@ from database.allinone import setpath, getpath
 from datetime import datetime
 
 DOWNLOADS = {}
-shell = "◯"*19
+shell = "◯" * 19
 bar = ""
+
 
 class Downloader:
 
@@ -22,14 +23,13 @@ class Downloader:
         pathname = utils.get_arg(message)
         if not os.path.exists(pathname):
             os.mkdir(pathname, 0o755)
-        add =  f"INSERT INTO downloader (path) VALUES ('{pathname}')"
+        add = f"INSERT INTO downloader (path) VALUES ('{pathname}')"
         delete = "DELETE FROM downloader"
         setpath(delete)
         if setpath(add):
             await message.edit("<b>Successfully set.</b>")
         else:
             await message.edit("<b>Something went wrong.</b>")
-
 
     async def status(message, dl, reply, btime=0):
         while not dl.isFinished():
@@ -45,11 +45,11 @@ class Downloader:
                 f"<i>{dl.get_progress_bar().replace('-', '◯').replace('#', '⬤').replace('[', '').replace(']', '')}</i>")
 
     async def tgstatus(message, rec, tot, media, btime, process):
-        perc= round((rec/tot)*100)
-        if str((tot/rec)/1024) not in message.text:
-            bar = str("⬤"*int(perc//5) + shell[int(perc//5)::])
+        perc = round((rec / tot) * 100)
+        if str((tot / rec) / 1024) not in message.text:
+            bar = str("⬤" * int(perc // 5) + shell[int(perc // 5)::])
             rec = (
-                f"{round(rec/1024, 2)}KB" if not (rec/1024) > 1024
+                f"{round(rec/1024, 2)}KB" if not (rec / 1024) > 1024
                 else f"{round(rec/1048576, 2)}MB")
             down = (
                 f"<b>File Name:</b> <i>{media}</i>\n"
@@ -62,7 +62,6 @@ class Downloader:
                 Downloader.counter += 1
             else:
                 Downloader.counter = 0
-
 
     async def dlxxx(message):
         """Downloads the replied media or input url with a nice progressbar"""
@@ -88,9 +87,9 @@ class Downloader:
         await message.edit("<b>Downloading</b> <i>{}</i>...".format(name))
         time = datetime.now()
         if getattr(await message.get_reply_message(), "media", None):
-            media = await message.client.download_media(  
-                await message.get_reply_message(), path, 
-                progress_callback=lambda rec, tot: 
+            media = await message.client.download_media(
+                await message.get_reply_message(), path,
+                progress_callback=lambda rec, tot:
                 asyncio.get_event_loop().create_task(
                     Downloader.tgstatus(message, rec, tot, name, time, "Downloaded:")))
             await message.edit(f"<b>Downloaded in:</b> <i>{media}</i>\n")
@@ -119,7 +118,6 @@ class Downloader:
                 await message.edit("<i>Stopped</i>")
                 del DOWNLOADS[dl]
 
-
     async def downloadsxxx(message):
         """Lists the downloads, only works with url downloads"""
         ls = ""
@@ -146,7 +144,6 @@ class Downloader:
                 DOWNLOADS[dl].pause()
                 await message.edit("<i>Paused</i>")
 
-
     async def dlresumexxx(message):
         """Resumes the paused download, only works with url downloads"""
         if not message.is_reply and DOWNLOADS:
@@ -161,7 +158,6 @@ class Downloader:
                 DOWNLOADS[dl].resume()
                 await message.edit("<i>Resumed</i>")
 
-
     async def upxxx(message):
         """Uploads the input file with a nice progressbar"""
         pathtofile = utils.get_arg(message).split("/")
@@ -169,7 +165,7 @@ class Downloader:
         await message.edit("<b>Uploading</b> <i>{}</i>...".format(pathtofile[-1]))
         try:
             file = await message.client.upload_file(
-                "/".join(pathtofile), progress_callback=lambda rec, tot: 
+                "/".join(pathtofile), progress_callback=lambda rec, tot:
                 asyncio.get_event_loop().create_task(
                     Downloader.tgstatus(message, rec, tot, pathtofile[-1], time, "Uploaded:")))
             await message.client.send_file(message.chat_id, file)

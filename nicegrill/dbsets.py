@@ -9,9 +9,9 @@ if not get_auth() or not getPM():
     setPM(notif)
     supblock = "UPDATE antipm SET supblock = 0"
     setPM(supblock)
-    
+
 if not getStats():
     setStats("INSERT INTO stats (id, name, msg) VALUES (1, 'NiceGrill Bot', \"Hold on...Whaaa.. I'm alive 🤥🤥\")")
-    
+
 if not getpath():
     setpath("INSERT INTO downloader (path) VALUES ('./')")

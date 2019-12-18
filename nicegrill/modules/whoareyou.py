@@ -1,12 +1,13 @@
 import logging
 
+
 class WhoAreYou:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
 
     async def whoxxx(message):
-        user  = (
+        user = (
             (await message.get_reply.message()).sender if message.is_reply
             else message.sender)
         identify = (

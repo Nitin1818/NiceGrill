@@ -3,6 +3,7 @@ from weather import Weather as wtr
 from database.allinone import setcity, getcity
 import logging
 
+
 class Weather:
 
     logger = logging.getLogger(__name__)
@@ -13,7 +14,8 @@ class Weather:
         if not getcity() and not utils.get_arg(message):
             await message.edit("<b>Enter a city name first</b>")
             return
-        city = getcity()[0][0] if not utils.get_arg(message) else utils.get_arg(message)
+        city = getcity()[0][0] if not utils.get_arg(
+            message) else utils.get_arg(message)
         weather = wtr.find(city)
         await message.edit(
             f"<b>City:</b> <i>{weather['weather']['city']}</i>\n"

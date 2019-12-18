@@ -30,9 +30,11 @@ class Snips:
             value = args[1]
             media = False
         if get_snip() and name in str(get_snip()):
-            set_snip(f"UPDATE snips SET name='{name}', value='{value}', media={media}")
+            set_snip(
+                f"UPDATE snips SET name='{name}', value='{value}', media={media}")
         else:
-            set_snip(f"INSERT INTO snips (name, value, media) VALUES ('{name}', '{value}', {media})")
+            set_snip(
+                f"INSERT INTO snips (name, value, media) VALUES ('{name}', '{value}', {media})")
         await message.edit(
             "<b>Snip </b><i>{}</i><b> successfully saved into the list."
             "Type </b><i>${}</i><b> to call it.</b>".format(name, name))
@@ -101,7 +103,7 @@ class Snips:
                     value = (
                         key[1] if not key[2]
                         else await message.client.get_messages(get_storage()[0][0], ids=key[2]))
-                    if type(value) is str:
+                    if isinstance(value, str):
                         if message.sender_id == (await message.client.get_me()).id:
                             respond = await message.edit(value)
                         else:

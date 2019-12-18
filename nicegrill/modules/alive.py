@@ -27,10 +27,12 @@ class Stats:
         tot = (
             "<i>{}</i>".format(msg) +
             "<b>\n\nUser's name:</b> <i>{}</i>\n<b>Python version:</b> <i>{}</i>\n"
-            "<b>Telethon version:</b> <i>{}</i>\n<b>Current time:</b> <i>{}</i>"
-            .format(username, platform.python_version(), version.__version__, time.strftime('%X %x')))
+            "<b>Telethon version:</b> <i>{}</i>\n<b>Current time:</b> <i>{}</i>" .format(
+                username,
+                platform.python_version(),
+                version.__version__,
+                time.strftime('%X %x')))
         await message.edit(tot)
-
 
     async def setnamexxx(message):
         """Sets your alive name"""

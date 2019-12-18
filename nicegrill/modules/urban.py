@@ -3,6 +3,7 @@ import urbandict
 from .. import utils
 from urllib.error import HTTPError
 
+
 class Urban:
 
     logger = logging.getLogger(__name__)

@@ -3,6 +3,7 @@ from .. import utils
 import logging
 import sqlite3
 
+
 class Settings:
 
     logger = logging.getLogger(__name__)

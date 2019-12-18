@@ -56,6 +56,7 @@ UNMUTE = ChatBannedRights(
     until_date=timedelta(days=366),
     send_messages=False)
 
+
 class Admin:
 
     async def promotexxx(message):
@@ -117,7 +118,6 @@ class Admin:
             await message.edit("<b>You either don't have enough permissions or there's something wrong with the admin rights</b>")
         except ChatAdminRequiredError:
             await message.edit("<b>Oh honey, you're not admin enough to promote this user 🙄</b>")
-
 
     async def mutexxx(message):
         await message.edit("<b>Muting...</b>")
@@ -257,7 +257,6 @@ class Admin:
             message.input_chat, reply.id, notify=loud)
         await message.edit("<b>Pinned succesfully.</b>")
 
-
     async def gbanxxx(message):
         chat = message.input_chat
         try:
@@ -273,7 +272,6 @@ class Admin:
             command = f'UPDATE admin SET gban=1 WHERE id={user}'
         add(command)
         await message.edit("<b>Globally banned...</b>")
-
 
     async def ungbanxxx(message):
         chat = message.input_chat
@@ -340,7 +338,8 @@ class Admin:
                     return
                 if user in get()[i] and get()[i][2] == 1:
                     await message.delete()
-                if user in get()[i] and get()[i][4] == message.chat_id and get()[i][1] == 1:
+                if user in get()[i] and get()[
+                        i][4] == message.chat_id and get()[i][1] == 1:
                     await message.delete()
                 if user in get()[i] and get()[i][3] == 1:
                     try:

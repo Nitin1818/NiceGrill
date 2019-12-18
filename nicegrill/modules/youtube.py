@@ -6,6 +6,7 @@ import logging
 import glob
 import subprocess
 
+
 class YouTube:
 
     async def ytxxx(message):
@@ -19,7 +20,7 @@ class YouTube:
         for i in results["videos"]:
             text += f"<i>◍ {i['title']}</i>\nhttps://www.youtube.com{i['link']}\n\n"
         await message.edit(text)
-        
+
     async def ytmp3xxx(message):
         link = utils.get_arg(message)
         cmd = f"youtube2mp3 -d {os.getcwd()} -y {link}"
@@ -31,4 +32,3 @@ class YouTube:
         await message.client.send_file(message.chat_id, file)
         await message.delete()
         os.remove(file)
-        

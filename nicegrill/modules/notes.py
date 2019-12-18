@@ -2,6 +2,7 @@ from database.allinone import *
 from .. import utils
 import sqlite3
 
+
 class Notes:
 
     logger = logging.getLogger(__name__)
@@ -32,7 +33,6 @@ class Notes:
             await add_note(chatid, name, value, media)
         await message.edit("<b>Note succesfully saved</b>")
 
-
     async def notesxxx(message):
         chatid = message.chat_id
         notes = await get_notes(chatid)
@@ -46,7 +46,6 @@ class Notes:
         caption += list
         await message.edit(caption)
 
-
     async def clearxxx(message):
         args = utils.get_arg(message)
         chatid = message.chat_id
@@ -56,7 +55,6 @@ class Notes:
             return
         await message.edit("<b>Note deleted successfully</b>")
 
-
     async def clearallxxx(message):
         chatid = message.chat_id
         notes = await del_notes(chatid)
@@ -64,7 +62,6 @@ class Notes:
             await message.edit("<b>There are no notes in this chat</b>")
             return
         await message.edit("<b>Notes cleared out successfully</b>")
-
 
     async def watchout(message):
         arg = message.text[1::]

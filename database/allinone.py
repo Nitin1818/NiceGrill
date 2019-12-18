@@ -5,15 +5,20 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-
 #  Notes
 
 async def add_note(chatid, key, value, file):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS notes (chat, key, value, id)")
-        cursor.execute("INSERT INTO notes (chat , key, value, id) VALUES (?, ?, ?, ?)", (chatid, key, value, file))
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS notes (chat, key, value, id)")
+        cursor.execute(
+            "INSERT INTO notes (chat , key, value, id) VALUES (?, ?, ?, ?)",
+            (chatid,
+             key,
+             value,
+             file))
         connection.commit()
     except Exception:
         logger.exception("")
@@ -34,12 +39,15 @@ async def del_note(chatid, key):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
     try:
-        cursor.execute("DELETE  FROM notes WHERE chat = {} AND key = '{}'".format(chatid, key))
+        cursor.execute(
+            "DELETE  FROM notes WHERE chat = {} AND key = '{}'".format(
+                chatid, key))
         connection.commit()
         return True
     except sqlite3.OperationalError as e:
         return False
         logger.exception("")
+
 
 async def del_notes(chatid):
     connection = sqlite3.connect("database/database.db")
@@ -51,18 +59,20 @@ async def del_notes(chatid):
     except sqlite3.OperationalError as e:
         return False
         logger.exception("")
-    
+
+
 async def get_note(chatid, key):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
     try:
-        cursor.execute("SELECT value, id FROM notes WHERE chat = {} AND key = '{}'".format(chatid, key))
+        cursor.execute(
+            "SELECT value, id FROM notes WHERE chat = {} AND key = '{}'".format(
+                chatid, key))
         note = cursor.fetchall()
         return note
     except sqlite3.OperationalError as e:
         return None
         logger.exception("")
-
 
 
 #  SNIPS
@@ -71,7 +81,8 @@ def set_snip(command):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS snips (name, value, media BOOL)")
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS snips (name, value, media BOOL)")
         cursor.execute(command)
         connection.commit()
     except Exception:
@@ -87,6 +98,7 @@ def get_snip():
         return snips
     except sqlite3.OperationalError as e:
         return None
+
 
 def others(command):
     try:
@@ -110,7 +122,6 @@ def get_others():
         return None
 
 
-
 #  Filters
 
 
@@ -118,8 +129,14 @@ async def add_filter(chatid, key, value, file):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS filters (chat, key, value, id)")
-        cursor.execute("INSERT INTO filters (chat , key, value, id) VALUES (?, ?, ?, ?)", (chatid, key, value, file))
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS filters (chat, key, value, id)")
+        cursor.execute(
+            "INSERT INTO filters (chat , key, value, id) VALUES (?, ?, ?, ?)",
+            (chatid,
+             key,
+             value,
+             file))
         connection.commit()
     except Exception:
         logger.exception("")
@@ -140,13 +157,16 @@ async def del_filter(chatid, key):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
     try:
-        cursor.execute("DELETE  FROM filters WHERE chat = {} AND key = '{}'".format(chatid, key))
+        cursor.execute(
+            "DELETE  FROM filters WHERE chat = {} AND key = '{}'".format(
+                chatid, key))
         connection.commit()
         return True
     except sqlite3.OperationalError as e:
         return False
         logger.exception("")
-    
+
+
 async def del_filters(chatid):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -159,7 +179,6 @@ async def del_filters(chatid):
         logger.exception("")
 
 
-
 #  Restart
 
 async def add_status(status, chat, msgid):
@@ -167,12 +186,17 @@ async def add_status(status, chat, msgid):
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS restart (status, chat, id)")
-        cursor.execute("INSERT INTO restart (status , chat, id) VALUES (?, ?, ?)", (status, chat, msgid))
+        cursor.execute(
+            "INSERT INTO restart (status , chat, id) VALUES (?, ?, ?)",
+            (status,
+             chat,
+             msgid))
         connection.commit()
     except Exception:
         logger.exception("")
         return None
-        
+
+
 def get_status():
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -194,7 +218,6 @@ def del_status():
         return None
 
 
-
 #  Storage
 
 def add_storage(channel):
@@ -207,7 +230,8 @@ def add_storage(channel):
     except Exception:
         logger.exception("")
         return None
-        
+
+
 def get_storage():
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -218,6 +242,7 @@ def get_storage():
     except sqlite3.OperationalError as e:
         return None
 
+
 def del_storage():
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -227,6 +252,7 @@ def del_storage():
     except sqlite3.OperationalError as e:
         logger.exception("")
         return None
+
 
 def setpath(command):
     try:
@@ -239,7 +265,8 @@ def setpath(command):
     except Exception:
         logger.exception("")
         return False
-        
+
+
 def getpath():
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -249,7 +276,6 @@ def getpath():
         return path
     except sqlite3.OperationalError as e:
         return None
-
 
 
 #  Prefix
@@ -284,12 +310,14 @@ async def set_afk(status, msg, time):
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS afk (status, msg, time)")
-        cursor.execute("INSERT INTO afk (status, msg, time) VALUES (?, ?, ?)", (status, msg, time))
+        cursor.execute(
+            "INSERT INTO afk (status, msg, time) VALUES (?, ?, ?)", (status, msg, time))
         connection.commit()
     except Exception:
         logger.exception("")
         return None
-        
+
+
 async def get_afk():
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -300,6 +328,7 @@ async def get_afk():
     except sqlite3.OperationalError as e:
         return None
 
+
 async def clr_afk():
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
@@ -309,8 +338,6 @@ async def clr_afk():
     except sqlite3.OperationalError as e:
         logger.exception("")
         return
-
-
 
 
 # APPROVALS
@@ -341,7 +368,8 @@ def setPM(command):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS antipm (mute, max, supblock)")
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS antipm (mute, max, supblock)")
         cursor.execute(command)
         connection.commit()
     except Exception:
@@ -359,7 +387,6 @@ def getPM():
     except sqlite3.OperationalError as e:
         return None
 
-        
 
 #  STATS
 
@@ -373,6 +400,7 @@ def setStats(command):
     except Exception:
         logger.exception("")
         return None
+
 
 def getStats():
     connection = sqlite3.connect("database/database.db")
@@ -427,12 +455,14 @@ def add(command):
     try:
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS admin (id INT, mute INT, gmute INT, gban INT, chatid INT)")
+        cursor.execute(
+            "CREATE TABLE IF NOT EXISTS admin (id INT, mute INT, gmute INT, gban INT, chatid INT)")
         cursor.execute(command)
         connection.commit()
     except Exception:
         logger.exception("")
         return None
+
 
 def get():
     try:
@@ -458,6 +488,7 @@ def setcity(command):
         logger.exception("")
         return None
 
+
 def getcity():
     try:
         connection = sqlite3.connect("database/database.db")
@@ -467,7 +498,6 @@ def getcity():
         return city
     except Exception:
         return None
-
 
 
 # GDRIVE
@@ -483,6 +513,7 @@ def setGFolder(command):
         logger.exception("")
         return None
 
+
 def getGFolder():
     try:
         connection = sqlite3.connect("database/database.db")
@@ -495,12 +526,14 @@ def getGFolder():
 
 # FUNCS
 
+
 def store_func(command):
     connection = sqlite3.connect("database/database.db")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS loadmods (name, links)")
     cursor.execute(command)
     connection.commit()
+
 
 def get_func():
     try:
