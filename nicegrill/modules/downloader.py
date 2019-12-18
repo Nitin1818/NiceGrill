@@ -126,7 +126,8 @@ class Downloader:
             return
         await message.edit("<i>Processing...</i>")
         for dl in DOWNLOADS:
-            ls += f"● <b>{dl}:\nSize:</b> <i>{DOWNLOADS[dl].get_final_filesize(human=True)}</i>\n<b>Status:</b> <i>{DOWNLOADS[dl].get_status().capitalize()}</i>\n\n"
+            ls += f"● <b>{dl}:\nSize:</b> <i>{DOWNLOADS[dl].get_final_filesize(human=True)}"
+            f"</i>\n<b>Status:</b> <i>{DOWNLOADS[dl].get_status().capitalize()}</i>\n\n"
         await message.edit(ls)
 
     async def dlpausexxx(message):

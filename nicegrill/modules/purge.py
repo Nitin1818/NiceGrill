@@ -25,7 +25,7 @@ Purges the chat with a given message count or until the replied message"""
         await client.delete_messages(message.chat_id, msgs)
         success = (
             await client.send_message(message.chat_id,
-             "<b>Purge has been successful. This message will disappear in 3 seconds.</b>"))
+                                      "<b>Purge has been successful. This message will disappear in 3 seconds.</b>"))
         await asyncio.sleep(3)
         await client.delete_messages(message.chat_id, success.id)
 
@@ -47,7 +47,7 @@ Purges the chat with a given message count or till the replied message but only 
         await client.delete_messages(message.chat_id, msgs)
         success = (
             await client.send_message(message.chat_id,
-             "<b>Purge has been successful. This message will disappear in 3 seconds.</b>"))
+                                      "<b>Purge has been successful. This message will disappear in 3 seconds.</b>"))
         await asyncio.sleep(3)
         await client.delete_messages(message.chat_id, success.id)
 

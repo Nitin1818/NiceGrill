@@ -67,7 +67,8 @@ class Admin:
         chat = message.input_chat
         try:
             user = (
-                (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
+                (await message.client.get_entity(utils.get_arg(message))).id
+                if not message.is_reply else
                 (await message.get_reply_message()).sender.id)
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
@@ -88,7 +89,8 @@ class Admin:
         except UserCreatorError:
             await message.edit("<b>Wtf, that is the chat owner..</b>")
         except RightForbiddenError:
-            await message.edit("<b>You either don't have enough permissions or there's something wrong with the admin rights</b>")
+            await message.edit(
+                "<b>You either don't have enough permissions or there's something wrong with the admin rights</b>")
         except ChatAdminRequiredError:
             await message.edit("<b>Oh honey, you're not admin enough to promote this user 🙄</b>")
 
@@ -97,7 +99,8 @@ class Admin:
         chat = message.input_chat
         try:
             user = (
-                (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
+                (await message.client.get_entity(utils.get_arg(message))).id
+                if not message.is_reply else
                 (await message.get_reply_message()).sender.id)
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
@@ -118,7 +121,9 @@ class Admin:
         except UserCreatorError:
             await message.edit("<b>Wtf, that is the chat owner..</b>")
         except RightForbiddenError:
-            await message.edit("<b>You either don't have enough permissions or there's something wrong with the admin rights</b>")
+            await message.edit(
+                "<b>You either don't have enough permissions or"
+                " there's something wrong with the admin rights</b>")
         except ChatAdminRequiredError:
             await message.edit("<b>Oh honey, you're not admin enough to promote this user 🙄</b>")
 
@@ -155,7 +160,8 @@ class Admin:
         chat = message.input_chat
         try:
             user = (
-                (await message.client.get_entity(utils.get_arg(message))).id if not message.is_reply else
+                (await message.client.get_entity(utils.get_arg(message))).id
+                if not message.is_reply else
                 (await message.get_reply_message()).sender.id)
         except ValueError:
             await message.edit("<b>No user found in that name</b>")

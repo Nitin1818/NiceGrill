@@ -67,10 +67,10 @@ class Quote:
         canvas = Image.new(
             'RGB',
             (top.width
-            + pfpbg.width,
-            top.height
-            + mid.height
-            + bottom.height))
+             + pfpbg.width,
+             top.height
+             + mid.height
+             + bottom.height))
         canvas.paste(pfpbg, (0, 0))
         canvas.paste(top, (pfpbg.width, 0))
         canvas.paste(mid, (pfpbg.width, top.height))

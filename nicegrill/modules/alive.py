@@ -24,8 +24,8 @@ class Stats:
         username = getStats()[0][1]
         msg = getStats()[0][2]
         tot = (
-            "<i>{}</i>".format(msg) +
-            "<b>\n\nUser's name:</b> <i>{}</i>\n<b>Python version:</b> <i>{}</i>\n"
+            "<i>{}</i>".format(msg)
+            + "<b>\n\nUser's name:</b> <i>{}</i>\n<b>Python version:</b> <i>{}</i>\n"
             "<b>Telethon version:</b> <i>{}</i>\n<b>Current time:</b> <i>{}</i>" .format(
                 username,
                 platform.python_version(),
