@@ -6,6 +6,7 @@ import logging
 import traceback
 import sys
 import html
+import textwrap
 
 
 class Python:
@@ -30,10 +31,11 @@ class Python:
         try:
             await message.edit(caption + f"<code>{html.escape(res)}</code>")
         except MessageTooLongError:
-            await message.edit(caption + f"<code>{res[0:4096]}</code>")
-            for i in range(len(res) // 4096):
-                res = res[0:4096]
-                await message.reply(f"<code>{res}</code>")
+            res = textwrap.wrap(res, 4096-len(caption))
+            await message.edit(caption + f"<code>{res[0]}</code>")
+            res = res[1::]
+            for part in res:
+                await message.reply(f"<code>{part}</code>")
 
     async def execxxx(message):
         """A nice tool (like you 🥰) to test python codes
