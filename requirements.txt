@@ -4,8 +4,9 @@ mtranslate
 urbandict
 cython
 pygdrive3fixed
-google - api - python - client
+googleapiclient
 oauthclient
+gtts
 oweatherm
 requests
 pillow
