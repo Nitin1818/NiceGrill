@@ -7,6 +7,7 @@ import traceback
 import sys
 import html
 import textwrap
+import asyncio
 
 
 class Python:
@@ -33,8 +34,8 @@ class Python:
         except MessageTooLongError:
             res = textwrap.wrap(res, 4096-len(caption))
             await message.edit(caption + f"<code>{res[0]}</code>")
-            res = res[1::]
-            for part in res:
+            for part in res[1::]:
+                await asyncio.sleep(1)
                 await message.reply(f"<code>{part}</code>")
 
     async def execxxx(message):
