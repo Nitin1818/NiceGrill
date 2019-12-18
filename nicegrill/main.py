@@ -86,4 +86,4 @@ class main:
                      title='NiceGrill Storage(DO NOT DELETE)',
                      about='Storage channel for your files'))
         del_storage()
-         add_storage(channel.updates[1].channel_id)
+        add_storage(channel.updates[1].channel_id)
