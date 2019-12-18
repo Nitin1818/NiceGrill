@@ -12,6 +12,7 @@ langdetect
 pySmartDL
 youtube_dl
 youtube2mp3
+ffmpeg
 cython
 numpy
 pandas
