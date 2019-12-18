@@ -76,7 +76,7 @@ class main:
     async def storage(client):
         if get_storage():
             try:
-                await client.get_entity(int(str(-100) + str(get_storage()[0][0])))
+                await client.get_entity(get_storage()[0][0])
                 return
             except ValueError:
                  channel = await client(functions.channels.CreateChannelRequest(
@@ -89,4 +89,4 @@ class main:
                      about='Storage channel for your files'))
             pass 
         del_storage()
-        add_storage(channel.updates[1].channel_id)
+        add_storage(int(str(-100) + str(channel.updates[1].channel_id)))
