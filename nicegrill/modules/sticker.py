@@ -30,10 +30,14 @@ class Stickers:
         "<i>Aww, baby..! Who is a nice little sticker, yes you are, yes you are! Come over here...</i>"]
 
     async def dumpitxxx(message):
-        reply = await message.get_reply.message()
-        if not reply or reply.sticker:
+        reply = await message.get_reply_message()
+        if not reply or not reply.sticker:
             await message.edit("<b>Reply to a sticker first</b>")
             return
+        sticker = await message.client.download_media(reply, "sticker.png")
+        await message.client.send_file(message.chat_id, sticker)
+        await message.delete()
+        os.remove(sticker)
 
     async def setpackxxx(message):
         """Defines which pack your stickers will be added"""
