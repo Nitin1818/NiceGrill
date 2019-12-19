@@ -62,6 +62,7 @@ class main:
         loop.run_until_complete(rest)
 
     async def restart(client):
+        await main.storage(client)
         status = get_status()
         if not status:
             return
@@ -77,7 +78,7 @@ class main:
         if get_storage():
             try:
                 print("Tring to get")
-                await client.get_entity(get_storage()[0][0])
+                await client.get_entity(int(get_storage()[0][0]))
                 return
             except ValueError:
                 print("Couldnt get it")
@@ -91,5 +92,4 @@ class main:
             channel = await client(functions.channels.CreateChannelRequest(
                       title='NiceGrill Storage(DO NOT DELETE)',
                      about='Storage channel for your files'))
-            pass 
         add_storage(int(str(-100) + str(channel.updates[1].channel_id)))
