@@ -72,8 +72,10 @@ class Misc:
             channel = await message.client(functions.channels.CreateChannelRequest(
                 title='NiceGrill Storage(DO NOT DELETE)',
                 about='Storage channel for your files'))
-            arg = channel.updates[1].channel_id
-        if not str(arg).isdigit() and arg != "make":
+            del_storage()
+            add_storage(int("-100" + str(channel.updates[1].channel_id)))
+            await message.edit("<b>Added successfully</b>")
+        if not str(arg)[1:].isdigit() and arg != "make":
             await message.edit(f"<i>Either put an ID or type .asset make</i>")
             return
         del_storage()
