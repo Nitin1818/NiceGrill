@@ -168,7 +168,7 @@ will be deleted when the idiot passes the message limit"""
             if getattr(message.sender, "bot", None):
                 return
             AntiPM.ALLOWED.clear()
-            [AntiPM.ALLOWED.append(ls[0]) for ls in get_auth()]
+            [AntiPM.ALLOWED.append(ls[0]) for ls in get_auth() if get_auth()]
             if AntiPM.ALLOWED and message.sender_id in AntiPM.ALLOWED:
                 return
             if not getPM()[0][0]:
