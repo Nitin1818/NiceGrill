@@ -1,6 +1,6 @@
 import logging
 from nicegrill.modules._init import modules as mods, classes as classinfo
-from .. import utils
+from nicegrill import utils
 
 
 class Help:
@@ -15,7 +15,7 @@ class Help:
                 funcs.update(mods[cls])
         help = " ‎\n•{}•".format("<b>Help</b>".center(85))
         name = utils.get_arg(message)
-        if name and name in funcs:
+        if name and (name in funcs or name in classinfo):
             for cmd in funcs:
                 if name == cmd:
                     templ = (
