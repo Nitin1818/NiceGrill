@@ -42,20 +42,22 @@ class Stickers:
     async def setpackxxx(message):
         """Defines which pack your stickers will be added"""
         packid = utils.get_arg(message)
-        pack = False
-        async with message.client.conversation(429000) as conv:
-            await conv.send_message("/addsticker")
-            buttons = (await conv.get_response()).buttons[0]
-            await conv.send_message("/cancel")
-            for button in buttons:
-                if packid and (button.text == packid):
-                    pack = True
-        if not pack:
-            await message.edit("<b>You don't own this pack</b>")
-            return
         if packid == "clear":
             del_Packid()
             await message.edit("<b>Saved pack deleted successfully</b>")
+            return
+        pack = False
+        async with message.client.conversation(429000) as conv:
+            await conv.send_message("/addsticker")
+            buttons = (await conv.get_response()).buttons
+            await conv.send_message("/cancel")
+            for button in buttons:
+                for item in button:
+                    if packid and (item.text == packid):
+                        pack = True
+        if not pack:
+            await message.edit("<b>You don't own this pack</b>")
+            return
         elif packid and pack:
             del_Packid()
             set_Packid(packid)
