@@ -73,7 +73,7 @@ class Misc:
                 title='NiceGrill Storage(DO NOT DELETE)',
                 about='Storage channel for your files'))
             arg = channel.updates[1].channel_id
-        if not arg.isdigit() and arg != "make":
+        if not str(arg).isdigit() and arg != "make":
             await message.edit(f"<i>Either put an ID or type .asset make</i>")
             return
         del_storage()
