@@ -42,7 +42,7 @@ class Notes:
         caption = "<b>Notes you saved in this chat:\n\n</b>"
         list = ""
         for note in notes:
-            list += "<b>  - " + note[0][:] + "</b>\n"
+            list += "<b>  ◍ " + note[0][:] + "</b>\n"
         caption += list
         await message.edit(caption)
 

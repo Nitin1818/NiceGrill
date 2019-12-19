@@ -47,7 +47,7 @@ class Filters:
         caption = "<b>Filters you saved in this chat:\n\n</b>"
         list = ""
         for filter in filters:
-            list += "<b>  - " + filter[1] + "</b>\n"
+            list += "<b>  ◍ " + filter[1] + "</b>\n"
         caption += list
         await message.edit(caption)
         message.message = ""

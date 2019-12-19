@@ -72,7 +72,7 @@ class Snips:
             await message.edit("<b>No snip found in snips list.</b>")
             return
         for key in get:
-            snips += "<b> -  " + key[0] + "</b>\n"
+            snips += "<b> ◍  " + key[0] + "</b>\n"
         snipl = "<b>Snips that you saved: </b>\n\n" + snips
         await message.edit(snipl)
 

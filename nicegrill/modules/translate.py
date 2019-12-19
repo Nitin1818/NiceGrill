@@ -21,10 +21,8 @@ Example usage:\n.trt <lang> with a replied message"""
             return
         await message.edit("<i>Translating...</i>")
         result = translate(text, target, 'auto')
-        align = 55 if len(text) < 30 and len(result) < 30 else 78
-        caption = "•{}•\n\n".format("<b>TRANSLATE</b>".center(align))
-        await message.edit(caption
-                           + "<b>Text:</b> <i>{}</i>\n"
+        await message.edit(
+                           "<b>Text:</b> <i>{}</i>\n"
                            "<b>Detected Language:</b> <i>{}</i>\n\n"
                            "<b>Translated to:</b>\n<i>{}</i>"
                            .format(text, detect(text), result))

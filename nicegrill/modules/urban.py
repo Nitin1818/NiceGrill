@@ -20,5 +20,5 @@ class Urban:
             await message.edit("<b>Nothing found</b>")
             return
         await message.edit(
-            f"<b>Word:</b>\n<i>{a[0]['word']}</i>\n\n<b>Meaning:</b>\n"
-            f"<i>{a[0]['def']}</i>\n\n<b>Example:</b>\n<i>{a[0]['example']}</i>")
+            f"<b>◍ Word:</b>\n<i>{a[0]['word']}</i>\n\n<b>◍ Meaning:</b>\n"
+            f"<i>{a[0]['def']}</i>\n\n<b>◍ Example:</b>\n<i>{a[0]['example']}</i>")
