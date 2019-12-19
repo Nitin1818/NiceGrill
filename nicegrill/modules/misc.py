@@ -2,9 +2,10 @@ import os
 import sys
 import asyncio
 import logging
-from database.allinone import add_status, del_status, get_status
+from database.allinone import add_status, del_status, get_status, add_storage, del_storage
 from telethon.errors import rpcerrorlist
-from .. import utils
+from telethon import functions
+from nicegrill import utils
 
 
 class Misc:
@@ -64,3 +65,17 @@ class Misc:
             await Misc.restartxxx(message)
         else:
             await message.edit(f"<i>{update}</i>")
+
+    async def assetxxx(message):
+        arg = utils.get_arg(message)
+        if arg == "make":
+            channel = await message.client(functions.channels.CreateChannelRequest(
+                title='NiceGrill Storage(DO NOT DELETE)',
+                about='Storage channel for your files'))
+            arg = channel.updates[1].channel_id
+        if not arg.isdigit() and arg != "make":
+            await message.edit(f"<i>Either put an ID or type .asset make</i>")
+            return
+        del_storage()
+        add_storage(int(arg))
+        await message.edit("<b>Added successfully</b>")

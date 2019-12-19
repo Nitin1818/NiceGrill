@@ -1,7 +1,7 @@
 import logging
 import functools
 import asyncio
-from telethon import events, functions
+from telethon import events
 from database.allinone import *
 from nicegrill.modules import _init
 
@@ -62,7 +62,6 @@ class main:
         loop.run_until_complete(rest)
 
     async def restart(client):
-        await main.storage(client)
         status = get_status()
         if not status:
             return
@@ -73,23 +72,3 @@ class main:
                 await client.edit_message(entity=chat, text="<b>Restarted</b>", message=status[0][1])
             except Exception:
                 pass
-
-    async def storage(client):
-        if get_storage():
-            try:
-                print("Tring to get")
-                await client.get_entity(int(get_storage()[0][0]))
-                return
-            except ValueError:
-                print("Couldnt get it")
-                channel = await client(functions.channels.CreateChannelRequest(
-                    title='NiceGrill Storage(DO NOT DELETE)',
-                    about='Storage channel for your files'))
-                del_storage()
-                pass
-        else:
-            print("No chat")
-            channel = await client(functions.channels.CreateChannelRequest(
-                      title='NiceGrill Storage(DO NOT DELETE)',
-                     about='Storage channel for your files'))
-        add_storage(int(str(-100) + str(channel.updates[1].channel_id)))
