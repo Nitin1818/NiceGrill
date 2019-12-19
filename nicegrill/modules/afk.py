@@ -59,7 +59,7 @@ them later. Check your storage channel."""
                                                   "<b># Chat: </b><a href=https://t.me/c/{}>{}</a>\n"
                                                   "<b># Message Link: </b>{}\n\n"
                                                   "<b>Message:</b>\n<i>{}</i>"
-                                                  .format(message.sender.id, user, chat.id, chat.title, link, sentmsg))
+                                                  .format((await message.get_sender()).id, user, chat.id, chat.title, link, sentmsg))
             if not AFK.flood_ctrl > 0:
                 AFK.flood_ctrl += 1
             else:
@@ -77,7 +77,7 @@ them later. Check your storage channel."""
                 "<b>I've been AFK for {}{}{}{} seconds.\nAFK time:</b> <i>{}</i>" .format(
                     msg, days, hours, minutes, time[2], then))
             await message.respond(afkmsg)
-        if message.sender_id == (await message.client.get_me()).id and attr:
+        if (await message.get_sender()).id == (await message.client.get_me()).id and attr:
             if message.text.startswith(
                     ".afk") or message.text.startswith(".godark"):
                 return

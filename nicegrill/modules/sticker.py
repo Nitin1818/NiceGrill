@@ -72,7 +72,7 @@ class Stickers:
             result = (
                 "<b>Your new pack has been created.</b>\n"
                 "<b>Click</b> <a href=https://t.me/addstickers/{}sKangPack_{}>Here</a> "
-                "<b>to access it</b>".format(message.sender.username.capitalize(), message.sender.id))
+                "<b>to access it</b>".format(message.sender.username.capitalize(), (await message.get_sender()).id))
             name, emoji, done, packid = False, False, False, False
             await Stickers.kang(
                 message, msg, task, name, emoji, done, packid, result)
@@ -131,7 +131,7 @@ class Stickers:
             await message.client.send_read_acknowledge(conv.chat_id)
             id = await conv.send_message(
                 "{}sKangPack_{}_{}".format(
-                    message.sender.username.capitalize(), message.sender.id, random.randint(0, 99999999)))
+                    message.sender.username.capitalize(), (await message.get_sender()).id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
             set_Packid(id)
             await message.edit(result)
