@@ -250,6 +250,8 @@ def get_storage():
         cursor.execute("SELECT * FROM storage")
         id = cursor.fetchall()
         connection.close()
+        if not id:
+            return[(0)]
         return id
     except sqlite3.OperationalError:
         return None
