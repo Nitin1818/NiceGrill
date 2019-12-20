@@ -20,4 +20,4 @@
 
 #### Not yet, still working on it
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FSnapDragon7410%2Fnicegrill_autoheroku%2Ftree%2Fmaster&template=https%3A%2F%2Fgithub.com%2FSnapDragon7410%2Fnicegrill_autoheroku%2Ftree%2Fmaster)
