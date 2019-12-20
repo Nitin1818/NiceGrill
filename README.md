@@ -10,8 +10,6 @@
     • pkg install clang
     • pkg install libjpeg-turbo
     • pkg install libwebp
-    • pip install cython
-    • pip install numpy
     • pip install - r requirements.txt
 
 ◍ Run the bot:
