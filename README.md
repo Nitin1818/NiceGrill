@@ -6,6 +6,7 @@
 
 ◍ Install the requirements with the lines below:
 
+    • cd NiceGrill
     • pkg install clang
     • pkg install libjpeg-turbo
     • pkg install libwebp
@@ -15,7 +16,6 @@
 
 ◍ Run the bot:
 
-    • cd NiceGrill
     • python - m nicegrill login
 
 ## DIRECT DEPLOY TO HEROKU
