@@ -185,7 +185,7 @@ will be deleted when the idiot passes the message limit"""
                     AntiPM.FLOOD_CTRL = 0
                     return
                 async for msg in message.client.iter_messages(entity=message.chat_id,
-                                                              from_user=(await client.get_me()).id,
+                                                              from_user=(await message.client.get_me()).id,
                                                               search="I have not allowed you to PM",
                                                               limit=1):
                     await msg.delete()
