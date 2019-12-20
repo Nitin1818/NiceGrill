@@ -6,6 +6,8 @@ import asyncio
 from nicegrill.main import main
 from nicegrill.modules import _init
 from config import API_HASH, API_ID, SESSION
+from telethon.sessions import StringSession
+from telethon.sessions import StringSession
 import pandas as pd
 import sqlite3
 import os
@@ -14,13 +16,12 @@ import os
 if not API_ID or not API_HASH:
     API_ID = int(input("Enter your API ID:"))
     API_HASH = input("Enter your API HASH:")
-    file = open("config.py", "w")
+    file = open("config.py", "a+")
     file.write(f"API_ID={API_ID}\nAPI_HASH=\"{API_HASH}\"")
     file.close()
 
 if not SESSION:
     print("Run generate_session.py to create a string session first")
-    break
 
 async def restore(client):
     async for msg in client.iter_messages((await client.get_me()).id, limit=2):
@@ -49,7 +50,7 @@ async def restore(client):
     newdb.close()
 
 
-with TelegramClient(StringSession(SESSION) , API_ID, API_HASH) as client:
+with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
     asyncio.get_event_loop().create_task(restore(client))
     client.parse_mode = 'html'
     _init.loads()

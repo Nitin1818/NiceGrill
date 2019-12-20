@@ -22,7 +22,6 @@ if not API_ID or not API_HASH:
 
 if not SESSION:
     print("Run generate_session.py to create a string session first")
-    break
 
 async def restore(client):
     async for msg in client.iter_messages((await client.get_me()).id, limit=2):
