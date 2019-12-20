@@ -20,6 +20,8 @@ logger.addHandler(file_handler)
 
 class main:
 
+    loadclient = None
+
     async def outgoing(message):
         mods = {}
         ls = [_init.modules[obj] for obj in _init.modules]
@@ -62,6 +64,7 @@ class main:
         loop.run_until_complete(rest)
 
     async def restart(client):
+        main.loadclient = client
         status = get_status()
         if not status:
             return

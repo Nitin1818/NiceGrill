@@ -14,9 +14,3 @@ def arg_split_with(message, char):
         if space.strip() == "":
             args.remove(space)
     return args
-
-
-async def run(message):
-    command = await message.get_reply_message()
-    await message.client.edit_message(
-        message.chat_id, command.id, await _init.modules[command.text.split(" ")[0]](command.text.split(" ")[1:]))

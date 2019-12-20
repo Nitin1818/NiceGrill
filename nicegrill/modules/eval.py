@@ -51,7 +51,7 @@ There's no output on this one tho"""
         Python.reply = await message.get_reply_message()
         Python.message = message
         return {"message": message, "reply": await message.get_reply_message(),
-                "client": message.client, "getme": (await message.client.get_me()).id, "run": utils.run,
+                "client": message.client, "getme": (await message.client.get_me()).id,
                 "dispatch": Python.dispatch}
 
     def dispatch(cmd, msg):

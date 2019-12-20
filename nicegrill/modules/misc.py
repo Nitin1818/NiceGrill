@@ -6,6 +6,7 @@ from database.allinone import add_status, del_status, get_status, add_storage, d
 from telethon.errors import rpcerrorlist
 from telethon import functions
 from nicegrill import utils
+from datetime import datetime
 
 
 class Misc:
@@ -81,3 +82,15 @@ class Misc:
         del_storage()
         add_storage(int(arg))
         await message.edit("<b>Added successfully</b>")
+
+    async def watchout(message):
+        if datetime.now().hour == 23 and datetime.now().minute == 50:
+            await client.send_file('me', "database/database.db")
+
+        if datetime.now().hour == 0 and datetime.now().minute == 5:
+            async for msg in client.iter_messages('me', limit=2):
+                if msg.document and msg.document.attributes[0].file_name == "database.db":
+                    os.remove("database/database.db")
+                    await client.download_media(msg, "database/database.db")
+                    await msg.delete()
+                    Misc.restartxxx(message)
