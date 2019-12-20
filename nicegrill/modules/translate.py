@@ -1,6 +1,6 @@
 from mtranslate import translate
 from langdetect import detect
-from .. import utils
+from nicegrill import utils
 import logging
 
 

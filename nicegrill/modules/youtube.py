@@ -1,5 +1,5 @@
 from youtube_search import YoutubeSearch
-from .. import utils
+from nicegrill import utils
 import os
 import json
 import logging

@@ -2,7 +2,7 @@ import time
 import logging
 import platform
 from telethon import version
-from .. import utils
+from nicegrill import utils
 from database.allinone import setStats, getStats
 from datetime import datetime
 

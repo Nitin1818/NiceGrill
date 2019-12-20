@@ -1,7 +1,7 @@
 import logging
 import os
 import asyncio
-from .. import utils
+from nicegrill import utils
 from pySmartDL import SmartDL
 from database.allinone import setpath, getpath
 from datetime import datetime

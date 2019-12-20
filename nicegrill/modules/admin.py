@@ -3,7 +3,7 @@ from telethon.tl.types import ChatAdminRights, ChatBannedRights
 from telethon.errors.rpcerrorlist import *
 from telethon.tl import functions
 from database.allinone import add, get
-from .. import utils
+from nicegrill import utils
 from datetime import timedelta
 import logging
 

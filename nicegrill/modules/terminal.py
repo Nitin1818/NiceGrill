@@ -1,7 +1,7 @@
 import asyncio
 import subprocess
 import logging
-from .. import utils
+from nicegrill import utils
 from telethon.errors.rpcerrorlist import MessageTooLongError
 
 

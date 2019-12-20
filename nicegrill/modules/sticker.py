@@ -1,6 +1,6 @@
 from PIL import Image
 from database.allinone import set_Packid, get_Packid, del_Packid
-from .. import utils
+from nicegrill import utils
 import random
 import logging
 import os

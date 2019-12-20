@@ -1,4 +1,4 @@
-from .. import utils
+from nicegrill import utils
 from weather import Weather as wtr
 from database.allinone import setcity, getcity
 import logging

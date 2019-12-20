@@ -1,5 +1,5 @@
 from database.allinone import *
-from .. import utils
+from nicegrill import utils
 import sqlite3
 import logging
 

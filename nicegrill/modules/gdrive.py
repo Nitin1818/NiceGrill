@@ -2,7 +2,7 @@ import logging
 import os
 from pygdrive3fixed import service
 from database.allinone import getGFolder, setGFolder
-from .. import utils
+from nicegrill import utils
 from nicegrill.modules.downloader import Downloader as dl
 
 

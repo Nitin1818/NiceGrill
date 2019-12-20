@@ -1,6 +1,6 @@
 import logging
 import asyncio
-from .. import utils
+from nicegrill import utils
 
 
 class Purge:

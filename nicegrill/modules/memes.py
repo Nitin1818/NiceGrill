@@ -1,5 +1,5 @@
 import logging
-from .. import utils
+from nicegrill import utils
 import time
 import random
 

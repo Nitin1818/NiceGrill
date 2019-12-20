@@ -1,6 +1,6 @@
 import logging
 import urbandict
-from .. import utils
+from nicegrill import utils
 from urllib.error import HTTPError
 
 

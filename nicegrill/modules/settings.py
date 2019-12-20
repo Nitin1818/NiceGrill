@@ -1,5 +1,5 @@
 from database.allinone import set_pref
-from .. import utils
+from nicegrill import utils
 import logging
 import sqlite3
 

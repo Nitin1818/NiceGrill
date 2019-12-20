@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from .. import utils
+from nicegrill import utils
 from database.allinone import set_afk, get_afk, clr_afk, get_storage
 import logging
 

@@ -1,4 +1,4 @@
-from .. import utils, loader
+from nicegrill import utils, loader
 from database.allinone import store_func, get_func
 import logging
 import urllib

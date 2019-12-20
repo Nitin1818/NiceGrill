@@ -1,5 +1,5 @@
 import logging
-from .. import utils
+from nicegrill import utils
 from database.allinone import auth, get_auth, setPM, getPM
 from telethon import functions, tl
 
