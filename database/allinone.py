@@ -388,7 +388,7 @@ def setPM(command):
         connection = sqlite3.connect("database/database.db")
         cursor = connection.cursor()
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS antipm (mute, max, supblock)")
+            "CREATE TABLE IF NOT EXISTS antipm (mute, max, supblock, anti)")
         cursor.execute(command)
         connection.commit()
     except Exception:

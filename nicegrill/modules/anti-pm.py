@@ -24,6 +24,20 @@ class AntiPM:
         "<b>spamming my chat. Therefore, you have been blocked and reported</b>"
         "<b>as spam. Good luck!</b>")
 
+    async def antipmxxx(message):
+        switch = utils.get_arg(message).lower()
+        if switch == "on":
+            command = f"UPDATE antipm SET anti=1"
+            setPM(command)
+            await message.edit("<i>AntiPM turned on</i>")
+        elif switch == "off":
+            command = f"UPDATE antipm SET anti=0"
+            setPM(command)
+            await message.edit("<i>AntiPM turned off</i>")
+        else:
+            await message.edit("<i>It's either on or off, pick one</i>")
+            return
+
     async def approvexxx(message):
         """Allows that person to PM you, you can either reply to user,
 type their username or use this in their chat"""
@@ -165,7 +179,7 @@ will be deleted when the idiot passes the message limit"""
 
     async def watchout(message):
         if message.sender_id != (await message.client.get_me()).id and isinstance(message.to_id, tl.types.PeerUser):
-            if getattr(message.sender, "bot", None):
+            if getattr(message.sender, "bot", None) or getPM()[0][3] == 0:
                 return
             AntiPM.ALLOWED.clear()
             [AntiPM.ALLOWED.append(ls[0]) for ls in get_auth() if get_auth()]
