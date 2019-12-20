@@ -1,15 +1,11 @@
 from telethon.sync import TelegramClient, events
 from telethon.sessions import StringSession
 from nicegrill import dbsets
-import functools
-import asyncio
 from nicegrill.main import main
 from nicegrill.modules import _init
 from config import API_HASH, API_ID, SESSION
-from telethon.sessions import StringSession
-from telethon.sessions import StringSession
-import pandas as pd
-import sqlite3
+import functools
+import asyncio
 import os
 
 
@@ -22,32 +18,16 @@ if not API_ID or not API_HASH:
 
 if not SESSION:
     print("Run generate_session.py to create a string session first")
+    quit()
 
 async def restore(client):
     async for msg in client.iter_messages((await client.get_me()).id, limit=2):
         if msg.document and msg.document.attributes[0].file_name == "database.db":
             await client.download_media(msg)
             await msg.delete()
-    qtables = "SELECT * FROM sqlite_master WHERE type='table'"
     if not os.path.isfile("database.db"):
         return
-    olddb = sqlite3.connect("database.db")
-    tables = pd.read_sql(qtables, olddb)
-    newdb = sqlite3.connect("database/database.db")
-    newcur = newdb.cursor()
-    for table in tables.index:
-        newcur.execute(f"DROP TABLE IF EXISTS {tables.name[table]}")
-        newcur.execute(tables.sql[table])
-        qcols = pd.read_sql(f"SELECT * from {tables.name[table]}", olddb)
-        qcols.to_sql(
-            tables.name[table],
-            newdb,
-            index=False,
-            if_exists="append")
-    os.system("rm *.db*")
-    newdb.commit()
-    olddb.close()
-    newdb.close()
+    os.rename("database.db", "database/database.db")
 
 
 with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:

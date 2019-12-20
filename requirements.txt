@@ -2,7 +2,6 @@ telethon
 meval
 mtranslate
 urbandict
-cython
 pygdrive3fixed
 google-api-python-client
 oauthclient
@@ -16,5 +15,3 @@ youtube_dl
 youtube2mp3
 youtube-search
 ffmpeg
-numpy
-pandas
