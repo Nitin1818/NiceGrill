@@ -1,21 +1,23 @@
 import logging
 import os
 from pygdrive3fixed import service
-from database.allinone import getGFolder, setGFolder
+from database import settingsdb as settings
 from nicegrill import utils
 from nicegrill.modules.downloader import Downloader as dl
 
 
 class GoogleDrive:
 
-    drive_service = service.DriveService('./client_secret.json')
-
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 
+    def get_service():
+         return service.DriveService('./client_secret.json')
+
     async def gdrivexxx(message):
         """Uploads the replied media or input url to your gdrive with a progressbar"""
-        GoogleDrive.drive_service.auth()
+        gservice = GoogleDrive.get_service()
+        gservice.auth()
         # await message.edit("<b>Check your terminal screen for authorization
         # link</b>")
         arg = utils.get_arg(message)
@@ -24,16 +26,16 @@ class GoogleDrive:
         else:
             if "/" not in arg:
                 file = arg.split("/")
-        if getGFolder():
-            folder = getGFolder()[0][0]
-        elif GoogleDrive.drive_service.list_folders_by_name('Telegram'):
-            folder = GoogleDrive.drive_service.list_folders_by_name('Telegram')[
+        if settings.check_gfolder():
+            folder = settings.check_gfolder()
+        elif gservice.list_folders_by_name('Telegram'):
+            folder = gservice.list_folders_by_name('Telegram')[
                 0]["id"]
         else:
-            folder = GoogleDrive.drive_service.create_folder('Telegram')
+            folder = gservice.create_folder('Telegram')
         await message.edit("<i>Uploading to GDrive</i>")
         try:
-            up = GoogleDrive.drive_service.upload_file(
+            up = gservice.upload_file(
                 file[-1], "/".join(file), folder)
         except MemoryError:
             await message.edit("<b>Your drive is full</b>")
@@ -46,20 +48,19 @@ class GoogleDrive:
             return
         await message.edit(
             f"<i>{file[-1]}</i> <b>uploaded to your GDrive folder. </b>"
-            f"<a href={GoogleDrive.drive_service.anyone_permission(up)}>Click Here</a> <b>to access it</b>")
+            f"<a href={gservice.anyone_permission(up)}>Click Here</a> <b>to access it</b>")
         os.remove("/".join(file))
 
     async def setgfolderxxx(message):
         """Specifies what folder your downloads go in in your drive"""
-        GoogleDrive.drive_service.auth()
-        folder = GoogleDrive.drive_service.list_folders_by_name(
+        gservice = GoogleDrive.get_service()
+        gservice.auth()
+        folder = gservice.list_folders_by_name(
             utils.get_arg(message))[0]["id"]
         if not folder:
-            folder = GoogleDrive.drive_service.create_folder(
+            folder = gservice.create_folder(
                 utils.get_arg(message))
             await message.edit("<b>You dont have this folder in your drive so i created it for you</b>")
-        delete = "DELETE FROM gdrive"
-        add = f"INSERT INTO gdrive (folderid) VALUES ('{folder}')"
-        setGFolder(delete)
-        setGFolder(add)
+        settings.delete("GFolder")
+        settings.set_gfolder(folder)
         await message.edit("<b>Succesfully saved</b>")

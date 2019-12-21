@@ -1,6 +1,6 @@
 import logging
 from nicegrill import utils
-from database.allinone import auth, get_auth, setPM, getPM
+from database import antipmdb as nicedb
 from telethon import functions, tl
 
 
@@ -27,12 +27,12 @@ class AntiPM:
     async def antipmxxx(message):
         switch = utils.get_arg(message).lower()
         if switch == "on":
-            command = f"UPDATE antipm SET anti=1"
-            setPM(command)
+            nicedb.delete("AntiPM")
+            nicedb.set_antipm(True)
             await message.edit("<i>AntiPM turned on</i>")
         elif switch == "off":
-            command = f"UPDATE antipm SET anti=0"
-            setPM(command)
+            nicedb.delete("AntiPM")
+            nicedb.set_antipm(False)
             await message.edit("<i>AntiPM turned off</i>")
         else:
             await message.edit("<i>It's either on or off, pick one</i>")
@@ -52,14 +52,14 @@ type their username or use this in their chat"""
         if pick == (await message.client.get_me()).id:
             await message.edit("<b>Why would you wanna approve yourself?</b>")
             return
-        if str(pick) not in str(get_auth()):
-            command = f"INSERT INTO auth (id) VALUES ({pick})"
+        if nicedb.check_approved(pick):
+            await message.edit("<i>User is already approved</i>")
+            return
         else:
-            command = f"UPDATE auth SET id={pick}"
-        auth(command)
-        await message.edit(
-            "<a href=tg://user?id={}>{}</a> <b>is approved to PM you now</b>"
-            .format(pick, (await message.client.get_entity(pick)).first_name))
+            nicedb.approve(pick)
+            await message.edit(
+                "<a href=tg://user?id={}>{}</a> <b>is approved to PM you now</b>"
+                .format(pick, (await message.client.get_entity(pick)).first_name))
 
     async def disapprovexxx(message):
         """Prevents that person to PM you, you can either reply to user,
@@ -75,15 +75,14 @@ type their username or use this in their chat"""
         if pick == (await message.client.get_me()).id:
             await message.edit("<b>Why would you wanna disapprove yourself?</b>")
             return
-        if str(pick) not in str(get_auth()):
-            await message.edit("<b>User is not approved at all</b>")
+        if not nicedb.check_approved(pick):
+            await message.edit("<i>User is not approved</i>")
             return
         else:
-            command = f"DELETE FROM auth WHERE id={pick}"
-        auth(command)
-        await message.edit(
-            "<a href=tg://user?id={}>{}</a> <b>is disapproved to PM you now</b>"
-            .format(pick, (await message.client.get_entity(pick)).first_name))
+            nicedb.disapprove(pick)
+            await message.edit(
+                "<a href=tg://user?id={}>{}</a> <b>is disapproved to PM you now</b>"
+                .format(pick, (await message.client.get_entity(pick)).first_name))
 
     async def blockxxx(message):
         """Simply blocks the person..duh!!"""
@@ -113,15 +112,15 @@ type their username or use this in their chat"""
         chat = None if not hasattr(
             message.to_id, "user_id") else message.chat_id
         if not reply and not id and not chat:
-            await message.edit("<b>No user found</b>")
+            await message.edit("<i>No user found</i>")
             return
         pick = reply or id or chat
         if pick == (await message.client.get_me()).id:
-            await message.edit("<b>Why would you wanna unblock yourself?</b>")
+            await message.edit("<i>Why would you wanna unblock yourself?</i>")
             return
         await message.client(functions.contacts.UnblockRequest(id=pick))
         await message.edit(
-            "<a href=tg://user?id={}>{}</a> <b>has been unblocked</b>"
+            "<a href=tg://user?id={}>{}</a> <i>has been unblocked</i>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
 
     async def notifsxxx(message):
@@ -130,67 +129,58 @@ sounds from unwanted PMs. It auto-sends a
 a message in your name until that user gets blocked or approved"""
         val = utils.get_arg(message)
         if not val:
-            await message.edit("<b>Please type on/off</b>")
+            await message.edit("<i>Please type on/off</i>")
             return
         if val == "off":
-            command = (
-                "INSERT INTO antipm (mute) VALUES (0)" if not getPM()
-                else "UPDATE antipm SET mute = 0")
-            await message.edit("<b>Notifications from unapproved PMs are muted</b>")
+            nicedb.delete("Notifications")
+            nicedb.set_notif(False)
+            await message.edit("<i>Notifications from unapproved PMs muted</i>")
         if val == "on":
-            command = (
-                "INSERT INTO antipm (mute) VALUES (0)" if not getPM()
-                else "UPDATE antipm SET mute = 0")
-            await message.edit("<b>Notifications from unapproved PMs are unmuted</b>")
-        setPM(command)
+            nicedb.delete("Notifications")
+            nicedb.set_notif(True)
+            await message.edit("<i>Notifications from unapproved PMs unmuted</i>")
 
     async def setlimitxxx(message):
         """This one sets a max. message limit for unwanted
 PMs and when they go beyond it, bamm!"""
         limit = int(utils.get_arg(message))
         if not limit or not str(limit).isdigit():
-            await message.edit("<b>Please type a number</b>")
+            await message.edit("<i>Please type a number</i>")
             return
         if limit > 0:
-            command = (
-                "INSERT INTO antipm (max) VALUES (0)" if not getPM()
-                else "UPDATE antipm SET max = 0")
-            await message.edit("<b>Max. PM message limit successfully updated</b>")
-        setPM(command)
+            nicedb.delete("Limit")
+            nicedb.set_limit(limit)
+            await message.edit("<i>Max. PM message limit successfully updated</i>")
 
     async def superblockxxx(message):
         """If unwanted users spams your chat, the chat
 will be deleted when the idiot passes the message limit"""
         val = utils.get_arg(message)
         if not val:
-            await message.edit("<b>Please type on/off</b>")
+            await message.edit("<i>Please type on/off</i>")
             return
         if val == "on":
-            command = (
-                "INSERT INTO antipm (supblock) VALUES (1)" if not getPM()
-                else "UPDATE antipm SET mute = 1")
-            await message.edit("<b>Chats from unapproved PMs will be removed</b>")
+            nicedb.delete("SuperBlock")
+            nicedb.set_sblock(True)
+            await message.edit("<i>Chats from unapproved PMs will be removed</i>")
         if val == "off":
-            command = (
-                "INSERT INTO antipm (supblock) VALUES (0)" if not getPM()
-                else "UPDATE antipm SET mute = 0")
-            await message.edit("<b>Chats from unapproved PMs will not be removed anymore</b>")
+            nicedb.delete("SuperBlock")
+            nicedb.set_sblock(False)
+            await message.edit("<i>Chats from unapproved PMs will not be removed anymore</i>")
         setPM(command)
 
     async def watchout(message):
         if message.sender_id != (await message.client.get_me()).id and isinstance(message.to_id, tl.types.PeerUser):
-            if getattr(message.sender, "bot", None) or getPM()[0][3] == 0:
+            if getattr(message.sender, "bot", None) or not nicedb.check_antipm():
                 return
-            AntiPM.ALLOWED.clear()
-            [AntiPM.ALLOWED.append(ls[0]) for ls in get_auth() if get_auth()]
-            if AntiPM.ALLOWED and message.sender_id in AntiPM.ALLOWED:
+            user = (await message.get_sender()).id
+            if nicedb.check_approved(user):
                 return
-            if not getPM()[0][0]:
+            if not nicedb.check_notifs():
                 await message.client.send_read_acknowledge(message.chat_id)
-            user = message.sender_id
             user_warns = 0 if user not in AntiPM.USERS_AND_WARNS else AntiPM.USERS_AND_WARNS[
                 user]
-            if user_warns <= getPM()[0][1] - 2:
+            if user_warns <= nicedb.check_limit() - 2:
                 user_warns += 1
                 AntiPM.USERS_AND_WARNS.update({user: user_warns})
                 if not AntiPM.FLOOD_CTRL > 0:
@@ -199,15 +189,15 @@ will be deleted when the idiot passes the message limit"""
                     AntiPM.FLOOD_CTRL = 0
                     return
                 async for msg in message.client.iter_messages(entity=message.chat_id,
-                                                              from_user=(await message.client.get_me()).id,
-                                                              search="I have not allowed you to PM",
-                                                              limit=1):
+                                                             from_user='me',
+                                                             search="I have not allowed you to PM",
+                                                             limit=1):
                     await msg.delete()
                 await message.reply(AntiPM.WARNING)
                 return
             await message.reply(AntiPM.BLOCKED)
             await message.client(functions.messages.ReportSpamRequest(peer=message.sender_id))
             await message.client(functions.contacts.BlockRequest(id=message.sender_id))
-            if getPM()[0][2] == 1:
+            if nicedb.check_sblock():
                 await message.client.delete_dialog(entity=message.chat_id, revoke=True)
             AntiPM.USERS_AND_WARNS.update({user: 0})

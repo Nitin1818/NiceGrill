@@ -2,7 +2,7 @@ from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest
 from telethon.tl.types import ChatAdminRights, ChatBannedRights
 from telethon.errors.rpcerrorlist import *
 from telethon.tl import functions
-from database.allinone import add, get
+from database import admindb as nicedb
 from nicegrill import utils
 from datetime import timedelta
 import logging
@@ -137,11 +137,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not get() or str(user) not in str(get()):
-            command = f'INSERT INTO admin (id, mute, gmute, gban, chatid) VALUES ({user}, 1, 0, 0, {message.chat_id})'
-        elif str(user) in str(get()):
-            command = f'UPDATE admin SET mute=1 WHERE id={user}'
-        add(command)
+        if not nicedb.check_user(user):
+            nicedb.add_user(user, True, False, False, message.chat_id)
+        else:
+            nicedb.update_user({"User": user}, {"Mute": True})
         try:
             await message.client(EditBannedRequest(chat, user, MUTE))
             await message.edit("<b>Muted</b>")
@@ -166,11 +165,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not get() or str(user) not in str(get()):
-            pass
-        elif str(user) in str(get()):
-            command = f'UPDATE admin SET mute=0 WHERE id={user}'
-            add(command)
+        if not nicedb.check_user(user):
+            nicedb.add_user(user, False, False, False, message.chat_id)
+        else:
+            nicedb.update_user({"User": user}, {"Mute": False})
         try:
             await message.client(EditBannedRequest(chat, user, UNMUTE))
             # add_unmuted(user)
@@ -274,10 +272,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not get() or str(user) not in str(get()):
-            command = f'INSERT INTO admin (id, mute, gmute, gban) VALUES ({user}, 0, 0, 1)'
-        elif str(user) in str(get()):
-            command = f'UPDATE admin SET gban=1 WHERE id={user}'
+        if not nicedb.check_user(user):
+            nicedb.add_user(user, False, False, True, message.chat_id)
+        else:
+            nicedb.update_user({"User": user}, {"GBan": True})
         add(command)
         await message.edit("<b>Globally banned...</b>")
 
@@ -289,12 +287,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not get() or str(user) not in str(get()):
-            await message.edit('<b>This user is not gbanned</b>')
-            return
-        elif str(user) in str(get()):
-            command = f'UPDATE admin SET gban=0 WHERE id={user}'
-            add(command)
+        if not nicedb.check_user(user):
+            nicedb.add_user(user, False, False, False, message.chat_id)
+        else:
+            nicedb.update_user({"User": user}, {"GBan": False})
         await message.edit("<b>Global ban lifted...</b>")
 
     async def gmutexxx(message):
@@ -306,11 +302,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not get() or str(user) not in str(get()):
-            command = f'INSERT INTO admin (id, mute, gmute, gban) VALUES ({user}, 1, 1, 0)'
-        elif str(user) in str(get()):
-            command = f'UPDATE admin SET gmute=1 WHERE id={user}'
-        add(command)
+        if not nicedb.check_user(user):
+            nicedb.add_user(user, True, True, False, message.chat_id)
+        else:
+            nicedb.update_user({"User": user}, {"Mute": True, "GMute": True})
         await message.edit("<b>Globally muted</b>")
 
     async def ungmutexxx(message):
@@ -322,12 +317,10 @@ class Admin:
         except TypeError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not get() or str(user) not in str(get()):
-            await message.edit('<b>This user is not gmuted</b>')
-            return
-        elif str(user) in str(get()):
-            command = f'UPDATE admin SET gmute=0 WHERE id={user}'
-            add(command)
+        if not nicedb.check_user(user):
+            nicedb.add_user(user, False, False, False, message.chat_id)
+        else:
+            nicedb.update_user({"User": user}, {"GBan": False})
         await message.edit("<b>Global mute lifted</b>")
 
     async def kickmexxx(message):
@@ -337,17 +330,16 @@ class Admin:
     async def watchout(message):
         user = message.sender_id
         chat = message.chat_id
-        if get():
-            for i in range(len(get())):
-                if (await message.client.get_me()).id == get()[i][0]:
-                    return
-                if user in get()[i] and get()[i][2] == 1:
-                    await message.delete()
-                if user in get()[i] and get()[
-                        i][4] == message.chat_id and get()[i][1] == 1:
-                    await message.delete()
-                if user in get()[i] and get()[i][3] == 1:
-                    try:
-                        await message.client(EditBannedRequest(chat, user, BAN))
-                    except Exception:
-                        pass
+        if nicedb.check_user(user):
+            entity = nicedb.check_user(user)
+            if (await message.client.get_me()).id == entity["User"]:
+                return
+            if entity["Mute"] and entity["GMute"]:
+                await message.delete()
+            elif entity["Mute"] and not entity["GMute"] and entity["Chat"] == chat:
+                  await message.delete()
+            if entity["GBan"]:
+                try:
+                    await message.client(EditBannedRequest(chat, user, BAN))
+                except Exception:
+                    pass

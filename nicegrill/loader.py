@@ -14,7 +14,6 @@ class loadmod:
 
     def load(mod, client):
         try:
-            print(mod)
             imp = __import__(mod[0:-3].replace("/", "."))
         except Exception as e:
             loadmod.logger.error(e)

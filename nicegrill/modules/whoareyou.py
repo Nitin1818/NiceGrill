@@ -8,7 +8,7 @@ class WhoAreYou:
 
     async def whoxxx(message):
         user = (
-            (await message.get_reply.message()).sender if message.is_reply
+            (await message.get_reply_message()).sender if message.is_reply
             else message.sender)
         identify = (
             f"<b>First Name:</b> <i>{user.first_name}</i>\n"

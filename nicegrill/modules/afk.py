@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from nicegrill import utils
-from database.allinone import set_afk, get_afk, clr_afk, get_storage
+from database import afkdb as nicedb
 import logging
 
 
@@ -9,7 +9,6 @@ class AFK:
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
     flood_ctrl = 0
-    godark = False
 
     async def afkxxx(message):
         """AFK means Away from Keyboard ya dummy.. duh!"""
@@ -17,8 +16,7 @@ class AFK:
         current = str(datetime.now())
         if not msg:
             msg = "No Reason"
-        await clr_afk()
-        await set_afk(True, msg, current)
+        nicedb.set_afk(msg, current)
         await message.edit("<b>I'm going AFK</b>")
 
     async def godarkxxx(message):
@@ -31,21 +29,20 @@ them later. Check your storage channel."""
             await message.edit("<b>Enter on/off as an option</b>")
             return
         if msg == "on":
-            AFK.godark = True
+            nicedb.set_godark(True)
             await message.edit("<b>AFK notifications muted</b>")
         else:
-            AFK.godark = False
+            nicedb.set_godark(False)
             await message.edit("<b>AFK notifications unmuted</b>")
 
     async def watchout(message):
-        attr = await get_afk()
-        if not attr:
+        if not nicedb.check_afk():
             return
-        msg = attr[0][1]
-        then = datetime.strptime(attr[0][2], '%Y-%m-%d %H:%M:%S.%f')
-        if getattr(message, "message") and message.mentioned and attr:
+        msg = nicedb.check_afk()["Message"]
+        then = datetime.strptime(nicedb.check_afk()["AFKTime"], '%Y-%m-%d %H:%M:%S.%f')
+        if getattr(message, "message") and message.mentioned:
             storage = await message.client.get_entity((get_storage())[0][0])
-            if AFK.godark:
+            if nicedb.check_godark():
                 await message.client.send_read_acknowledge(
                     message.chat, message, clear_mentions=True)
                 sentmsg = message.text
@@ -77,12 +74,10 @@ them later. Check your storage channel."""
                 "<b>I've been AFK for {}{}{}{} seconds.\nAFK time:</b> <i>{}</i>" .format(
                     msg, days, hours, minutes, time[2], then))
             await message.respond(afkmsg)
-        if (await message.get_sender()).id == (await message.client.get_me()).id and attr:
+        if (await message.get_sender()).id == (await message.client.get_me()).id:
             if message.text.startswith(
                     ".afk") or message.text.startswith(".godark"):
                 return
-            await clr_afk()
-            await message.client.send_message(
-                entity=message.chat_id,
-                message="<b>I'm not AFK anymore.</b>",
-                reply_to=message.id)
+            nicedb.stop_afk()
+            await message.reply("<b>I'm not AFK anymore.</b>")
+

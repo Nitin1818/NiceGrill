@@ -1,3 +1,4 @@
-API_ID=None
-API_HASH=None
-SESSION=None
+API_HASH = None
+API_ID = None
+MONGO_URI = None
+SESSION = None

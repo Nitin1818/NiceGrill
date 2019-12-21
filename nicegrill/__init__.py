@@ -1,9 +1,9 @@
+from database import mongo
 from telethon.sync import TelegramClient, events
 from telethon.sessions import StringSession
-from nicegrill import dbsets
 from nicegrill.main import main
 from nicegrill.modules import _init
-from config import API_HASH, API_ID, SESSION
+from config import API_HASH, API_ID, SESSION, MONGO_URI
 import functools
 import asyncio
 import os
@@ -20,18 +20,11 @@ if not SESSION:
     print("Run generate_session.py to create a string session first")
     quit()
 
-async def restore(client):
-    async for msg in client.iter_messages((await client.get_me()).id, limit=2):
-        if msg.document and msg.document.attributes[0].file_name == "database.db":
-            await client.download_media(msg)
-            await msg.delete()
-    if not os.path.isfile("database.db"):
-        return
-    os.rename("database.db", "database/database.db")
-
+if not MONGO_URI:
+    print("Haven't you set your MongoDB URI yet?")
+    quit()
 
 with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
-    asyncio.get_event_loop().create_task(restore(client))
     client.parse_mode = 'html'
     _init.loads()
     main.read(client)

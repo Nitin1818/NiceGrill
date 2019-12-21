@@ -1,6 +1,6 @@
-from database.allinone import *
+from database import notesdb as nicedb, settingsdb as settings
 from nicegrill import utils
-import sqlite3
+import logging
 
 BLACKLIST = [".stop", ".stopall", ".filter"]
 
@@ -12,7 +12,7 @@ class Filters:
 
     async def filterxxx(message):
         args = utils.arg_split_with(message, ",")
-        storage = await message.client.get_entity((get_storage())[0][0])
+        storage = settings.check_asset()
         media = None
         reply = await message.get_reply_message()
         if not args:
@@ -28,48 +28,44 @@ class Filters:
         name = args[0]
         chatid = message.chat_id
         if reply and reply.media and not reply.web_preview:
-            media = (await message.client.send_file(entity=storage, file=reply.media)).id
-        try:
-            await del_filter(chatid, name)
-            await add_filter(chatid, name, value, media)
-        except sqlite3.OperationalError:
-            pass
-            await add_filter(chatid, name, value, media)
-        await message.edit("<b>Filter succesfully saved</b>")
-        message.message = ""
+            media = (await message.client.send_message(storage, reply)).id
+        if nicedb.check_one("Filters", chatid, name):
+            nicedb.update("Filters", {"Chat": chatid, "Key": name},
+                chatid, name, value, media)
+            await message.edit("<b>Filter succesfully updated</b>")
+        else:
+            nicedb.add("Filters", chatid, name, value, media)
+            await message.edit("<b>Filter succesfully saved</b>")
 
     async def filtersxxx(message):
         chatid = message.chat_id
-        filters = await get_filters(chatid)
+        filters = nicedb.check("Filters", chatid)
         if not filters:
-            await message.edit("<b>No filters found in this chat</b>")
+            await message.edit("<b>No filter found in this chat</b>")
             return
-        caption = "<b>Filters you saved in this chat:\n\n</b>"
+        caption = "<b>Word(s) you filtered in this chat:\n\n</b>"
         list = ""
         for filter in filters:
-            list += "<b>  ◍ " + filter[1] + "</b>\n"
+            list += "<b>  ◍ " + filter["Key"] + "</b>\n"
         caption += list
         await message.edit(caption)
-        message.message = ""
 
     async def stopxxx(message):
         args = utils.get_arg(message)
         chatid = message.chat_id
-        filter = await del_filter(chatid, args)
-        if not filter:
-            await message.edit("<b>No filters found in that name</b>")
+        if not nicedb.check_one("Filters", chatid, args):
+            await message.edit("<b>No filter found in that name</b>")
             return
-        await message.edit("<b>Filters deleted successfully</b>")
-        message.message = ""
+        nicedb.delete_one("Filters", chatid, args)
+        await message.edit("<b>Filter deleted successfully</b>")
 
     async def stopallxxx(message):
         chatid = message.chat_id
-        filters = await del_filters(chatid)
-        if not filters:
+        if not nicedb.check("Filters", chatid):
             await message.edit("<b>There are no filters in this chat</b>")
             return
+        nicedb.delete("Filters", chatid)
         await message.edit("<b>Filters cleared out successfully</b>")
-        message.message = ""
 
     async def watchout(message):
         for i in BLACKLIST:
@@ -77,17 +73,15 @@ class Filters:
                 return
         arg = message.text
         chatid = message.chat_id
-        if get_storage():
-            storage = await message.client.get_entity((get_storage())[0][0])
-        filters = await get_filters(chatid)
+        storage = settings.check_asset()
+        filters = nicedb.check("Filters", chatid)
         if not filters:
             return
-        for list in filters:
-            if list[1] in arg:
-                value = list[2]
-                id = list[3]
-                if id:
-                    fetch = await message.client.get_messages(entity=storage.id, ids=id)
-                    await message.client.send_message(entity=chatid, file=fetch.media, message=value)
+        for item in filters:
+            if item["Key"] in arg:
+                value = item["Value"] if not item["Media"] else item["Media"]
+                if item["Media"]:
+                    fetch = await message.client.get_messages(entity=storage, ids=value)
+                    await message.client.send_message(chatid, fetch, reply_to=message.id)
                     return
                 await message.reply(value)

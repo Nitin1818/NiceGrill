@@ -1,7 +1,7 @@
-import urllib
+from urllib import request
 import importlib
 import os
-from database.allinone import get_func
+from database import dloadsdb as nicedb
 
 
 modules = {}
@@ -12,17 +12,17 @@ cmds = {}
 
 
 def loads():
-    if get_func():
-        for name in get_func():
-            urllib.request.urlretrieve(name[1], "./" + name[0])
+    if nicedb.check_dload():
+        for mod in nicedb.check_dload():
+            request.urlretrieve(mod["URL"], "./" + mod["Name"])
             try:
-                imported.append(__import__(name[0][0:-3]))
+                imported.append(__import__(mod["Name"][0:-3]))
                 print("Module is loaded: {}".format(
-                    name[0][0:-3].capitalize()))
+                    mod["Name"][0:-3].capitalize()))
             except ImportError as e:
                 print("Module can not be loaded: {}\n\n{}".format(
-                    name[0][0:-3].capitalize(), e))
-            os.remove(name[0])
+                    mod["Name"][0:-3].capitalize(), e))
+            os.remove(mod["Name"])
     base = os.path.basename(__name__)
     for f in os.listdir("/".join(base.split(".")[:2])):
         if not f.startswith("_") and f.endswith(".py"):

@@ -1,5 +1,6 @@
 from nicegrill.modules import _init
 
+cli = None
 
 def get_arg(message):
     split = message.message.message[1:].replace("\n", " \n").split(" ")

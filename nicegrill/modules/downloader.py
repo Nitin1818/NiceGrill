@@ -3,8 +3,8 @@ import os
 import asyncio
 from nicegrill import utils
 from pySmartDL import SmartDL
-from database.allinone import setpath, getpath
 from datetime import datetime
+from database import settingsdb as settings
 
 DOWNLOADS = {}
 shell = "◯" * 19
@@ -23,10 +23,8 @@ class Downloader:
         pathname = utils.get_arg(message)
         if not os.path.exists(pathname):
             os.mkdir(pathname, 0o755)
-        add = f"INSERT INTO downloader (path) VALUES ('{pathname}')"
-        delete = "DELETE FROM downloader"
-        setpath(delete)
-        if setpath(add):
+        settings.delete("Path")
+        if settings.set_path(pathname):
             await message.edit("<b>Successfully set.</b>")
         else:
             await message.edit("<b>Something went wrong.</b>")
@@ -65,7 +63,7 @@ class Downloader:
 
     async def dlxxx(message):
         """Downloads the replied media or input url with a nice progressbar"""
-        path = getpath()[0][0]
+        path = settings.check_path()
         target = (
             utils.get_arg(message) if not message.is_reply
             else (await message.get_reply_message()).media)

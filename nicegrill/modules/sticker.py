@@ -1,5 +1,5 @@
 from PIL import Image
-from database.allinone import set_Packid, get_Packid, del_Packid
+from database import settingsdb as settings
 from nicegrill import utils
 import random
 import logging
@@ -43,11 +43,11 @@ class Stickers:
         """Defines which pack your stickers will be added"""
         packid = utils.get_arg(message)
         if packid == "clear":
-            del_Packid()
+            settings.delete("Pack")
             await message.edit("<b>Saved pack deleted successfully</b>")
             return
         pack = False
-        async with message.client.conversation(429000) as conv:
+        async with message.client.conversation("@stickers") as conv:
             await conv.send_message("/addsticker")
             buttons = (await conv.get_response()).buttons
             await conv.send_message("/cancel")
@@ -59,8 +59,8 @@ class Stickers:
             await message.edit("<b>You don't own this pack</b>")
             return
         elif packid and pack:
-            del_Packid()
-            set_Packid(packid)
+            settings.delete("Pack")
+            settings.set_pack(packid)
             await message.edit("<b>Pack saved successfully</b>")
 
     async def kangxxx(message):
@@ -71,7 +71,7 @@ class Stickers:
             return
         img = await reply.download_media()
         await Stickers.resize(message, img)
-        packid = None if not get_Packid() else get_Packid()[0][0]
+        packid = settings.check_pack()
         if not packid:
             msg = "<b>You have no sticker pack set, so I'm creating a new pack</b>"
             task = "/newpack"
@@ -104,7 +104,7 @@ class Stickers:
 
     async def kang(message, msg, task, name, emoji, done, packid, result):
         check_sticker_chat = False
-        async with message.client.conversation(429000, total_timeout=15) as conv:
+        async with message.client.conversation("@stickers", total_timeout=15) as conv:
             async for chat in message.client.iter_dialogs():
                 if 429000 == chat.id:
                     check_sticker_chat = True
@@ -139,5 +139,5 @@ class Stickers:
                 "{}sKangPack_{}_{}".format(
                     message.sender.username.capitalize(), (await message.get_sender()).id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
-            set_Packid(id)
+            setting.set_pack(id)
             await message.edit(result)

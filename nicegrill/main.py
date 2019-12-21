@@ -2,7 +2,7 @@ import logging
 import functools
 import asyncio
 from telethon import events
-from database.allinone import *
+from database import settingsdb as settings
 from nicegrill.modules import _init
 
 logging.basicConfig(
@@ -27,7 +27,7 @@ class main:
         ls = [_init.modules[obj] for obj in _init.modules]
         for item in ls:
             mods.update(item)
-        prefix = "." if not get_pref() else get_pref()[0][0]
+        prefix = settings.check_prefix()
         if getattr(message, "message") and message.text.startswith(prefix):
             if message.text.startswith(prefix * 2):
                 await message.edit(message.text[1:])
@@ -64,14 +64,11 @@ class main:
         loop.run_until_complete(rest)
 
     async def restart(client):
-        main.loadclient = client
-        status = get_status()
-        if not status:
+        if not settings.check_restart():
             return
-        chat = await client.get_entity(status[0][0])
-        del_status()
-        if status:
-            try:
-                await client.edit_message(entity=chat, text="<b>Restarted</b>", message=status[0][1])
-            except Exception:
-                pass
+        chat = await client.get_entity(settings.check_restart()["Chat"])
+        try:
+            await client.edit_message(entity=chat, text="<b>Restarted</b>", message=settings.check_restart()["Message"])
+        except Exception:
+            pass
+        settings.delete("Restart")

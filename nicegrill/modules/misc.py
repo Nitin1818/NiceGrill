@@ -2,7 +2,7 @@ import os
 import sys
 import asyncio
 import logging
-from database.allinone import add_status, del_status, get_status, add_storage, del_storage
+from database import settingsdb as settings
 from telethon.errors import rpcerrorlist
 from telethon import functions
 from nicegrill import utils
@@ -16,13 +16,9 @@ class Misc:
 
     async def restartxxx(message):
         msg = await message.edit("<b>Restarting...</b>")
-        if get_status():
-            del_status()
-        await add_status(True, msg.chat_id, msg.id)
-        if os.path.isfile(
-                "database/database.db") and not os.path.getsize("database/database.db") == 0:
-            db = await message.client.upload_file("database/database.db")
-            await message.client.send_file((await message.client.get_me()).id, db)
+        if settings.check_restart():
+            settings.delete("Restart")
+        settings.set_restart(msg.chat_id, msg.id)
         os.execl(sys.executable, sys.executable, *sys.argv)
 
     async def shutdownxxx(message):
@@ -73,24 +69,12 @@ class Misc:
             channel = await message.client(functions.channels.CreateChannelRequest(
                 title='NiceGrill Storage(DO NOT DELETE)',
                 about='Storage channel for your files'))
-            del_storage()
-            add_storage(int("-100" + str(channel.updates[1].channel_id)))
+            settings.delete("Asset")
+            settings.set_asset(int("-100" + str(channel.updates[1].channel_id)))
             await message.edit("<b>Added successfully</b>")
         if not str(arg)[1:].isdigit() and arg != "make":
             await message.edit(f"<i>Either put an ID or type .asset make</i>")
             return
-        del_storage()
-        add_storage(int(arg))
+        settings.delete("Asset")
+        settings.set_asset(int(arg))
         await message.edit("<b>Added successfully</b>")
-
-    async def watchout(message):
-        if datetime.now().hour == 23 and datetime.now().minute == 50:
-            await client.send_file('me', "database/database.db")
-
-        if datetime.now().hour == 0 and datetime.now().minute == 5:
-            async for msg in client.iter_messages('me', limit=2):
-                if msg.document and msg.document.attributes[0].file_name == "database.db":
-                    os.remove("database/database.db")
-                    await client.download_media(msg, "database/database.db")
-                    await msg.delete()
-                    Misc.restartxxx(message)
