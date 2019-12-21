@@ -33,6 +33,6 @@ def delete():
 def delete_one(key):
     return cli.delete_one({"Key": key})
 
-def delete_others(opt):
+def delete_others():
     cli.delete_one({"Others": True})
     cli.delete_one({"Others": False})
