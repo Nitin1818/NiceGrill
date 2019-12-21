@@ -1,4 +1,5 @@
 telethon
+pymongo
 meval
 mtranslate
 urbandict
