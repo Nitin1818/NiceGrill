@@ -74,11 +74,11 @@ class Snips:
         state = utils.get_arg(message)
         if state == "on":
             nicedb.delete_others()
-            nicedb.set_others(True)
+            nicedb.others(True)
             await message.edit("<b>Snips are now open to use for anyone.</b>")
         elif state == "off":
             nicedb.delete_others()
-            nicedb.set_others(False)
+            nicedb.others(False)
             await message.edit("<b>Snips are now turned off for others.</b>")
             return
 
