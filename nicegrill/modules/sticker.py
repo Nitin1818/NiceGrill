@@ -139,5 +139,5 @@ class Stickers:
                 "{}sKangPack_{}_{}".format(
                     message.sender.username.capitalize(), (await message.get_sender()).id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
-            setting.set_pack(id)
+            settingd.set_pack(id)
             await message.edit(result)
