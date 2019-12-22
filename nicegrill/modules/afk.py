@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from nicegrill import utils
-from database import afkdb as nicedb
+from database import afkdb as nicedb, settingsdb as settings
 import logging
 
 
