@@ -71,4 +71,6 @@ class main:
             await client.edit_message(entity=chat, text="<b>Restarted</b>", message=settings.check_restart()["Message"])
         except Exception:
             pass
+        except ValueError:
+            pass
         settings.delete("Restart")
