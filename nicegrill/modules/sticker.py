@@ -135,9 +135,10 @@ class Stickers:
             await message.client.send_read_acknowledge(conv.chat_id)
             await conv.send_message("/skip")
             await message.client.send_read_acknowledge(conv.chat_id)
+            pn = "NiceGrill" if not message.sender.username else message.sender.username.capitalize()
             id = await conv.send_message(
                 "{}sKangPack_{}_{}".format(
-                    message.sender.username.capitalize(), (await message.get_sender()).id, random.randint(0, 99999999)))
+                    pn, (await message.get_sender()).id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
-            settings.set_pack(id)
+            settings.set_pack(id.message)
             await message.edit(result)
