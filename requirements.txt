@@ -6,7 +6,7 @@ mtranslate
 urbandict
 pygdrive3fixed
 google-api-python-client
-libxml
+lxml
 search-engine_parser
 google_images_download
 oauthclient
