@@ -13,10 +13,11 @@ class Translate:
         """Translates desired text to whatever language.\n\n
 Example usage:\n.trt <lang> with a replied message"""
         target = (utils.arg_split_with(message, " "))[0]
+        reply = await message.get_reply_message()
         text = (
             (utils.arg_split_with(message, " "))[1] if not message.is_reply else
-            (await message.get_reply_message()).text)
-        if not (await message.get_reply_message()).text:
+            reply.text)
+        if reply and not reply.text:
             await message.edit("<i>Babe..Are you okay? You can not translate files you know.</i>")
             return
         await message.edit("<i>Translating...</i>")
