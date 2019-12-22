@@ -98,9 +98,8 @@ type their username or use this in their chat"""
             await message.edit("<b>Why would you wanna block yourself?</b>")
             return
         await message.client(functions.contacts.BlockRequest(id=pick))
-        if str(pick) in str(get_auth()):
-            command = f"DELETE FROM auth WHERE id={pick}"
-            auth(command)
+        if nicedb.check_approved(pick):
+            nicedb.disapprove(pick)
         await message.edit(
             "<a href=tg://user?id={}>{}</a> <b>has been blocked</b>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
