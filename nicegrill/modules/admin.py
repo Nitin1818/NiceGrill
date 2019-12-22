@@ -125,7 +125,7 @@ class Admin:
                 "<b>You either don't have enough permissions or"
                 " there's something wrong with the admin rights</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to promote this user 🙄</b>")
+            await message.edit("<b>Oh honey, you're not admin enough to demote this user 🙄</b>")
 
     async def mutexxx(message):
         await message.edit("<b>Muting...</b>")
