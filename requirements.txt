@@ -6,6 +6,9 @@ mtranslate
 urbandict
 pygdrive3fixed
 google-api-python-client
+libxml
+search-engine_parser
+google_images_download
 oauthclient
 gtts
 oweatherm
