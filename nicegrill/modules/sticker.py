@@ -32,7 +32,7 @@ class Stickers:
     async def dumpitxxx(message):
         reply = await message.get_reply_message()
         if not reply or not reply.sticker:
-            await message.edit("<b>Reply to a sticker first</b>")
+            await message.edit("<i>Reply to a sticker first</i>")
             return
         sticker = await message.client.download_media(reply, "sticker.png")
         await message.client.send_file(message.chat_id, sticker)
@@ -44,7 +44,7 @@ class Stickers:
         packid = utils.get_arg(message)
         if packid == "clear":
             settings.delete("Pack")
-            await message.edit("<b>Saved pack deleted successfully</b>")
+            await message.edit("<i>Saved pack deleted successfully</i>")
             return
         pack = False
         async with message.client.conversation("@stickers") as conv:
@@ -56,29 +56,30 @@ class Stickers:
                     if packid and (item.text == packid):
                         pack = True
         if not pack:
-            await message.edit("<b>You don't own this pack</b>")
+            await message.edit("<i>You don't own this pack</i>")
             return
         elif packid and pack:
             settings.delete("Pack")
             settings.set_pack(packid)
-            await message.edit("<b>Pack saved successfully</b>")
+            await message.edit("<i>Pack saved successfully</i>")
 
     async def kangxxx(message):
         """Kangs a sticker or photo into you pack"""
         reply = await message.get_reply_message()
         if not reply.photo and not reply.sticker:
-            await message.edit("<b>Reply to an image or get out</b>")
+            await message.edit("<i>Reply to an image or get out</i>")
             return
         img = await reply.download_media()
         await Stickers.resize(message, img)
         packid = settings.check_pack()
         if not packid:
-            msg = "<b>You have no sticker pack set, so I'm creating a new pack</b>"
+            msg = "<i>You have no sticker pack set, so I'm creating a new pack</i>"
             task = "/newpack"
+            pn = pn = "NiceGrill" if not message.sender.username else message.sender.username.capitalize()
             result = (
-                "<b>Your new pack has been created.</b>\n"
-                "<b>Click</b> <a href=https://t.me/addstickers/{}sKangPack_{}>Here</a> "
-                "<b>to access it</b>".format(message.sender.username.capitalize(), (await message.get_sender()).id))
+                "<i>Your new pack has been created.</i>\n"
+                "<i>Click</i> <a href=https://t.me/addstickers/{}>Here</a> "
+                "<i>to access it</i>")
             name, emoji, done, packid = False, False, False, False
             await Stickers.kang(
                 message, msg, task, name, emoji, done, packid, result)
@@ -86,9 +87,9 @@ class Stickers:
             msg = random.choice(Stickers.STRINGS)
             task = "/addsticker"
             result = (
-                "<b>Sticker kanged succesfully.</b>\n"
-                "<b>Click</b> <a href=https://t.me/addstickers/{}>Here</a> "
-                "<b>to access it</b>".format(packid))
+                "<i>Sticker kanged succesfully.</i>\n"
+                "<i>Click</i> <a href=https://t.me/addstickers/{}>Here</a> "
+                "<i>to access it</i>".format(packid))
             emoji = utils.get_arg(message) if utils.get_arg(message) else False
             name, done = True, True
             await Stickers.kang(
@@ -141,4 +142,4 @@ class Stickers:
                     pn, (await message.get_sender()).id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
             settings.set_pack(id.message)
-            await message.edit(result)
+            await message.edit(result.format(id.message))
