@@ -66,8 +66,8 @@ class main:
     async def restart(client):
         if not settings.check_restart():
             return
-        chat = await client.get_entity(settings.check_restart()["Chat"])
         try:
+            chat = await client.get_entity(settings.check_restart()["Chat"])
             await client.edit_message(entity=chat, text="<b>Restarted</b>", message=settings.check_restart()["Message"])
         except Exception:
             pass
