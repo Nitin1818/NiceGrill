@@ -1,0 +1,51 @@
+from database import storagedb as nicedb, settingsdb as settings
+from nicegrill import utils
+import random
+import logging
+
+class Store:
+
+    async def storexxx(message):
+        if not settings.check_asset():
+            await message.edit(
+                "<b>You haven't set a storage chat yet, it's:</b>\n\n"
+                "<i>'.asset make'</i><b> for auto setup</b>\n"
+                "<i>'.asset <chatid>'</i><b> to set a specific chat</b>\n")
+            return
+        reply = await message.get_reply_message()
+        if not reply or not reply.media:
+            await message.edit("<i>Make sure to reply to a message first</i>")
+            return
+        args = utils.get_arg(message).split()
+        if len(args) <= 1:
+            await message.edit("<i>Specify a file name and a path</i>")
+            return
+        name, path = args[0], args[1]
+        file = await message.client.send_message(settings.check_asset(), reply)
+        if not nicedb.check_one(name):
+            nicedb.save_file(name, path, file.id)
+        else:
+            nicedb.update_file(name, path, file.id)
+        await message.edit("<i>File saved to be restored</i>")
+
+    async def delfilexxx(message):
+        name = utils.get_arg(message)
+        if not name:
+            await message.edit("<i>Specify a file name</i>")
+            return
+        if not nicedb.check_one(name):
+            await message.edit("<i>File doesn't exist in database</i>")
+            return
+        nicedb.delete_one(name)
+        await message.edit("<i>Successfully removed</i>")
+
+    async def storedxxx(message):
+        await message.edit("<i>Retrieving..</i>")
+        files = nicedb.check()
+        if not files:
+            await message.edit("<i>There's no saved file</i>")
+            return
+        ls = ""
+        for item in files:
+            ls += f"<b>File:</b> <i>{item['Name']}</i>\n<b>Will be restored to:</b> <i>{item['Path']}</i>\n\n"
+        await message.edit(ls)

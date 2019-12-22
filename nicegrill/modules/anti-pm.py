@@ -91,17 +91,17 @@ type their username or use this in their chat"""
         chat = None if not hasattr(
             message.to_id, "user_id") else message.chat_id
         if not reply and not id and not chat:
-            await message.edit("<b>No user found</b>")
+            await message.edit("<i>No user found</i>")
             return
         pick = reply or id or chat
         if pick == (await message.client.get_me()).id:
-            await message.edit("<b>Why would you wanna block yourself?</b>")
+            await message.edit("<i>Why would you wanna block yourself?</i>")
             return
         await message.client(functions.contacts.BlockRequest(id=pick))
         if nicedb.check_approved(pick):
             nicedb.disapprove(pick)
         await message.edit(
-            "<a href=tg://user?id={}>{}</a> <b>has been blocked</b>"
+            "<a href=tg://user?id={}>{}</a> <i>has been blocked</i>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
 
     async def unblockxxx(message):

@@ -1,7 +1,7 @@
 from urllib import request
 import importlib
 import os
-from database import dloadsdb as nicedb
+from database import dloadsdb as nicedb, storagedb as storage, settingsdb as settings
 
 
 modules = {}
@@ -10,6 +10,17 @@ imported = []
 watchouts = []
 cmds = {}
 
+
+async def filestorage(client):
+    if storage.retrieve():
+        for file in storage.retrieve():
+            try:
+                msg = await client.get_messages(settings.check_asset(), ids=file["File"])
+                if not os.path.isdir(file["Path"]):
+                    os.makedirs(file["Path"], 0o755)
+                await client.download_media(msg, os.path.join(file["Path"], file["Name"]))
+            except Exception:
+                pass
 
 def loads():
     if nicedb.check_dload():

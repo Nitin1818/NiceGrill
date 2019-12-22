@@ -27,6 +27,7 @@ if not MONGO_URI:
 with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
     client.parse_mode = 'html'
     _init.loads()
+    asyncio.get_event_loop().create_task(_init.filestorage(client))
     main.read(client)
     client.add_event_handler(
         functools.partial(main.outgoing),
