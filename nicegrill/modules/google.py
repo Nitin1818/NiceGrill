@@ -46,3 +46,20 @@ class Google:
         for path in paths[0][keyword]:
             os.remove(path)
  
+    async def lmgtfyxxx(message):
+        keyword = (
+            (await message.get_reply_message()).message 
+            if not utils.get_arg(message) 
+            else utils.get_arg(message))
+        if not keyword:
+            await message.edit(
+                "<i>You didn't specify a keyword. Reply to a message"
+                " or enter a keyword</i>")
+            return
+        link = f"https://lmgtfy.com/?q={keyword.replace(' ', '+')}"
+        reply_id = (
+            (await message.get_reply_message()).id if message.is_reply
+            else None)
+        await message.edit(link)
+
+ 
