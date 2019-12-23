@@ -20,7 +20,7 @@ class Terminal:
             stderr=subprocess.PIPE,
             stdout=subprocess.PIPE)
         template = (
-            "\n<b>⬤ Input:</b>\n\n<code>{}</code>\n\n<b>⬤ Output:</b>\n<code>"
+            "\n<b>⬤ Input:</b>\n\n<code>{}</code>\n\n<b>⬤ Output:</b>\n\n<code>"
             .format(cmd))
         await message.edit(template)
         if process.poll() is not None:
