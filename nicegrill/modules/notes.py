@@ -72,6 +72,6 @@ class Notes:
             return
         fetch = None if not note["Media"] else await message.client.get_messages(entity=storage, ids=note["Media"])
         if hasattr(fetch, "media"):
-            await message.client.send_message(chatid, fetch, reply_to=message.id)
+            await utils.reply(message, fetch)
             return
         await message.reply(note["Value"])
