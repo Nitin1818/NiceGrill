@@ -7,6 +7,7 @@
 ◍ Install the requirements with the lines below:
 
     • cd NiceGrill
+    • apt install libxslt
     • pkg install clang
     • pkg install libjpeg-turbo
     • pkg install libwebp
