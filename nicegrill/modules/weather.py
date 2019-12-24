@@ -1,5 +1,6 @@
 from nicegrill import utils
 from weather import Weather as wtr
+from database import settingsdb as settings
 import logging
 
 
@@ -10,10 +11,10 @@ class Weather:
 
     async def weatherxxx(message):
         """Shows the weather of specified city"""
-        if not getcity() and not utils.get_arg(message):
+        if not settings.check_city() and not utils.get_arg(message):
             await message.edit("<b>Enter a city name first</b>")
             return
-        city = getcity()[0][0] if not utils.get_arg(
+        city = settings.check_city() if not utils.get_arg(
             message) else utils.get_arg(message)
         weather = wtr.find(city)
         await message.edit(
@@ -28,12 +29,10 @@ class Weather:
 
     async def setcityxxx(message):
         """Sets a default city so that you don't have to type it everytime"""
-        delete = "DELETE FROM weather"
-        add = f"INSERT INTO weather (city) VALUES ('{utils.get_arg(message)}')"
         if not utils.get_arg(message):
-            setcity(delete)
+            settings.delete("City")
             await message.edit("<b>Saved city name removed</b>")
             return
-        setcity(delete)
-        setcity(add)
+        settings.delete("City")
+        settings.set_city(utils.get_arg(message))
         await message.edit("<b>Successfully saved</b>")
