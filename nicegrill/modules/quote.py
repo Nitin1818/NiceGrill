@@ -36,16 +36,20 @@ class Quote:
         top = Image.open(".tmp/top.jpg", "r").convert('RGBA')
         mid = Image.open(".tmp/mid.jpg", "r").convert('RGBA')
         bottom = Image.open(".tmp/bottom.jpg", "r").convert('RGBA')
-
-        msg = msg.replace("\n", "\\\\n")
+        maxlength = 0
         text = []
-        for i in textwrap.wrap(msg, 43):
-            text = text + i.replace("\\\\n", "\n").split("\n")
-        midh = mid.height - 20
+        for line in msg.split("\n"):
+            if len(line) > 43:
+                text += textwrap.wrap(line, 43)
+                next
+            else:
+                text.append(line + "\n")
+            if len(line) > maxlength:
+                maxlength = len(line)
+                if len(line) > 43:
+                    maxlength = 43
+                
 
-        for line in text:
-            mid = mid.resize((mid.width, midh + 40))
-            midh += 40
 
         dlpfp = await client.download_profile_photo(reply.id)
         paste = Image.open(dlpfp)
@@ -63,26 +67,37 @@ class Quote:
         pfp = mask_im.copy()
         pfpbg.paste(paste, (10, 20), mask_im)
 
+        lname = "" if not reply.last_name else reply.last_name
+        tot = reply.first_name + " " + lname
+
+        font = ImageFont.truetype(".tmp/DejaVuSansCondensed-Bold.ttf", 43, encoding="utf-16")
+        font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 33, encoding="utf-16")
+        width, height = font2.getsize("o"*maxlength)
+        namewidth, nameheight = font.getsize(tot)
+        if namewidth > width:
+            width = namewidth + 30
+        if width < 200:
+            width = 200
+        height = len(text) * 40
+
+        top = top.resize((width + 70, top.height))
+        mid = mid.resize((width + 70, height + 50))
+        bottom = bottom.resize((width + 70, top.height))
+
         canvas = Image.new(
             'RGB',
-            (top.width
+            (width + 70
              + pfpbg.width,
              top.height
-             + mid.height
+             + height
              + bottom.height))
         canvas.paste(pfpbg, (0, 0))
         canvas.paste(top, (pfpbg.width, 0))
         canvas.paste(mid, (pfpbg.width, top.height))
         canvas.paste(bottom, (pfpbg.width, top.height + mid.height))
 
-        canvas.resize((canvas.width - 100, canvas.height))
 
         draw = ImageDraw.Draw(canvas)
-        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 43)
-        font2 = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 33)
-
-        lname = "" if not reply.last_name else reply.last_name
-        tot = reply.first_name + " " + lname
 
         draw.text((pfp.width + 70, 40), tot, font=font, fill='#E9967A')
 
