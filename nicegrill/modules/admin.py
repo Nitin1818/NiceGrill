@@ -92,7 +92,7 @@ class Admin:
             await message.edit(
                 "<b>You either don't have enough permissions or there's something wrong with the admin rights</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to promote this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to promote this user 🙄</b>")
 
     async def demotexxx(message):
         await message.edit("<b>Demoting...</b>")
@@ -125,7 +125,7 @@ class Admin:
                 "<b>You either don't have enough permissions or"
                 " there's something wrong with the admin rights</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to demote this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to demote this user 🙄</b>")
 
     async def mutexxx(message):
         await message.edit("<b>Muting...</b>")
@@ -152,7 +152,7 @@ class Admin:
         except UserIdInvalidError:
             await message.edit("<b>Specified user is a no go</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to mute this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to mute this user 🙄</b>")
 
     async def unmutexxx(message):
         await message.edit("<b>Unmuting...</b>")
@@ -184,7 +184,7 @@ class Admin:
         except UserIdInvalidError:
             await message.edit("<b>Specified user is a no go</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to unmute this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to unmute this user 🙄</b>")
 
     async def kickxxx(message):
         chat = message.input_chat
@@ -207,7 +207,7 @@ class Admin:
         except UserIdInvalidError:
             await message.edit("<b>Specified user is a no go</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to kick this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to kick this user 🙄</b>")
 
     async def banxxx(message):
         chat = message.input_chat
@@ -229,7 +229,7 @@ class Admin:
         except UserIdInvalidError:
             await message.edit("<b>Specified user is a no go</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to ban this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to ban this user 🙄</b>")
 
     async def unbanxxx(message):
         chat = message.input_chat
@@ -252,7 +252,7 @@ class Admin:
         except UserIdInvalidError:
             await message.edit("<b>Specified user is a no go</b>")
         except ChatAdminRequiredError:
-            await message.edit("<b>Oh honey, you're not admin enough to unban this user 🙄</b>")
+            await message.edit("<b>Oh honey, I'm not admin enough to unban this user 🙄</b>")
 
     async def pinxxx(message):
         reply = await message.get_reply_message()
