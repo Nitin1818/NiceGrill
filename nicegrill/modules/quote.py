@@ -28,11 +28,11 @@ class Quote:
                 'https://github.com/erenmetesar/modules-repo/raw/master/bottom.jpg',
                 '.tmp/bottom.jpg')
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
-                '.tmp/Roboto-Medium.ttf')
+                'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed.ttf',
+                '.tmp/DejaVuSansCondensed.ttf')
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf',
-                '.tmp/Roboto-Regular.ttf')
+                'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed-Bold.ttf',
+                '.tmp/DejaVuSansCondensed-Bold.ttf')
         top = Image.open(".tmp/top.jpg", "r").convert('RGBA')
         mid = Image.open(".tmp/mid.jpg", "r").convert('RGBA')
         bottom = Image.open(".tmp/bottom.jpg", "r").convert('RGBA')
