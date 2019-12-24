@@ -40,12 +40,7 @@ def check_approved(user):
     return cli.find_one({"Approved": user})
 
 def delete(obj):
-    if obj == "Notifications" or obj == "AntiPM":
-        cli.delete_one({obj: True})
-        cli.delete_one({obj: False})
-        return
-    if obj == "Limit":
-        return cli.delete_one({obj: {"$regex": "[0-9]"}})
+    return cli.delete_one({obj: {"$exists": True}})
 
 def disapprove(user):
     return cli.delete_one({"Approved": user})

@@ -54,14 +54,6 @@ def check_gfolder():
         else cli.find_one({"GFolder": {"$exists": True}})["GFolder"])
 
 def delete(obj):
-    if obj == "Message" or obj == "Restart":
-        cli.delete_one({obj: True})
-        cli.delete_one({obj: False})
-        return
-    if obj == "Asset":
-        cli.delete_one({obj: {"$regex": "\-"}})
-        cli.delete_one({obj: {"$regex": "[0-9]"}})
-        return
-    return cli.delete_one({obj: {"$regex": "."}})
+    return cli.delete_one({obj: {"$exists": True}})
         
 

@@ -16,6 +16,6 @@ def check_dload():
         else cli.find({"Name": {"$exists": True}}))
 
 def delete(name):
-    return cli.delete_one({name: {"$regex": "."}})
+    return cli.delete_one({name: {"$exists": True}})
         
 

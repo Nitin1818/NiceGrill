@@ -18,4 +18,4 @@ def check_godark():
     return cli.find_one({"GoDark": {"$exists": True}})
 
 def stop_afk():
-    return cli.delete_one({"Message": {"$regex": "."}})
+    return cli.delete_one({"Message": {"$exists": True}})
