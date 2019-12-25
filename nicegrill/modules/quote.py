@@ -24,7 +24,7 @@ class Quote:
                 'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed-Bold.ttf',
                 '.tmp/DejaVuSansCondensed-Bold.ttf')
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed-Bold.ttf',
+                'https://github.com/erenmetesar/modules-repo/raw/master/twemoji.ttf',
                 '.tmp/twemoji.ttf')
 
         # Splitting text
