@@ -61,7 +61,7 @@ class Quote:
         height = len(text) * 40
 
         # Top part
-        top = Image.new('RGBA', (width + 100, 20), (0,0,0,0))
+        top = Image.new('RGBA', (width + 90, 20), (0,0,0,0))
         draw = ImageDraw.Draw(top)
         draw.line((10, 0, top.width - 20, 0),  fill="#191919", width=50)
         draw.pieslice((0, 0, 30, 50), 180, 270, fill="#191919")
