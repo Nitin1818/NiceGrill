@@ -40,7 +40,7 @@ them later. Check your storage channel."""
             return
         msg = nicedb.check_afk()["Message"]
         then = datetime.strptime(nicedb.check_afk()["AFKTime"], '%Y-%m-%d %H:%M:%S.%f')
-        if getattr(message, "message") and message.mentioned:
+        if getattr(message, "message") and message.mentioned and settings.check_asset():
             storage = await message.client.get_entity(settings.check_asset())
             if nicedb.check_godark():
                 await message.client.send_read_acknowledge(
