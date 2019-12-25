@@ -72,6 +72,7 @@ class Misc:
             settings.delete("Asset")
             settings.set_asset(int("-100" + str(channel.updates[1].channel_id)))
             await message.edit("<b>Added successfully</b>")
+            return
         if not str(arg)[1:].isdigit() and arg != "make":
             await message.edit(f"<i>Either put an ID or type .asset make</i>")
             return
