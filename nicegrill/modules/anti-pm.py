@@ -20,8 +20,8 @@ class AntiPM:
         "<b>you will be blocked & reported spam if you continue.</b>")
 
     BLOCKED = (
-        "<b>I have warned you several times now. However, you did not stop</b>"
-        "<b>spamming my chat. Therefore, you have been blocked and reported</b>"
+        "<b>I have warned you several times now. However, you did not stop </b>"
+        "<b>spamming my chat. Therefore, you have been blocked and reported </b>"
         "<b>as spam. Good luck!</b>")
 
     async def antipmxxx(message):
