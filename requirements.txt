@@ -5,6 +5,7 @@ meval
 mtranslate
 urbandict
 pygdrive3fixed
+emoji
 google-api-python-client
 lxml
 search-engine_parser
