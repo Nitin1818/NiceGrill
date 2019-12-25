@@ -40,7 +40,7 @@ class main:
                 if args[0] == cmd:
                     try:
                         await mods[cmd](message)
-                    except TypeError:
+                    except BaseException:
                         logger.exception("")
                         await message.edit("<b>Loading..</b>")
                         await message.client.send_file(entity=message.chat_id, message=message, file="error.txt",
