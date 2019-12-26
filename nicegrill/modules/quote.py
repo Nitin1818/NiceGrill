@@ -4,6 +4,7 @@ import textwrap
 import urllib
 import logging
 import random
+import jso
 import os
 
 COLORS = [
@@ -121,8 +122,10 @@ class Quote:
             for word in splitemoji:
                 wordwidth = 0
                 if word in emoji.UNICODE_EMOJI:
-                    draw.text((x, y), word, font=emojifont, fill="white")
-                    x += font2.getsize(word)[0]
+                    img =Image.open(await Quote.emoji_fetch(word))
+                    img.thumbnail((30, 30))
+                    canvas.paste(img, (x, y))
+                    x += 30
                 else:
                     draw.text((x, y), word, font=font2, fill='white')
                     x += font2.getsize(word)[0]
@@ -139,6 +142,12 @@ class Quote:
         font = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 60)
         pen.text((32, 17), letter, font=font, fill="white")
         return pfp, color
+
+    async def emoji_fetch(emoji):
+        emojis = json.loads(
+            urllib.request.urlopen("https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt").read().decode())
+        img = emojis[emoji]
+        return urllib.request.urlretrieve(img, ".tmp/emoji.png")
 
     async def quotexxx(message):
         """Converts the replied message into an independent sticker"""
