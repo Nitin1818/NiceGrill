@@ -1,3 +1,18 @@
+#    This file is part of NiceGrill.
+
+#    NiceGrill is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    NiceGrill is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
+
 import logging
 from nicegrill import utils
 import time
@@ -25,6 +40,13 @@ class Memes:
             await message.edit("<i>Reply to a message first</i>")
             return
         await message.edit(f"<i>This person is {random.randint(0,101)}% gay</i>")
+
+    async def ratexxx(message):
+        if not message.is_reply:
+            await message.edit("<i>Reply to a message first</i>")
+            return
+        await message.edit(f"<i>This person is {random.randint(0,101)}% gay</i>")
+
 
     async def watchout(message):
         if message.text.lower() == "yey":
