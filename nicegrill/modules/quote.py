@@ -30,7 +30,7 @@ class Quote:
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 
-    async def process(msg, reply, client):
+    async def process(msg, reply, client, replied=None):
         if not os.path.isdir(".tmp"):
             os.mkdir(".tmp", 0o755)
             urllib.request.urlretrieve(
@@ -88,11 +88,6 @@ class Quote:
         # Profile Photo BG
         pfpbg = Image.new("RGBA", (125, 600), (0, 0, 0, 0))
 
-        # Creating a big canvas to gather all the elements
-        canvassize = (
-            middle.width + pfpbg.width, top.height + middle.height + bottom.height)
-        canvas = Image.new('RGBA', canvassize)
-
         # Profile Photo Check and Fetch
         yes = False
         color = random.choice(COLORS)
@@ -115,14 +110,44 @@ class Quote:
             paste, color = await Quote.no_photo(reply, tot)
             pfpbg.paste(paste, (0, 0))
 
-        # Gathering everything in one big canvas
-        canvas.paste(pfpbg, (0, 0))
-        canvas.paste(top, (pfpbg.width, 0))
-        canvas.paste(middle, (pfpbg.width, top.height))
-        canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
+        # Creating a big canvas to gather all the elements
+        canvassize = (
+            middle.width + pfpbg.width, top.height + middle.height + bottom.height)
+        canvas = Image.new('RGBA', canvassize)
+        draw = ImageDraw.Draw(canvas)
+
+        y = 80
+        if replied:
+            # Creating a big canvas to gather all the elements
+            canvas = canvas.resize((canvas.width, canvas.height + 120))
+            middle = middle.resize((middle.width, middle.height + 120))
+            canvas.paste(pfpbg, (0, 0))
+            canvas.paste(top, (pfpbg.width, 0))
+            canvas.paste(middle, (pfpbg.width, top.height))
+            canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
+            draw = ImageDraw.Draw(canvas)
+            replname = "" if not replied.sender.last_name else replied.sender.last_name
+            reptot = replied.sender.first_name + " " + lname
+            if replied.sticker:
+                replied.text = "Sticker"
+            elif replied.photo:
+                replied.text = "Photo"
+            elif replied.audio:
+                replied.text = "Audio"
+            elif replied.voice:
+                replied.text = "Voice Message"
+            elif replied.document:
+                replied.text = "Document"
+            await Quote.replied_user(draw, font, font2, reptot, replied.message)
+            y = 200
+        else:
+            canvas.paste(pfpbg, (0, 0))
+            canvas.paste(top, (pfpbg.width, 0))
+            canvas.paste(middle, (pfpbg.width, top.height))
+            canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
+            y = 80
 
         # Writing User's Name
-        draw = ImageDraw.Draw(canvas)
         space = pfpbg.width + 30
         for letter in tot:
             if letter in emoji.UNICODE_EMOJI:
@@ -134,7 +159,7 @@ class Quote:
                 space += font.getsize(letter)[0]
 
         # Writing all separating emojis and regular texts
-        x, y = pfpbg.width + 30, 85
+        x = pfpbg.width + 30
         for line in text:
             splitemoji = emoji.get_emoji_regexp().split(line)
             for word in splitemoji:
@@ -175,15 +200,25 @@ class Quote:
         draw.ellipse((0, 0, 40, 40), fill=255)
         return emoji, mask
 
+    async def replied_user(draw, namefont, textfont, tot, text):
+        namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
+        textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
+        text = text[:13] + ".." if len(text) > 13 else text
+        tot = tot[:13] + ".." if len(tot) > 13 else tot
+        draw.line((165, 90, 165, 170), width=5, fill="white")
+        draw.text((180, 86), tot, font=namefont, fill="#888888")
+        draw.text((180, 132), text, font=textfont, fill="white")
+
     async def quotexxx(message):
         """Converts the replied message into an independent sticker"""
         await message.delete()
         reply = await message.get_reply_message()
         msg = reply.message
+        repliedreply = await reply.get_reply_message()
         reply = (
             await message.client.get_entity(reply.fwd_from.from_id) if reply.fwd_from
             else reply.sender)
-        res, canvas = await Quote.process(msg, reply, message.client)
+        res, canvas = await Quote.process(msg, reply, message.client, repliedreply)
         if not res:
             return
         canvas.save('.tmp/sticker.webp')
