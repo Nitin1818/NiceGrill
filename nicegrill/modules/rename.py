@@ -34,7 +34,7 @@ class Renamer:
         file = await message.client.upload_file(dl)
         file.name = name
         await message.client.send_file(
-            message.chat_id, file=file, reply_to=reply.id, support_streaming=True, voice_note=True)
+            message.chat_id, file=file, reply_to=reply.id, support_streaming=True)
         await message.delete()
         os.remove(dl)
 
@@ -56,6 +56,6 @@ class Renamer:
         file = await message.client.upload_file(name)
         file.name = name
         await message.client.send_file(
-            message.chat_id, file=file, support_streaming=True, voice_note=True)
+            message.chat_id, file=file, support_streaming=True)
         await message.delete()
         os.remove(name)
