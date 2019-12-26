@@ -119,7 +119,7 @@ class Quote:
         y = 80
         if replied:
             # Creating a big canvas to gather all the elements
-            canvas = canvas.resize((canvas.width, canvas.height + 120))
+            canvas = canvas.resize((canvas.width + 20, canvas.height + 120))
             middle = middle.resize((middle.width, middle.height + 120))
             canvas.paste(pfpbg, (0, 0))
             canvas.paste(top, (pfpbg.width, 0))
