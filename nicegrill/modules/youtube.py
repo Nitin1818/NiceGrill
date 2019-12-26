@@ -72,7 +72,7 @@ class YouTube:
             file = glob.glob("*.mp3")[0]
             await message.client.send_file(
                 message.chat_id, file,
-                reply_to=reply.id if reply else None
+                reply_to=reply.id if reply else None,
                 voice_note=True,
                 support_streaming=True)
             await message.delete()
