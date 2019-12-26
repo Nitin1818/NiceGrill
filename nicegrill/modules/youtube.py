@@ -40,6 +40,7 @@ class YouTube:
         await message.edit(text)
 
     async def ytmp3xxx(message, song=None):
+        reply = await message.get_reply_message()
         link = utils.get_arg(message) if not song else song
         cmd = f"youtube2mp3 -d {os.getcwd()} -y {link}"
         process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
@@ -47,10 +48,7 @@ class YouTube:
             await message.edit(f"<i>{line.decode()}</i>")
         file = glob.glob("*.mp3")[0]
         await message.edit("<i>Uploading..</i>")
-        await message.client.send_file(
-            message.chat_id, file,
-            voice_note=True,
-            support_streaming=True)
+        await message.client.send_file(message.chat_id, file, reply_to=reply.id if reply else None)
         await message.delete()
         os.remove(file)
 
@@ -70,10 +68,6 @@ class YouTube:
             process.wait()
             await message.edit("<i>Uploading..</i>")
             file = glob.glob("*.mp3")[0]
-            await message.client.send_file(
-                message.chat_id, file,
-                reply_to=reply.id if reply else None,
-                voice_note=True,
-                support_streaming=True)
+            await message.client.send_file(message.chat_id, file, reply_to=reply.id if reply else None)
             await message.delete()
             os.remove(file)
