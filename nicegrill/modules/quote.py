@@ -4,7 +4,7 @@ import textwrap
 import urllib
 import logging
 import random
-import jso
+import json
 import os
 
 COLORS = [
@@ -24,29 +24,25 @@ class Quote:
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed-Bold.ttf',
                 '.tmp/DejaVuSansCondensed-Bold.ttf')
-            urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/twemoji.ttf',
-                '.tmp/twemoji.ttf')
 
         # Splitting text
         maxlength = 0
         text = []
         for line in msg.split("\n"):
-            if len(line) > 43:
+            length = len(line)
+            if length > 43:
                 text += textwrap.wrap(line, 43)
                 next
             else:
                 text.append(line + "\n")
-            if len(line) > maxlength:
-                maxlength = len(line)
-                if len(line) > 43:
+            if length > maxlength:
+                maxlength = length
+                if length > 43:
                     maxlength = 43
 
         # Importıng fonts and gettings the size of text
         font = ImageFont.truetype(".tmp/DejaVuSansCondensed-Bold.ttf", 43, encoding="utf-16")
         font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 33, encoding="utf-16")
-        # This was an emoji test and failed, but ill keep it just in case
-        emojifont = ImageFont.truetype(".tmp/twemoji.ttf", 32, encoding="utf-16")
         width, height = font2.getsize("o"*maxlength)
 
         # Get user name
@@ -62,7 +58,7 @@ class Quote:
         height = len(text) * 40
 
         # Top part
-        top = Image.new('RGBA', (width + 90, 20), (0,0,0,0))
+        top = Image.new('RGBA', (width + 80, 20), (0,0,0,0))
         draw = ImageDraw.Draw(top)
         draw.line((10, 0, top.width - 20, 0),  fill="#191919", width=50)
         draw.pieslice((0, 0, 30, 50), 180, 270, fill="#191919")
@@ -75,7 +71,7 @@ class Quote:
         bottom = ImageOps.flip(top)
 
         # Profile Photo BG
-        pfpbg = Image.new("RGBA", (135, 600), (0, 0, 0, 0))
+        pfpbg = Image.new("RGBA", (125, 600), (0, 0, 0, 0))
 
         # Creating a big canvas to gather all the elements
         canvassize = (
@@ -91,18 +87,18 @@ class Quote:
             pfp = await client.download_profile_photo(reply)
             paste = Image.open(pfp)
             os.remove(pfp)
-            paste.thumbnail((110, 115))
+            paste.thumbnail((105, 105))
 
             # Mask
             mask_im = Image.new("L", paste.size, 0)
             draw = ImageDraw.Draw(mask_im)
-            draw.ellipse((0, 0, 105, 113), fill=255)
+            draw.ellipse((0, 0, 105, 105), fill=255)
 
             # Apply Mask
-            pfpbg.paste(paste, (0, 20), mask_im)
+            pfpbg.paste(paste, (0, 0), mask_im)
         else:
             paste, color = await Quote.no_photo(reply, tot)
-            pfpbg.paste(paste, (0, 20))
+            pfpbg.paste(paste, (0, 0))
 
         # Gathering everything in one big canvas
         canvas.paste(pfpbg, (0, 0))
@@ -112,20 +108,25 @@ class Quote:
 
         # Writing User's Name
         draw = ImageDraw.Draw(canvas)
-        draw.text((pfpbg.width + 30, 20), tot, font=font, fill=color)
+        space = pfpbg.width + 30
+        for letter in tot:
+            if letter in emoji.UNICODE_EMOJI:
+                newemoji, mask = await Quote.emoji_fetch(letter)
+                canvas.paste(newemoji, (space, 24), mask)
+                space += 40
+            else:
+                draw.text((space, 20), letter, font=font, fill=color)
+                space += font.getsize(letter)[0]
 
         # Writing all separating emojis and regular texts
-        lineheight = 50
-        x, y = pfpbg.width + 30, lineheight + 40
+        x, y = pfpbg.width + 30, 85
         for line in text:
             splitemoji = emoji.get_emoji_regexp().split(line)
             for word in splitemoji:
-                wordwidth = 0
                 if word in emoji.UNICODE_EMOJI:
-                    img =Image.open(await Quote.emoji_fetch(word))
-                    img.thumbnail((30, 30))
-                    canvas.paste(img, (x, y))
-                    x += 30
+                    newemoji, mask = await Quote.emoji_fetch(word)
+                    canvas.paste(newemoji, (x, y - 2), mask)
+                    x += 45
                 else:
                     draw.text((x, y), word, font=font2, fill='white')
                     x += font2.getsize(word)[0]
@@ -147,7 +148,17 @@ class Quote:
         emojis = json.loads(
             urllib.request.urlopen("https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt").read().decode())
         img = emojis[emoji]
-        return urllib.request.urlretrieve(img, ".tmp/emoji.png")
+        return await Quote.transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
+        
+    async def transparent(emoji):
+        emoji = Image.open(emoji).convert("RGBA")
+        emoji.thumbnail((40, 40))
+        
+        # Mask
+        mask = Image.new("L", (40, 40), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((0, 0, 40, 40), fill=255)
+        return emoji, mask
 
     async def quotexxx(message):
         """Converts the replied message into an independent sticker"""
