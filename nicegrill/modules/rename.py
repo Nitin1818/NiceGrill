@@ -50,7 +50,7 @@ class Renamer:
         try:
             request.urlretrieve(args[0], "./" + name)
         except ValueError:
-            await message.edit("<i>You did it wrong.. It's .rndl \<url\> \<name\> </i>")
+            await message.edit("<i>You did it wrong.. It's .rndl url filename </i>")
             return
         await message.edit("<i>Renaming..</i>")
         file = await message.client.upload_file(name)
