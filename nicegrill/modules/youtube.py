@@ -73,7 +73,7 @@ class YouTube:
             await message.client.send_file(
                 message.chat_id, file,
                 reply_to=reply.id if reply else None
-                voice_note=True
+                voice_note=True,
                 support_streaming=True)
             await message.delete()
             os.remove(file)
