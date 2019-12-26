@@ -41,7 +41,7 @@ class Renamer:
     async def rndlxxx(message):
         args = utils.get_arg(message).split()
         if not args:
-            await message.edit("<i>First comes the URL, then the name (Optional)</i>")
+            await message.edit("<i>First comes the URL, then the name</i>")
             return
         await message.edit("<i>Downloading..</i>")
         name = " ".join(args[1:])
@@ -50,7 +50,7 @@ class Renamer:
         try:
             request.urlretrieve(args[0], "./" + name)
         except ValueError:
-            await message.edit("<i>You did it wrong.. It's .rndl <url> <name> </i>")
+            await message.edit("<i>You did it wrong.. It's .rndl \<url\> \<name\> </i>")
             return
         await message.edit("<i>Renaming..</i>")
         file = await message.client.upload_file(name)
