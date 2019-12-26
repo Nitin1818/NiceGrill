@@ -30,31 +30,31 @@ class Terminal:
 
     async def termxxx(message):
         cmd = utils.get_arg(message)
-        process = subprocess.Popen(
-            cmd.split(),
-            stderr=subprocess.PIPE,
-            stdout=subprocess.PIPE)
+        process = await asyncio.create_subprocess_shell(
+            cmd,
+            stderr=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE)
         template = (
             "\n<b>⬤ Input:</b>\n\n<code>{}</code>\n\n<b>⬤ Output:</b>\n\n<code>"
             .format(cmd))
         await message.edit(template)
-        if process.poll() is not None:
-            returncode = str(process.wait())
-            out = process.stdout.read().decode() + process.stderr.read().decode()
+        if process.returncode is not None:
+            stdout, stderr = await process.communicate()
+            out = stdout.decode() + stderr.decode()
             result = template + "{}</code>".format(
-                "Process returned with exit code: " + returncode if not out
+                "Process returned with exit code: " + str(process.returncode) if not out
                 else out)
             await message.edit(result)
             return
         TERMLIST.update({message.id: process})
         out = ""
-        for line in process.stdout:
+        for line in (await process.stdout.read()).decode().split("\n"):
             if Terminal.FLOODCONTROL < 4:
                 Terminal.FLOODCONTROL += 1
-                out += "<code>{}\n</code>".format(line.decode() if line.decode else process.stderr.readline().decode())
+                out += "<code>{}\n</code>".format(line if line else (await process.stderr.readline()).decode())
                 continue
             Terminal.FLOODCONTROL = 0
-            out += "<code>{}\n</code>".format(line.decode() if line.decode else process.stderr.readline().decode())
+            out += "<code>{}\n</code>".format(line if line else (await process.stderr.readline()).decode())
             if len(out) < 1500 and message.id in TERMLIST:
                 await message.edit(template + out)
             else:
