@@ -37,8 +37,8 @@ class Quote:
                 'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed.ttf',
                 '.tmp/DejaVuSansCondensed.ttf')
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed-Bold.ttf',
-                '.tmp/DejaVuSansCondensed-Bold.ttf')
+                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
+                '.tmp/Roboto-Medium.ttf')
 
         # Splitting text
         maxlength = 0
@@ -56,7 +56,7 @@ class Quote:
                     maxlength = 43
 
         # Importıng fonts and gettings the size of text
-        font = ImageFont.truetype(".tmp/DejaVuSansCondensed-Bold.ttf", 43, encoding="utf-16")
+        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 43, encoding="utf-16")
         font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 33, encoding="utf-16")
         width, height = font2.getsize("o"*maxlength)
 

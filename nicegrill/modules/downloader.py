@@ -70,11 +70,11 @@ class Downloader:
                 f"<b>{process}</b> <i>{rec}</i>\n"
                 f"<b>Time Passed:</b> <i>{str(datetime.now()-btime)[0:-7]}</i>\n"
                 f"<i>{bar}</i>")
-            if Downloader.counter < 1:
+            if Downloader.counter > 2:
                 await message.edit(down)
-                Downloader.counter += 1
-            else:
                 Downloader.counter = 0
+            else:
+                Downloader.counter += 1
 
     async def dlxxx(message):
         """Downloads the replied media or input url with a nice progressbar"""
