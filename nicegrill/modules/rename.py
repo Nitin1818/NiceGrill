@@ -26,24 +26,22 @@ class Renamer:
         if not message.is_reply or not reply.media:
             await message.edit("<i>Reply to a message with media</i>")
             return
-        if not name:
-            await message.edit("<i>Specify a new name for the file</i>")
-            return
         await message.edit("<i>Downloading..</i>")
-        if os.path.isfile(name):
-            os.remove(name)
         dl = await reply.download_media()
+        if not name:
+            name = dl
         await message.edit("<i>Renaming..</i>")
         file = await message.client.upload_file(dl)
         file.name = name
-        await message.client.send_message(message.chat_id, file=file, reply_to=reply.id)
+        await message.client.send_file(
+            message.chat_id, file=file, reply_to=reply.id, support_streaming=True, voice_note=True)
         await message.delete()
         os.remove(dl)
 
     async def rndlxxx(message):
         args = utils.get_arg(message).split()
-        if not args or len(args) < 2:
-            await message.edit("<i>First comes the URL, then the name</i>")
+        if not args:
+            await message.edit("<i>First comes the URL, then the name (Optional)</i>")
             return
         await message.edit("<i>Downloading..</i>")
         name = " ".join(args[1:])
@@ -57,6 +55,7 @@ class Renamer:
         await message.edit("<i>Renaming..</i>")
         file = await message.client.upload_file(name)
         file.name = name
-        await message.client.send_message(message.chat_id, file=file)
+        await message.client.send_file(
+            message.chat_id, file=file, support_streaming=True, voice_note=True)
         await message.delete()
         os.remove(name)

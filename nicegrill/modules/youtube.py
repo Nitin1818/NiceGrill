@@ -47,12 +47,16 @@ class YouTube:
             await message.edit(f"<i>{line.decode()}</i>")
         file = glob.glob("*.mp3")[0]
         await message.edit("<i>Uploading..</i>")
-        await message.client.send_file(message.chat_id, file)
+        await message.client.send_file(
+            message.chat_id, file,
+            voice_note=True,
+            support_streaming=True)
         await message.delete()
         os.remove(file)
 
     async def songxxx(message):
         args = utils.get_arg(message)
+        reply = await message.get_reply_message()
         if not args:
             await message.edit("<i>Enter a song name first</i>")
             return
@@ -66,6 +70,10 @@ class YouTube:
             process.wait()
             await message.edit("<i>Uploading..</i>")
             file = glob.glob("*.mp3")[0]
-            await message.client.send_file(message.chat_id, file)
+            await message.client.send_file(
+                message.chat_id, file,
+                reply_to=reply.id if reply else None
+                voice_note=True
+                support_streaming=True)
             await message.delete()
             os.remove(file)
