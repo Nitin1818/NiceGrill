@@ -70,7 +70,7 @@ class Downloader:
                 f"<b>{process}</b> <i>{rec}</i>\n"
                 f"<b>Time Passed:</b> <i>{str(datetime.now()-btime)[0:-7]}</i>\n"
                 f"<i>{bar}</i>")
-            if Downloader.counter > 2:
+            if Downloader.counter > 10:
                 await message.edit(down)
                 Downloader.counter = 0
             else:
