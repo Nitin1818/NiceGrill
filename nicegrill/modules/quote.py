@@ -127,7 +127,7 @@ class Quote:
             canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
             draw = ImageDraw.Draw(canvas)
             replname = "" if not replied.sender.last_name else replied.sender.last_name
-            reptot = replied.sender.first_name + " " + lname
+            reptot = replied.sender.first_name + " " + replname
             if replied.sticker:
                 replied.text = "Sticker"
             elif replied.photo:
