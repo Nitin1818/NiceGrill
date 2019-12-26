@@ -138,7 +138,7 @@ class Quote:
                 replied.text = "Voice Message"
             elif replied.document:
                 replied.text = "Document"
-            await Quote.replied_user(draw, font, font2, reptot, replied.message)
+            await Quote.replied_user(draw, font, font2, reptot, replied.message, top.width)
             y = 200
         else:
             canvas.paste(pfpbg, (0, 0))
@@ -200,11 +200,11 @@ class Quote:
         draw.ellipse((0, 0, 40, 40), fill=255)
         return emoji, mask
 
-    async def replied_user(draw, namefont, textfont, tot, text):
+    async def replied_user(draw, namefont, textfont, tot, text, len1):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
-        text = text[:13] + ".." if len(text) > 13 else text
-        tot = tot[:13] + ".." if len(tot) > 13 else tot
+        text = text[:int((len1 / 18)-6)] + ".." if len(text) > int((len1 / 18)-6) else text
+        tot = tot[:int((len1 / 18)-6)] + ".." if len(tot) > int((len1 / 18)-6) else tot
         draw.line((165, 90, 165, 170), width=5, fill="white")
         draw.text((180, 86), tot, font=namefont, fill="#888888")
         draw.text((180, 132), text, font=textfont, fill="white")
