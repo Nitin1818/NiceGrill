@@ -133,7 +133,7 @@ class Quote:
         elif reply.sticker:
             sticker = await reply.download_media()
             stimg = Image.open(sticker)
-            canvas = canvas.resize((stimg.width + pfpbg.width + 30, 520))
+            canvas = canvas.resize((stimg.width + pfpbg.width + 30, stimg.height + 10))
             canvas.paste(pfpbg, (0,0))
             canvas.paste(stimg, (pfpbg.width + 10, 10))
             os.remove(sticker)
