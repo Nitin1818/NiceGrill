@@ -72,22 +72,11 @@ class Quote:
             width = 200
         height = len(text) * 40
 
-        # Top part
-        top = Image.new('RGBA', (width + 80, 20), (0,0,0,0))
-        draw = ImageDraw.Draw(top)
-        draw.line((10, 0, top.width - 20, 0),  fill="#191919", width=50)
-        draw.pieslice((0, 0, 30, 50), 180, 270, fill="#191919")
-        draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill="#191919")
-
-        # Middle part
-        middle = Image.new("RGBA", (top.width, height + 75), (25, 25, 25, 255))
-        
-        # Bottom part
-        bottom = ImageOps.flip(top)
-
         # Profile Photo BG
         pfpbg = Image.new("RGBA", (125, 600), (0, 0, 0, 0))
 
+        # Draw Template
+        top, middle, bottom = await Quote.drawer(width + 30, height)
         # Profile Photo Check and Fetch
         yes = False
         color = random.choice(COLORS)
@@ -121,9 +110,9 @@ class Quote:
             # Creating a big canvas to gather all the elements
             replname = "" if not replied.sender.last_name else replied.sender.last_name
             reptot = replied.sender.first_name + " " + replname
-            replywidth = font.getsize(reptot)[0] + 20
+            replywidth = font2.getsize(reptot)[0]
             canvas = canvas.resize((canvas.width + replywidth, canvas.height + 120))
-            middle = middle.resize((middle.width + replywidth, middle.height + 120))
+            top, middle, bottom = await Quote.drawer(width + replywidth, height + 105)
             canvas.paste(pfpbg, (0, 0))
             canvas.paste(top, (pfpbg.width, 0))
             canvas.paste(middle, (pfpbg.width, top.height))
@@ -139,7 +128,7 @@ class Quote:
                 replied.text = "Voice Message"
             elif replied.document:
                 replied.text = "Document"
-            await Quote.replied_user(draw, font, font2, reptot, replied.message, top.width)
+            await Quote.replied_user(draw, font, font2, reptot, replied.message, replywidth)
             y = 200
         else:
             canvas.paste(pfpbg, (0, 0))
@@ -175,6 +164,23 @@ class Quote:
             x = pfpbg.width + 30
         return True, canvas
 
+    async def drawer(width, height):
+        # Top part
+        top = Image.new('RGBA', (width, 20), (0,0,0,0))
+        draw = ImageDraw.Draw(top)
+        draw.line((10, 0, top.width - 20, 0),  fill="#191919", width=50)
+        draw.pieslice((0, 0, 30, 50), 180, 270, fill="#191919")
+        draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill="#191919")
+
+        # Middle part
+        middle = Image.new("RGBA", (top.width, height + 75), (25, 25, 25, 255))
+        
+        # Bottom part
+        bottom = ImageOps.flip(top)
+
+        return top, middle, bottom
+
+
     async def no_photo(reply, tot):
         pfp = Image.new("RGBA", (105, 105), (0, 0, 0, 0))
         pen = ImageDraw.Draw(pfp)
@@ -201,10 +207,10 @@ class Quote:
         draw.ellipse((0, 0, 40, 40), fill=255)
         return emoji, mask
 
-    async def replied_user(draw, namefont, textfont, tot, text, len1):
+    async def replied_user(draw, namefont, textfont, tot, text, replywidth):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
-        text = text[:len(tot) - 3] + ".." if len(text) > len(tot) else text
+        text = text[:len(tot)] + ".." if replywidth < textfont.getsize(text)[0] else text
         draw.line((165, 90, 165, 170), width=5, fill="white")
         draw.text((180, 86), tot, font=namefont, fill="#888888")
         draw.text((180, 132), text, font=textfont, fill="white")
