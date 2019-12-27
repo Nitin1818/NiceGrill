@@ -31,7 +31,7 @@ class Loadmod:
         try:
             imp = __import__(mod[0:-3].replace("/", "."))
         except Exception as e:
-            loadmod.logger.error(e)
+            Loadmod.logger.error(e)
             return False
         for cls in vars(imp):
             if callable(vars(imp)[cls]):
