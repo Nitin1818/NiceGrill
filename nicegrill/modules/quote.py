@@ -30,7 +30,7 @@ class Quote:
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 
-    async def process(msg, reply, client, replied=None):
+    async def process(msg, user, client, reply, replied=None):
         if not os.path.isdir(".tmp"):
             os.mkdir(".tmp", 0o755)
             urllib.request.urlretrieve(
@@ -61,8 +61,8 @@ class Quote:
         width, height = font2.getsize("o"*maxlength)
 
         # Get user name
-        lname = "" if not reply.last_name else reply.last_name
-        tot = reply.first_name + " " + lname
+        lname = "" if not user.last_name else user.last_name
+        tot = user.first_name + " " + lname
 
         namewidth = font.getsize(tot)[0]
 
@@ -80,10 +80,10 @@ class Quote:
         # Profile Photo Check and Fetch
         yes = False
         color = random.choice(COLORS)
-        async for photo in client.iter_profile_photos(reply, limit=1):
+        async for photo in client.iter_profile_photos(user, limit=1):
             yes = True
         if yes:
-            pfp = await client.download_profile_photo(reply)
+            pfp = await client.download_profile_photo(user)
             paste = Image.open(pfp)
             os.remove(pfp)
             paste.thumbnail((105, 105))
@@ -96,7 +96,7 @@ class Quote:
             # Apply Mask
             pfpbg.paste(paste, (0, 0), mask_im)
         else:
-            paste, color = await Quote.no_photo(reply, tot)
+            paste, color = await Quote.no_photo(user, tot)
             pfpbg.paste(paste, (0, 0))
 
         # Creating a big canvas to gather all the elements
@@ -130,12 +130,40 @@ class Quote:
                 replied.text = "Document"
             await Quote.replied_user(draw, font, font2, reptot, replied.message.replace("\n", " "), maxlength)
             y = 200
+        elif reply.sticker:
+            sticker = await reply.download_media()
+            stimg = Image.open(sticker)
+            canvas = canvas.resize((stimg.width + pfpbg.width + 30, 520))
+            canvas.paste(pfpbg, (0,0))
+            canvas.paste(stimg, (pfpbg.width + 10, 10))
+            os.remove(sticker)
+            return True, canvas
+        elif reply.document and not reply.audio and not reply.audio:
+            docname = ".".join(reply.document.attributes[-1].file_name.split(".")[:-1])
+            doctype = reply.document.attributes[-1].file_name.split(".")[-1].upper()
+            if reply.document.size < 1024:
+                docsize = str(reply.document.size) + " Bytes"
+            elif reply.document.size < 1048576:
+                docsize = str(round(reply.document.size / 1024, 2)) + " KB "
+            elif reply.document.size < 1073741824:
+                docsize = str(round(reply.document.size / 1024**2, 2)) + " MB "
+            else:
+                docsize = str(round(reply.document.size / 1024**3, 2)) + " GB "
+            docbglen = font.getsize(docsize)[0] if font.getsize(docsize)[0] > font.getsize(docname)[0] else font.getsize(docname)[0]
+            canvas = canvas.resize((300 + middle.width + docbglen, 180 + height))
+            top, middle, bottom = await Quote.drawer(160 + middle.width + docbglen, height + 30)
+            canvas.paste(pfpbg, (0, 0))
+            canvas.paste(top, (pfpbg.width, 0))
+            canvas.paste(middle, (pfpbg.width, top.height))
+            canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
+            canvas = await Quote.doctype(docname, docsize, doctype, canvas)
+            y = 80 if maxlength > 0 else 0
         else:
             canvas.paste(pfpbg, (0, 0))
             canvas.paste(top, (pfpbg.width, 0))
             canvas.paste(middle, (pfpbg.width, top.height))
             canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
-            y = 80
+            y = 85
 
         # Writing User's Name
         space = pfpbg.width + 30
@@ -173,13 +201,28 @@ class Quote:
         draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill="#191919")
 
         # Middle part
-        middle = Image.new("RGBA", (top.width, height + 75), (25, 25, 25, 255))
+        middle = Image.new("RGBA", (top.width, height + 75), (29, 29, 29, 255))
         
         # Bottom part
         bottom = ImageOps.flip(top)
 
         return top, middle, bottom
 
+    async def doctype(name, size, type, canvas):
+        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
+        doc = Image.new("RGBA", (130, 130), (29, 29, 29, 255))
+        draw = ImageDraw.Draw(doc)
+        draw.ellipse((0, 0, 130, 130), fill="#434343")
+        draw.line((66, 28, 66, 53), width=14, fill="white")
+        draw.polygon([(67, 77), (90, 53), (42, 53)], fill="white")
+        draw.line((40, 87, 90, 87), width=8, fill="white")
+        canvas.paste(doc, (160,23))
+        draw2 = ImageDraw.Draw(canvas)
+        draw2.text((320, 40), name, font=font, fill="white")
+        draw2.text(
+            (320, 97), size
+            + type , font=font, fill="#AAAAAA")
+        return canvas
 
     async def no_photo(reply, tot):
         pfp = Image.new("RGBA", (105, 105), (0, 0, 0, 0))
@@ -221,10 +264,10 @@ class Quote:
         reply = await message.get_reply_message()
         msg = reply.message
         repliedreply = await reply.get_reply_message()
-        reply = (
+        user = (
             await message.client.get_entity(reply.fwd_from.from_id) if reply.fwd_from
             else reply.sender)
-        res, canvas = await Quote.process(msg, reply, message.client, repliedreply)
+        res, canvas = await Quote.process(msg, user, message.client, reply, repliedreply)
         if not res:
             return
         canvas.save('.tmp/sticker.webp')
