@@ -203,7 +203,7 @@ class Quote:
     async def replied_user(draw, namefont, textfont, tot, text, len1):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
-        text = text[:int((len1 / 18)-6)] + ".." if len(text) > int((len1 / 18)-6) else text
+        text = text[:int((len1 / 18)-9)] + ".." if len(text) > int((len1 / 18)-9) else text
         tot = tot[:int((len1 / 18)-6)] + ".." if len(tot) > int((len1 / 18)-6) else tot
         draw.line((165, 90, 165, 170), width=5, fill="white")
         draw.text((180, 86), tot, font=namefont, fill="#888888")
