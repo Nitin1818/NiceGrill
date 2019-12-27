@@ -22,7 +22,7 @@ from telethon import events
 BLACKLIST = ["Loader", "Help", "Settings", "Misc"]
 
 
-class loadmod:
+class Loadmod:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
