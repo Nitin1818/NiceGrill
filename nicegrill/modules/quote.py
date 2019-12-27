@@ -111,6 +111,19 @@ class Quote:
             replname = "" if not replied.sender.last_name else replied.sender.last_name
             reptot = replied.sender.first_name + " " + replname
             replywidth = font2.getsize(reptot)[0]
+            if reply.sticker:
+                sticker = await reply.download_media()
+                stimg = Image.open(sticker)
+                canvas = canvas.resize((stimg.width + pfpbg.width, stimg.height + 130))
+                top = Image.new("RGBA", (200 + stimg.width, 300), (29, 29, 29, 255))
+                draw = ImageDraw.Draw(top)
+                await Quote.replied_user(draw, reptot, replied.message.replace("\n", " "), 20)
+                top = top.crop((135, 70, top.width, 300))
+                canvas.paste(pfpbg, (0,0))
+                canvas.paste(top, (pfpbg.width + 3, 0))
+                canvas.paste(stimg, (pfpbg.width + 10, 140))
+                os.remove(sticker)
+                return True, canvas
             canvas = canvas.resize((canvas.width + replywidth, canvas.height + 120))
             top, middle, bottom = await Quote.drawer(width + replywidth, height + 105)
             canvas.paste(pfpbg, (0, 0))
@@ -128,7 +141,7 @@ class Quote:
                 replied.text = "Voice Message"
             elif replied.document:
                 replied.text = "Document"
-            await Quote.replied_user(draw, font, font2, reptot, replied.message.replace("\n", " "), maxlength)
+            await Quote.replied_user(draw, reptot, replied.message.replace("\n", " "), maxlength)
             y = 200
         elif reply.sticker:
             sticker = await reply.download_media()
@@ -196,9 +209,9 @@ class Quote:
         # Top part
         top = Image.new('RGBA', (width, 20), (0,0,0,0))
         draw = ImageDraw.Draw(top)
-        draw.line((10, 0, top.width - 20, 0),  fill="#191919", width=50)
-        draw.pieslice((0, 0, 30, 50), 180, 270, fill="#191919")
-        draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill="#191919")
+        draw.line((10, 0, top.width - 20, 0),  fill=(29, 29, 29, 255), width=50)
+        draw.pieslice((0, 0, 30, 50), 180, 270, fill=(29, 29, 29, 255))
+        draw.pieslice((top.width - 75, 0, top.width, 50), 270, 360, fill=(29, 29, 29, 255))
 
         # Middle part
         middle = Image.new("RGBA", (top.width, height + 75), (29, 29, 29, 255))
@@ -250,7 +263,7 @@ class Quote:
         draw.ellipse((0, 0, 40, 40), fill=255)
         return emoji, mask
 
-    async def replied_user(draw, namefont, textfont, tot, text, maxlength):
+    async def replied_user(draw, tot, text, maxlength):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
         text = text[:maxlength] + ".." if len(text) > maxlength else text
