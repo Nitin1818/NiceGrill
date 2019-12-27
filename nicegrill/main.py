@@ -33,7 +33,7 @@ formatter = logging.Formatter(
 logger.addHandler(file_handler)
 
 
-class main:
+class Main:
 
     loadclient = None
 
@@ -75,7 +75,7 @@ class main:
                     incoming=True,
                     forwards=False))
         loop = asyncio.get_event_loop()
-        rest = loop.create_task(main.restart(client))
+        rest = loop.create_task(Main.restart(client))
         loop.run_until_complete(rest)
 
     async def restart(client):
