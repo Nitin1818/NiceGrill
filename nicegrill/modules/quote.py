@@ -119,15 +119,16 @@ class Quote:
         y = 80
         if replied:
             # Creating a big canvas to gather all the elements
-            canvas = canvas.resize((canvas.width + 20, canvas.height + 120))
-            middle = middle.resize((middle.width, middle.height + 120))
+            replname = "" if not replied.sender.last_name else replied.sender.last_name
+            reptot = replied.sender.first_name + " " + replname
+            replywidth = font.getsize(reptot)[0] + 20
+            canvas = canvas.resize((canvas.width + replywidth, canvas.height + 120))
+            middle = middle.resize((middle.width + replywidth, middle.height + 120))
             canvas.paste(pfpbg, (0, 0))
             canvas.paste(top, (pfpbg.width, 0))
             canvas.paste(middle, (pfpbg.width, top.height))
             canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
             draw = ImageDraw.Draw(canvas)
-            replname = "" if not replied.sender.last_name else replied.sender.last_name
-            reptot = replied.sender.first_name + " " + replname
             if replied.sticker:
                 replied.text = "Sticker"
             elif replied.photo:
@@ -203,8 +204,7 @@ class Quote:
     async def replied_user(draw, namefont, textfont, tot, text, len1):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
-        text = text[:int((len1 / 18)-9)] + ".." if len(text) > int((len1 / 18)-9) else text
-        tot = tot[:int((len1 / 18)-6)] + ".." if len(tot) > int((len1 / 18)-6) else tot
+        text = text[:len(tot) - 3] + ".." if len(text) > len(tot) else text
         draw.line((165, 90, 165, 170), width=5, fill="white")
         draw.text((180, 86), tot, font=namefont, fill="#888888")
         draw.text((180, 132), text, font=textfont, fill="white")
