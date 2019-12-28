@@ -14,9 +14,11 @@
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
 from nicegrill.modules import _init
+import html
 
 def get_arg(message):
-    split = message.message.message[1:].replace("\n", " \n").split(" ")
+    msg = message.message if isinstance(message.message, str) else message.message.message
+    split = str(msg)[1:].replace("\n", " \n").split(" ")
     if " ".join(split[1:]).strip() == "":
         return ""
     return " ".join(split[1:])
