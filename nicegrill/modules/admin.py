@@ -238,7 +238,7 @@ class Admin:
             return
         try:
             await message.client(EditBannedRequest(chat, user, BAN))
-            await message.edit("<b>Banned...</b>")
+            await message.edit("<b>Banned</b>")
         except TypeError:
             await message.edit("<b>You need to be in a chat to do this</b>")
             return
@@ -295,7 +295,7 @@ class Admin:
         else:
             nicedb.update_user({"User": user}, {"GBan": True})
         add(command)
-        await message.edit("<b>Globally banned...</b>")
+        await message.edit("<b>Globally banned</b>")
 
     async def ungbanxxx(message):
         try:
@@ -309,7 +309,7 @@ class Admin:
             nicedb.add_user(user, False, False, False, message.chat_id)
         else:
             nicedb.update_user({"User": user}, {"GBan": False})
-        await message.edit("<b>Global ban lifted...</b>")
+        await message.edit("<b>Global ban lifted</b>")
 
     async def gmutexxx(message):
         await message.edit("<b>Muting...</b>")
