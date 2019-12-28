@@ -152,6 +152,8 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
+        if user == (await client.get_me()).id:
+            raise UserIdInvalidError
         if not nicedb.check_user(user):
             nicedb.add_user(user, True, False, False, message.chat_id)
         else:
