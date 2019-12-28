@@ -153,7 +153,8 @@ class Admin:
             await message.edit("<b>No user found in that name</b>")
             return
         if user == (await message.client.get_me()).id:
-            raise UserIdInvalidError
+            await message.edit("<b>Specified user is a no go</b>")
+            return
         if not nicedb.check_user(user):
             nicedb.add_user(user, True, False, False, message.chat_id)
         else:
