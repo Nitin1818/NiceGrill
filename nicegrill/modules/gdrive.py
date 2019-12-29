@@ -41,8 +41,8 @@ class GoogleDrive:
         else:
             if "/" not in arg:
                 file = arg.split("/")
-        if settings.check_gfolder():
-            folder = settings.check_gfolder()
+        if await settings.check_gfolder():
+            folder = await settings.check_gfolder()
         elif gservice.list_folders_by_name('Telegram'):
             folder = gservice.list_folders_by_name('Telegram')[
                 0]["id"]
@@ -76,6 +76,6 @@ class GoogleDrive:
             folder = gservice.create_folder(
                 utils.get_arg(message))
             await message.edit("<b>You dont have this folder in your drive so i created it for you</b>")
-        settings.delete("GFolder")
-        settings.set_gfolder(folder)
+        await settings.delete("GFolder")
+        await settings.set_gfolder(folder)
         await message.edit("<b>Succesfully saved</b>")

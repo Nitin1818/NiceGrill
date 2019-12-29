@@ -43,7 +43,7 @@ class Stickers:
         """Defines which pack your stickers will be added"""
         packid = utils.get_arg(message)
         if packid == "clear":
-            settings.delete("Pack")
+            await settings.delete("Pack")
             await message.edit("<i>Saved pack deleted successfully</i>")
             return
         pack = False
@@ -59,8 +59,8 @@ class Stickers:
             await message.edit("<i>You don't own this pack</i>")
             return
         elif packid and pack:
-            settings.delete("Pack")
-            settings.set_pack(packid)
+            await settings.delete("Pack")
+            await settings.set_pack(packid)
             await message.edit("<i>Pack saved successfully</i>")
 
     async def kangxxx(message):
@@ -71,7 +71,7 @@ class Stickers:
             return
         img = await reply.download_media()
         await Stickers.resize(message, img)
-        packid = settings.check_pack()
+        packid = await settings.check_pack()
         if not packid:
             msg = "<i>You have no sticker pack set, so I'm creating a new pack</i>"
             task = "/newpack"
@@ -141,5 +141,5 @@ class Stickers:
                 "{}sKangPack_{}_{}".format(
                     pn, (await message.get_sender()).id, random.randint(0, 99999999)))
             await message.client.send_read_acknowledge(conv.chat_id)
-            settings.set_pack(id.message)
+            await settings.set_pack(id.message)
             await message.edit(result.format(id.message))

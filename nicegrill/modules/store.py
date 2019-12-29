@@ -21,7 +21,7 @@ import logging
 class Store:
 
     async def storexxx(message):
-        if not settings.check_asset():
+        if not await settings.check_asset():
             await message.edit(
                 "<b>You haven't set a storage chat yet, it's:</b>\n\n"
                 "<i>'.asset make'</i><b> for auto setup</b>\n"
@@ -36,11 +36,11 @@ class Store:
             await message.edit("<i>Specify a file name and a path</i>")
             return
         name, path = args[0], args[1]
-        file = await message.client.send_message(settings.check_asset(), reply)
-        if not nicedb.check_one(name):
-            nicedb.save_file(name, path, file.id)
+        file = await message.client.send_message(await settings.check_asset(), reply)
+        if not await nicedb.check_one(name):
+            await nicedb.save_file(name, path, file.id)
         else:
-            nicedb.update_file(name, path, file.id)
+            await nicedb.update_file(name, path, file.id)
         await message.edit("<i>File saved to be restored</i>")
 
     async def delfilexxx(message):
@@ -48,15 +48,15 @@ class Store:
         if not name:
             await message.edit("<i>Specify a file name</i>")
             return
-        if not nicedb.check_one(name):
+        if not await nicedb.check_one(name):
             await message.edit("<i>File doesn't exist in database</i>")
             return
-        nicedb.delete_one(name)
+        await nicedb.delete_one(name)
         await message.edit("<i>Successfully removed</i>")
 
     async def storedxxx(message):
         await message.edit("<i>Retrieving..</i>")
-        files = nicedb.check()
+        files = await nicedb.check()
         if not files:
             await message.edit("<i>There's no saved file</i>")
             return

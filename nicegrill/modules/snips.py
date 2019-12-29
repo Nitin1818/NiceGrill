@@ -36,7 +36,7 @@ class Snips:
             return
         if message.is_reply:
             if reply.media:
-                value = (await message.client.send_message(settings.check_asset(), reply)).id
+                value = (await message.client.send_message(await settings.check_asset(), reply)).id
                 media = True
             else:
                 value = reply.message
@@ -44,10 +44,10 @@ class Snips:
         else:
             value = args[1]
             media = False
-        if not nicedb.check_one(name):
-            nicedb.add(name, value, media)
+        if not await nicedb.check_one(name):
+            await nicedb.add(name, value, media)
         else:
-            nicedb.update({"Key": name}, name, value, media)
+            await nicedb.update({"Key": name}, name, value, media)
         await message.edit(
             "<b>Snip </b><i>{}</i><b> successfully saved into the list."
             "Type </b><i>${}</i><b> to call it.</b>".format(name, name))
@@ -58,24 +58,24 @@ class Snips:
         if not snipn:
             await message.edit("<b>Please specify the name of the snip to remove.</b>")
             return
-        if nicedb.check_one(snipn):
-            nicedb.delete_one(snipn)
+        if await nicedb.check_one(snipn):
+            await nicedb.delete_one(snipn)
             await message.edit("<b>Snip </b><i>{}</i><b> successfully deleted</b>".format(snipn))
         else:
             await message.edit("<b>Snip </b><i>{}</i><b> not found in snips list</b>".format(snipn))
 
     async def remsnipsxxx(message):
         """Clears out the snip list."""
-        if not nicedb.check():
+        if not await nicedb.check():
             await message.edit("<b>There are no snips in the list to clear out.</b>")
             return
-        nicedb.delete()
+        await nicedb.delete()
         await message.edit("<b>All snips successfully removed from the list.</b>")
 
     async def snipsxxx(message):
         """Shows saved snips."""
         snips = ""
-        get = nicedb.check()
+        get = await nicedb.check()
         if not get:
             await message.edit("<b>No snip found in snips list.</b>")
             return
@@ -88,28 +88,28 @@ class Snips:
         """Turns on/off snips for others usage."""
         state = utils.get_arg(message)
         if state == "on":
-            nicedb.delete_others()
-            nicedb.others(True)
+            await nicedb.delete_others()
+            await nicedb.others(True)
             await message.edit("<b>Snips are now open to use for anyone.</b>")
         elif state == "off":
-            nicedb.delete_others()
-            nicedb.others(False)
+            await nicedb.delete_others()
+            await nicedb.others(False)
             await message.edit("<b>Snips are now turned off for others.</b>")
             return
 
     async def watchout(message):
-        if not nicedb.check_one(message.text[1::]):
+        if not await nicedb.check_one(message.text[1::]):
             return
         args = message.text
-        if not nicedb.check_others():
+        if not await nicedb.check_others():
             if message.sender_id != (await message.client.get_me()).id:
                 return
         if args.startswith("$"):
             argsraw = args[1::]
-            snip = nicedb.check_one(argsraw)
+            snip = await nicedb.check_one(argsraw)
             value = (
                     snip["Value"] if not snip["Media"]
-                    else await message.client.get_messages(settings.check_asset(), ids=snip["Value"]))
+                    else await message.client.get_messages(await settings.check_asset(), ids=snip["Value"]))
             if not snip["Media"]:
                 if message.sender_id == (await message.client.get_me()).id:
                     await message.edit(value)

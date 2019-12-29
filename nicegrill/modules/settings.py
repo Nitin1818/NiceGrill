@@ -18,13 +18,13 @@ from nicegrill import utils
 import logging
 
 
-class Settings:
+class settings:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
 
     async def setprefixxxx(message):
         pref = utils.get_arg(message)
-        settings.delete("Prefix")
-        settings.set_prefix(pref)
+        await settings.delete("Prefix")
+        await settings.set_prefix(pref)
         await message.edit("<b>Prefix has been successfully set to: {}</b>".format(pref))

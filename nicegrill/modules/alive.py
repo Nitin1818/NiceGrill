@@ -36,12 +36,12 @@ class Stats:
 
     async def alivexxx(message):
         """Show off to people with my bot using this command"""
-        if not nicedb.check_name():
-            nicedb.set_name("NiceGrill Bot")
-        if not nicedb.check_msg():
-            nicedb.set_message("Hold on, Whaa.. I'm alive 🤥🤥")
-        username = nicedb.check_name()
-        msg = nicedb.check_msg()
+        if not await nicedb.check_name():
+            await nicedb.set_name("NiceGrill Bot")
+        if not await nicedb.check_msg():
+            await nicedb.set_message("Hold on, Whaa.. I'm alive 🤥🤥")
+        username = await nicedb.check_name()
+        msg = await nicedb.check_msg()
         tot = (
             "<i>{}</i>".format(msg)
             + "<b>\n\nUser's name:</b> <i>{}</i>\n<b>Python version:</b> <i>{}</i>\n"
@@ -56,26 +56,26 @@ class Stats:
         """Sets your alive message"""
         msg = utils.get_arg(message)
         if not msg:
-            nicedb.set_message("Hold on, Whaa.. I'm alive 🤥🤥")
+            await nicedb.set_message("Hold on, Whaa.. I'm alive 🤥🤥")
             await message.edit("<i>Alive message set to default</i>")
             return
-        if not nicedb.check_msg():
-            nicedb.set_message(msg)
+        if not await nicedb.check_msg():
+            await nicedb.set_message(msg)
             await message.edit("<i>Message succesfully set</i>")
         else:
-            nicedb.update({"ID": 2}, {"Message": msg})
+            await nicedb.update({"ID": 2}, {"Message": msg})
             await message.edit("<i>Message succesfully updated</i>")
 
     async def setnamexxx(message):
         """Sets your alive name"""
         name = utils.get_arg(message)
         if not name:
-            nicedb.set_message("NiceGrill Bot")
+            await nicedb.set_message("NiceGrill Bot")
             await message.edit("<i>Alive message set to default</i>")
             return
-        if not nicedb.check_name():
-            nicedb.set_message(name)
+        if not await nicedb.check_name():
+            await nicedb.set_message(name)
             await message.edit("<i>Name succesfully set</i>")
         else:
-            nicedb.update({"ID": 1}, {"Name": name})
+            await nicedb.update({"ID": 1}, {"Name": name})
             await message.edit("<i>Name succesfully updated</i>")

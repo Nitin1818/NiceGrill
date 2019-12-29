@@ -1,6 +1,7 @@
 from urllib import request
 import importlib
 import os
+import asyncio
 from database import dloadsdb as nicedb, storagedb as storage, settingsdb as settings
 
 
@@ -12,19 +13,21 @@ cmds = {}
 
 
 async def filestorage(client):
-    if storage.retrieve():
-        for file in storage.retrieve():
+    filestorage = await storage.retrieve()
+    if filestorage:
+        for file in filestorage:
             try:
-                msg = await client.get_messages(settings.check_asset(), ids=file["File"])
+                msg = await client.get_messages(await settings.check_asset(), ids=file["File"])
                 if not os.path.isdir(file["Path"]):
                     os.makedirs(file["Path"], 0o755)
                 await client.download_media(msg, os.path.join(file["Path"], file["Name"]))
             except Exception:
                 pass
 
-def loads():
-    if nicedb.check_dload():
-        for mod in nicedb.check_dload():
+async def loads():
+    dloads = await nicedb.check_dload()
+    if dloads:
+        for mod in dloads:
             request.urlretrieve(mod["URL"], "./" + mod["Name"])
             try:
                 imported.append(__import__(mod["Name"][0:-3]))

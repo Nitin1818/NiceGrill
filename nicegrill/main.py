@@ -42,7 +42,7 @@ class Main:
         ls = [_init.modules[obj] for obj in _init.modules]
         for item in ls:
             mods.update(item)
-        prefix = settings.check_prefix()
+        prefix = await settings.check_prefix()
         if getattr(message, "message") and message.text.startswith(prefix):
             if message.text.startswith(prefix * 2):
                 await message.edit(message.text[1:])
@@ -65,7 +65,7 @@ class Main:
                         with open('error.txt', 'w'):
                             pass
 
-    def read(client):
+    async def read(client):
         watchouts = _init.watchouts
         for watchout in watchouts:
             client.add_event_handler(
@@ -74,18 +74,17 @@ class Main:
                     outgoing=True,
                     incoming=True,
                     forwards=False))
-        loop = asyncio.get_event_loop()
-        rest = loop.create_task(Main.restart(client))
-        loop.run_until_complete(rest)
+        await Main.restart(client)
 
     async def restart(client):
-        if not settings.check_restart():
+        restart = await settings.check_restart()
+        if not restart:
             return
         try:
-            chat = await client.get_entity(settings.check_restart()["Chat"])
-            await client.edit_message(entity=chat, text="<b>Restarted</b>", message=settings.check_restart()["Message"])
+            chat = await client.get_entity(restart["Chat"])
+            await client.edit_message(entity=chat, text="<b>Restarted</b>", message=restart["Message"])
         except Exception:
             pass
         except ValueError:
             pass
-        settings.delete("Restart")
+        await settings.delete("Restart")

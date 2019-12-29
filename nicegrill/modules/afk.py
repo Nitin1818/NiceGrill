@@ -31,7 +31,7 @@ class AFK:
         current = str(datetime.now())
         if not msg:
             msg = "No Reason"
-        nicedb.set_afk(msg, current)
+        await nicedb.set_afk(msg, current)
         await message.edit("<b>I'm going AFK</b>")
 
     async def godarkxxx(message):
@@ -44,20 +44,20 @@ them later. Check your storage channel."""
             await message.edit("<b>Enter on/off as an option</b>")
             return
         if msg == "on":
-            nicedb.set_godark(True)
+            await nicedb.set_godark(True)
             await message.edit("<b>AFK notifications muted</b>")
         else:
-            nicedb.set_godark(False)
+            await nicedb.set_godark(False)
             await message.edit("<b>AFK notifications unmuted</b>")
 
     async def watchout(message):
-        if not nicedb.check_afk():
+        if not await nicedb.check_afk():
             return
-        msg = nicedb.check_afk()["Message"]
-        then = datetime.strptime(nicedb.check_afk()["AFKTime"], '%Y-%m-%d %H:%M:%S.%f')
-        if getattr(message, "message") and message.mentioned and settings.check_asset():
-            storage = await message.client.get_entity(settings.check_asset())
-            if nicedb.check_godark():
+        msg = await nicedb.check_afk()["Message"]
+        then = datetime.strptime(await nicedb.check_afk()["AFKTime"], '%Y-%m-%d %H:%M:%S.%f')
+        if getattr(message, "message") and message.mentioned and await settings.check_asset():
+            storage = await message.client.get_entity(await settings.check_asset())
+            if await nicedb.check_godark():
                 await message.client.send_read_acknowledge(
                     message.chat, message, clear_mentions=True)
                 sentmsg = message.text
@@ -93,6 +93,6 @@ them later. Check your storage channel."""
             if message.text.startswith(
                     ".afk") or message.text.startswith(".godark"):
                 return
-            nicedb.stop_afk()
+            await nicedb.stop_afk()
             await message.reply("<b>I'm not AFK anymore.</b>")
 

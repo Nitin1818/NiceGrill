@@ -155,10 +155,10 @@ class Admin:
         if user == (await message.client.get_me()).id:
             await message.edit("<b>Specified user is a no go</b>")
             return
-        if not nicedb.check_user(user):
-            nicedb.add_user(user, True, False, False, message.chat_id)
+        if not await nicedb.check_user(user):
+            await nicedb.add_user(user, True, False, False, message.chat_id)
         else:
-            nicedb.update_user({"User": user}, {"Mute": True})
+            await nicedb.update_user({"User": user}, {"Mute": True})
         try:
             await message.client(EditBannedRequest(chat, user, MUTE))
             await message.edit("<b>Muted</b>")
@@ -183,10 +183,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not nicedb.check_user(user):
-            nicedb.add_user(user, False, False, False, message.chat_id)
+        if not await nicedb.check_user(user):
+            await nicedb.add_user(user, False, False, False, message.chat_id)
         else:
-            nicedb.update_user({"User": user}, {"Mute": False})
+            await nicedb.update_user({"User": user}, {"Mute": False})
         try:
             await message.client(EditBannedRequest(chat, user, UNMUTE))
             # add_unmuted(user)
@@ -290,10 +290,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not nicedb.check_user(user):
-            nicedb.add_user(user, False, False, True, message.chat_id)
+        if not await nicedb.check_user(user):
+            await nicedb.add_user(user, False, False, True, message.chat_id)
         else:
-            nicedb.update_user({"User": user}, {"GBan": True})
+            await nicedb.update_user({"User": user}, {"GBan": True})
         add(command)
         await message.edit("<b>Globally banned</b>")
 
@@ -305,10 +305,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not nicedb.check_user(user):
-            nicedb.add_user(user, False, False, False, message.chat_id)
+        if not await nicedb.check_user(user):
+            await nicedb.add_user(user, False, False, False, message.chat_id)
         else:
-            nicedb.update_user({"User": user}, {"GBan": False})
+            await nicedb.update_user({"User": user}, {"GBan": False})
         await message.edit("<b>Global ban lifted</b>")
 
     async def gmutexxx(message):
@@ -320,10 +320,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not nicedb.check_user(user):
-            nicedb.add_user(user, True, True, False, message.chat_id)
+        if not await nicedb.check_user(user):
+            await nicedb.add_user(user, True, True, False, message.chat_id)
         else:
-            nicedb.update_user({"User": user}, {"Mute": True, "GMute": True})
+            await nicedb.update_user({"User": user}, {"Mute": True, "GMute": True})
         await message.edit("<b>Globally muted</b>")
 
     async def ungmutexxx(message):
@@ -335,10 +335,10 @@ class Admin:
         except TypeError:
             await message.edit("<b>No user found in that name</b>")
             return
-        if not nicedb.check_user(user):
-            nicedb.add_user(user, False, False, False, message.chat_id)
+        if not await nicedb.check_user(user):
+            await nicedb.add_user(user, False, False, False, message.chat_id)
         else:
-            nicedb.update_user({"User": user}, {"GBan": False})
+            await nicedb.update_user({"User": user}, {"GBan": False})
         await message.edit("<b>Global mute lifted</b>")
 
     async def kickmexxx(message):
@@ -348,8 +348,8 @@ class Admin:
     async def watchout(message):
         user = message.sender_id
         chat = message.chat_id
-        if nicedb.check_user(user):
-            entity = nicedb.check_user(user)
+        if await nicedb.check_user(user):
+            entity = await nicedb.check_user(user)
             if (await message.client.get_me()).id == entity["User"]:
                 return
             if entity["Mute"] and entity["GMute"]:

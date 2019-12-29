@@ -38,8 +38,8 @@ class Downloader:
         pathname = utils.get_arg(message)
         if not os.path.exists(pathname):
             os.mkdir(pathname, 0o755)
-        settings.delete("Path")
-        if settings.set_path(pathname):
+        await settings.delete("Path")
+        if await settings.set_path(pathname):
             await message.edit("<b>Successfully set.</b>")
         else:
             await message.edit("<b>Something went wrong.</b>")
@@ -78,7 +78,7 @@ class Downloader:
 
     async def dlxxx(message):
         """Downloads the replied media or input url with a nice progressbar"""
-        path = settings.check_path()
+        path = await settings.check_path()
         target = (
             utils.get_arg(message) if not message.is_reply
             else (await message.get_reply_message()).media)

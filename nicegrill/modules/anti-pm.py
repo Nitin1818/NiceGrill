@@ -42,12 +42,12 @@ class AntiPM:
     async def antipmxxx(message):
         switch = utils.get_arg(message).lower()
         if switch == "on":
-            nicedb.delete("AntiPM")
-            nicedb.set_antipm(True)
+            await nicedb.delete("AntiPM")
+            await nicedb.set_antipm(True)
             await message.edit("<i>AntiPM turned on</i>")
         elif switch == "off":
-            nicedb.delete("AntiPM")
-            nicedb.set_antipm(False)
+            await nicedb.delete("AntiPM")
+            await nicedb.set_antipm(False)
             await message.edit("<i>AntiPM turned off</i>")
         else:
             await message.edit("<i>It's either on or off, pick one</i>")
@@ -67,11 +67,11 @@ type their username or use this in their chat"""
         if pick == (await message.client.get_me()).id:
             await message.edit("<b>Why would you wanna approve yourself?</b>")
             return
-        if nicedb.check_approved(pick):
+        if await nicedb.check_approved(pick):
             await message.edit("<i>User is already approved</i>")
             return
         else:
-            nicedb.approve(pick)
+            await nicedb.approve(pick)
             await message.edit(
                 "<a href=tg://user?id={}>{}</a> <b>is approved to PM you now</b>"
                 .format(pick, (await message.client.get_entity(pick)).first_name))
@@ -90,11 +90,11 @@ type their username or use this in their chat"""
         if pick == (await message.client.get_me()).id:
             await message.edit("<b>Why would you wanna disapprove yourself?</b>")
             return
-        if not nicedb.check_approved(pick):
+        if not await nicedb.check_approved(pick):
             await message.edit("<i>User is not approved</i>")
             return
         else:
-            nicedb.disapprove(pick)
+            await nicedb.disapprove(pick)
             await message.edit(
                 "<a href=tg://user?id={}>{}</a> <b>is disapproved to PM you now</b>"
                 .format(pick, (await message.client.get_entity(pick)).first_name))
@@ -113,8 +113,8 @@ type their username or use this in their chat"""
             await message.edit("<i>Why would you wanna block yourself?</i>")
             return
         await message.client(functions.contacts.BlockRequest(id=pick))
-        if nicedb.check_approved(pick):
-            nicedb.disapprove(pick)
+        if await nicedb.check_approved(pick):
+            await nicedb.disapprove(pick)
         await message.edit(
             "<a href=tg://user?id={}>{}</a> <i>has been blocked</i>"
             .format(pick, (await message.client.get_entity(pick)).first_name))
@@ -146,12 +146,12 @@ a message in your name until that user gets blocked or approved"""
             await message.edit("<i>Please type on/off</i>")
             return
         if val == "off":
-            nicedb.delete("Notifications")
-            nicedb.set_notif(False)
+            await nicedb.delete("Notifications")
+            await nicedb.set_notif(False)
             await message.edit("<i>Notifications from unapproved PMs muted</i>")
         if val == "on":
-            nicedb.delete("Notifications")
-            nicedb.set_notif(True)
+            await nicedb.delete("Notifications")
+            await nicedb.set_notif(True)
             await message.edit("<i>Notifications from unapproved PMs unmuted</i>")
 
     async def setlimitxxx(message):
@@ -162,8 +162,8 @@ PMs and when they go beyond it, bamm!"""
             await message.edit("<i>Please type a number</i>")
             return
         if limit > 0:
-            nicedb.delete("Limit")
-            nicedb.set_limit(limit)
+            await nicedb.delete("Limit")
+            await nicedb.set_limit(limit)
             await message.edit("<i>Max. PM message limit successfully updated</i>")
 
     async def superblockxxx(message):
@@ -174,27 +174,27 @@ will be deleted when the idiot passes the message limit"""
             await message.edit("<i>Please type on/off</i>")
             return
         if val == "on":
-            nicedb.delete("SuperBlock")
-            nicedb.set_sblock(True)
+            await nicedb.delete("SuperBlock")
+            await nicedb.set_sblock(True)
             await message.edit("<i>Chats from unapproved PMs will be removed</i>")
         if val == "off":
-            nicedb.delete("SuperBlock")
-            nicedb.set_sblock(False)
+            await nicedb.delete("SuperBlock")
+            await nicedb.set_sblock(False)
             await message.edit("<i>Chats from unapproved PMs will not be removed anymore</i>")
         setPM(command)
 
     async def watchout(message):
         if message.sender_id != (await message.client.get_me()).id and isinstance(message.to_id, tl.types.PeerUser):
-            if getattr(message.sender, "bot", None) or not nicedb.check_antipm():
+            if getattr(message.sender, "bot", None) or not await nicedb.check_antipm():
                 return
             user = (await message.get_sender()).id
-            if nicedb.check_approved(user):
+            if await nicedb.check_approved(user):
                 return
-            if not nicedb.check_notifs():
+            if not await nicedb.check_notifs():
                 await message.client.send_read_acknowledge(message.chat_id)
             user_warns = 0 if user not in AntiPM.USERS_AND_WARNS else AntiPM.USERS_AND_WARNS[
                 user]
-            if user_warns <= nicedb.check_limit() - 2:
+            if user_warns <= await nicedb.check_limit() - 2:
                 user_warns += 1
                 AntiPM.USERS_AND_WARNS.update({user: user_warns})
                 if not AntiPM.FLOOD_CTRL > 0:
@@ -212,6 +212,6 @@ will be deleted when the idiot passes the message limit"""
             await message.reply(AntiPM.BLOCKED)
             await message.client(functions.messages.ReportSpamRequest(peer=message.sender_id))
             await message.client(functions.contacts.BlockRequest(id=message.sender_id))
-            if nicedb.check_sblock():
+            if await nicedb.check_sblock():
                 await message.client.delete_dialog(entity=message.chat_id, revoke=True)
             AntiPM.USERS_AND_WARNS.update({user: 0})

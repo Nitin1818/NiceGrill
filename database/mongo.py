@@ -14,7 +14,7 @@
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-import pymongo
+from pymongo import MongoClient
 from config import MONGO_URI
 
-cli = pymongo.MongoClient(MONGO_URI)
+cli = MongoClient(MONGO_URI)

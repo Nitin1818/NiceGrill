@@ -27,7 +27,7 @@ class Filters:
 
     async def filterxxx(message):
         args = utils.arg_split_with(message, ",")
-        storage = settings.check_asset()
+        storage = await settings.check_asset()
         media = None
         reply = await message.get_reply_message()
         if not args:
@@ -44,17 +44,17 @@ class Filters:
         chatid = message.chat_id
         if reply and reply.media and not reply.web_preview:
             media = (await message.client.send_message(storage, reply)).id
-        if nicedb.check_one("Filters", chatid, name):
-            nicedb.update("Filters", {"Chat": chatid, "Key": name},
+        if await nicedb.check_one("Filters", chatid, name):
+            await nicedb.update("Filters", {"Chat": chatid, "Key": name},
                 chatid, name, value, media)
             await message.edit("<b>Filter succesfully updated</b>")
         else:
-            nicedb.add("Filters", chatid, name, value, media)
+            await nicedb.add("Filters", chatid, name, value, media)
             await message.edit("<b>Filter succesfully saved</b>")
 
     async def filtersxxx(message):
         chatid = message.chat_id
-        filters = nicedb.check("Filters", chatid)
+        filters = await nicedb.check("Filters", chatid)
         if not filters:
             await message.edit("<b>No filter found in this chat</b>")
             return
@@ -68,18 +68,18 @@ class Filters:
     async def stopxxx(message):
         args = utils.get_arg(message)
         chatid = message.chat_id
-        if not nicedb.check_one("Filters", chatid, args):
+        if not await nicedb.check_one("Filters", chatid, args):
             await message.edit("<b>No filter found in that name</b>")
             return
-        nicedb.delete_one("Filters", chatid, args)
+        await nicedb.delete_one("Filters", chatid, args)
         await message.edit("<b>Filter deleted successfully</b>")
 
     async def stopallxxx(message):
         chatid = message.chat_id
-        if not nicedb.check("Filters", chatid):
+        if not await nicedb.check("Filters", chatid):
             await message.edit("<b>There are no filters in this chat</b>")
             return
-        nicedb.delete("Filters", chatid)
+        await nicedb.delete("Filters", chatid)
         await message.edit("<b>Filters cleared out successfully</b>")
 
     async def watchout(message):
@@ -88,8 +88,8 @@ class Filters:
                 return
         arg = message.text
         chatid = message.chat_id
-        storage = settings.check_asset()
-        filters = nicedb.check("Filters", chatid)
+        storage = await settings.check_asset()
+        filters = await nicedb.check("Filters", chatid)
         if not filters:
             return
         for item in filters:

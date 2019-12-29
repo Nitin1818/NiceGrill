@@ -31,9 +31,9 @@ class Misc:
 
     async def restartxxx(message):
         msg = await message.edit("<b>Restarting...</b>")
-        if settings.check_restart():
-            settings.delete("Restart")
-        settings.set_restart(msg.chat_id, msg.id)
+        if await settings.check_restart():
+            await settings.delete("Restart")
+        await settings.set_restart(msg.chat_id, msg.id)
         os.execl(sys.executable, sys.executable, *sys.argv)
 
     async def shutdownxxx(message):
@@ -84,13 +84,13 @@ class Misc:
             channel = await message.client(functions.channels.CreateChannelRequest(
                 title='NiceGrill Storage(DO NOT DELETE)',
                 about='Storage channel for your files'))
-            settings.delete("Asset")
-            settings.set_asset(int("-100" + str(channel.updates[1].channel_id)))
+            await settings.delete("Asset")
+            await settings.set_asset(int("-100" + str(channel.updates[1].channel_id)))
             await message.edit("<b>Added successfully</b>")
             return
         if not str(arg)[1:].isdigit() and arg != "make":
             await message.edit(f"<i>Either put an ID or type .asset make</i>")
             return
-        settings.delete("Asset")
-        settings.set_asset(int(arg))
+        await settings.delete("Asset")
+        await settings.set_asset(int(arg))
         await message.edit("<b>Added successfully</b>")

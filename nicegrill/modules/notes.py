@@ -25,7 +25,7 @@ class Notes:
 
     async def savexxx(message):
         args = utils.arg_split_with(message, ",")
-        storage = settings.check_asset()
+        storage = await settings.check_asset()
         media = None
         reply = await message.get_reply_message()
         if not args:
@@ -40,17 +40,17 @@ class Notes:
         chatid = message.chat_id
         if reply and reply.media and not reply.web_preview:
             media = (await message.client.send_message(storage, reply)).id
-        if nicedb.check_one("Notes", chatid, name):
-            nicedb.update("Notes", {"Chat": chatid, "Key": name},
+        if await nicedb.check_one("Notes", chatid, name):
+            await nicedb.update("Notes", {"Chat": chatid, "Key": name},
                 chatid, name, value, media)
             await message.edit("<b>Note succesfully updated</b>")
         else:
-            nicedb.add("Notes", chatid, name, value, media)
+            await nicedb.add("Notes", chatid, name, value, media)
             await message.edit("<b>Note succesfully saved</b>")
 
     async def notesxxx(message):
         chatid = message.chat_id
-        notes = nicedb.check("Notes", chatid)
+        notes = await nicedb.check("Notes", chatid)
         if not notes:
             await message.edit("<b>No notes found in this chat</b>")
             return
@@ -64,25 +64,25 @@ class Notes:
     async def clearxxx(message):
         args = utils.get_arg(message)
         chatid = message.chat_id
-        if not nicedb.check_one("Notes", chatid, args):
+        if not await nicedb.check_one("Notes", chatid, args):
             await message.edit("<b>No notes found in that name</b>")
             return
-        nicedb.delete_one("Notes", chatid, args)
+        await nicedb.delete_one("Notes", chatid, args)
         await message.edit("<b>Note deleted successfully</b>")
 
     async def clearallxxx(message):
         chatid = message.chat_id
-        if not nicedb.check("Notes", chatid):
+        if not await nicedb.check("Notes", chatid):
             await message.edit("<b>There are no notes in this chat</b>")
             return
-        nicedb.delete("Notes", chatid)
+        await nicedb.delete("Notes", chatid)
         await message.edit("<b>Notes cleared out successfully</b>")
 
     async def watchout(message):
         arg = message.text[1::]
         chatid = message.chat_id
-        storage = settings.check_asset()
-        note = nicedb.check_one("Notes", chatid, arg)
+        storage = await settings.check_asset()
+        note = await nicedb.check_one("Notes", chatid, arg)
         if not note:
             return
         fetch = None if not note["Media"] else await message.client.get_messages(entity=storage, ids=note["Media"])

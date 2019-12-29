@@ -41,8 +41,8 @@ class Loader:
         mod = utils.get_arg(message)
         await message.edit("<b>Module unloading...</b>")
         if oader.Loadmod.unload(mod, message.client):
-            if mod.lower() + ".py" in [n["Name"] for n in nicedb.check_dload()]:
-                nicedb.delete(mod.lower())
+            if mod.lower() + ".py" in [n["Name"] for n in await nicedb.check_dload()]:
+                await nicedb.delete(mod.lower())
             await message.edit("<b>Module unloaded</b>")
         else:
             Loader.logger.error("")
@@ -54,11 +54,11 @@ class Loader:
         urllib.request.urlretrieve(link, "./" + name)
         clssname = loader.Loadmod.load(name, message.client)
         if clssname:
-            if link in [l["URL"] for l in nicedb.check_dload()]:
-                nicedb.delete("Name")
-                nicedb.dload(clssname, link)
+            if link in [l["URL"] for l in await nicedb.check_dload()]:
+                await nicedb.delete("Name")
+                await nicedb.dload(clssname, link)
             else:
-                nicedb.dload(name, link)
+                await nicedb.dload(name, link)
             await message.edit("<b>Module loaded</b>")
         else:
             await message.edit("<b>Loading failed</b>")
