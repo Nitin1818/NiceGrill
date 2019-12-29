@@ -41,6 +41,12 @@ class Quote:
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
                 '.tmp/Roboto-Medium.ttf')
+            urllib.request.urlretrieve(
+                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
+                '.tmp/DroidSansMono.ttf')
+            urllib.request.urlretrieve(
+                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
+                '.tmp/Roboto-Italic.ttf')
 
         # Splitting text
         maxlength = 0
@@ -201,7 +207,7 @@ class Quote:
             for letter in line:
                 for offset, length in bold.items():
                     if index in range(offset - 1, length):
-                        font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed-Bold.ttf", 33, encoding="utf-16")
+                        font2 = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in italic.items():
                     if index in range(offset - 1, length):
@@ -245,7 +251,7 @@ class Quote:
 
     async def get_entity(msg):
         if not msg.entities:
-            return {0: 0}, {0: 0}, {0: 0}
+            return {0: 0}, {0: 0}, {0: 0}, {0: 0}
         entities = {}
         bold = {}
         italic = {}
