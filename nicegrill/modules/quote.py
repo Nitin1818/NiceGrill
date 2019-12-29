@@ -14,6 +14,7 @@
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
+from telethon.tl import types
 import emoji
 import textwrap
 import urllib
@@ -21,6 +22,7 @@ import logging
 import random
 import json
 import os
+import re
 
 COLORS = [
     "#F07975", "#F49F69", "#F9C84A", "#8CC56E", "#6CC7DC", "#80C1FA", "#BCB3F9", "#E181AC"]
@@ -114,13 +116,13 @@ class Quote:
             if reply.sticker:
                 sticker = await reply.download_media()
                 stimg = Image.open(sticker)
-                canvas = canvas.resize((stimg.width + pfpbg.width, stimg.height + 130))
+                canvas = canvas.resize((stimg.width + pfpbg.width, stimg.height + 160))
                 top = Image.new("RGBA", (200 + stimg.width, 300), (29, 29, 29, 255))
                 draw = ImageDraw.Draw(top)
                 await Quote.replied_user(draw, reptot, replied.message.replace("\n", " "), 20)
                 top = top.crop((135, 70, top.width, 300))
                 canvas.paste(pfpbg, (0,0))
-                canvas.paste(top, (pfpbg.width + 3, 0))
+                canvas.paste(top, (pfpbg.width + 10, 0))
                 canvas.paste(stimg, (pfpbg.width + 10, 140))
                 os.remove(sticker)
                 return True, canvas
@@ -191,16 +193,36 @@ class Quote:
 
         # Writing all separating emojis and regular texts
         x = pfpbg.width + 30
+        bold, mono, italic, link = await Quote.get_entity(reply)
+        mdlength = 0
+        index = 0
+        textcolor = "white"
         for line in text:
-            splitemoji = emoji.get_emoji_regexp().split(line)
-            for word in splitemoji:
-                if word in emoji.UNICODE_EMOJI:
-                    newemoji, mask = await Quote.emoji_fetch(word)
+            for letter in line:
+                for offset, length in bold.items():
+                    if index in range(offset - 1, length):
+                        font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed-Bold.ttf", 33, encoding="utf-16")
+                        textcolor = "white"
+                for offset, length in italic.items():
+                    if index in range(offset - 1, length):
+                        font2 = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
+                        textcolor = "white"
+                for offset, length in mono.items():
+                    if index in range(offset - 1, length):
+                        font2 = ImageFont.truetype(".tmp/DroidSansMono.ttf", 29, encoding="utf-16")
+                        textcolor = "white"
+                for offset, length in link.items():
+                    if index in range(offset - 1, length):
+                        font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 29, encoding="utf-16")
+                        textcolor = "#898989"
+                if letter in emoji.UNICODE_EMOJI:
+                    newemoji, mask = await Quote.emoji_fetch(letter)
                     canvas.paste(newemoji, (x, y - 2), mask)
                     x += 45
                 else:
-                    draw.text((x, y), word, font=font2, fill='white')
-                    x += font2.getsize(word)[0]
+                    draw.text((x, y), letter, font=font2, fill=textcolor)
+                    x += font2.getsize(letter)[0]
+                index += 1
             y += 40
             x = pfpbg.width + 30
         return True, canvas
@@ -220,6 +242,29 @@ class Quote:
         bottom = ImageOps.flip(top)
 
         return top, middle, bottom
+
+    async def get_entity(msg):
+        if not msg.entities:
+            return {0: 0}, {0: 0}, {0: 0}
+        entities = {}
+        bold = {}
+        italic = {}
+        mono = {}
+        link = {}
+        for entity in msg.entities:
+            if isinstance(entity, types.MessageEntityBold):
+                bold[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityItalic):
+                italic[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityCode):
+                mono[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityUrl):
+                link[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityTextUrl):
+                link[entity.offset] = entity.offset + entity.length
+            elif isinstance(entity, types.MessageEntityMention):
+                link[entity.offset] = entity.offset + entity.length
+        return bold, mono, italic, link
 
     async def doctype(name, size, type, canvas):
         font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
@@ -265,7 +310,7 @@ class Quote:
 
     async def replied_user(draw, tot, text, maxlength):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
-        textfont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 32)
+        textfont = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 32)
         text = text[:maxlength] + ".." if len(text) > maxlength else text
         draw.line((165, 90, 165, 170), width=5, fill="white")
         draw.text((180, 86), tot, font=namefont, fill="#888888")
@@ -278,7 +323,7 @@ class Quote:
         msg = reply.message
         repliedreply = await reply.get_reply_message()
         user = (
-            await message.client.get_entity(reply.fwd_from.from_id) if reply.fwd_from
+            await message.client.get_entity(reply.forward.sender) if reply.fwd_from
             else reply.sender)
         res, canvas = await Quote.process(msg, user, message.client, reply, repliedreply)
         if not res:
