@@ -36,8 +36,11 @@ class Dogbin:
                 with open(doc, "r") as file:
                     context = file.read().encode()
                 os.remove(doc)
-            else:
+            elif repmsg.message:
                 context = repmsg.message.encode()
+            else:
+                await message.edit("<i>Input or reply to some text to paste</i>")
+                return
             paste = post(f"{URL}documents", data=context).json()
         elif msg:
             await message.edit("<i>Pasting..</i>")
