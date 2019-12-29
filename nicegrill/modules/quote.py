@@ -42,10 +42,10 @@ class Quote:
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
                 '.tmp/Roboto-Medium.ttf')
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
+                'https://github.com/erenmetesar/modules-repo/raw/master/DroidSansMono.ttf',
                 '.tmp/DroidSansMono.ttf')
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
+                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf',
                 '.tmp/Roboto-Italic.ttf')
 
         # Splitting text
@@ -250,13 +250,12 @@ class Quote:
         return top, middle, bottom
 
     async def get_entity(msg):
+        bold = {0: 0}
+        italic = {0: 0}
+        mono = {0: 0}
+        link = {0: 0}
         if not msg.entities:
-            return {0: 0}, {0: 0}, {0: 0}, {0: 0}
-        entities = {}
-        bold = {}
-        italic = {}
-        mono = {}
-        link = {}
+            return bold, mono, italic, link
         for entity in msg.entities:
             if isinstance(entity, types.MessageEntityBold):
                 bold[entity.offset] = entity.offset + entity.length
@@ -301,8 +300,12 @@ class Quote:
     async def emoji_fetch(emoji):
         emojis = json.loads(
             urllib.request.urlopen("https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt").read().decode())
-        img = emojis[emoji]
-        return await Quote.transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
+        if emoji in emojis:
+            img = emojis[emoji]
+            return await Quote.transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
+        else:
+            img = emojis["⛔"]
+            return await Quote.transparent(urllib.request.urlretrieve(img, ".tmp/emoji.png")[0])
         
     async def transparent(emoji):
         emoji = Image.open(emoji).convert("RGBA")
