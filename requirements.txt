@@ -6,6 +6,7 @@ mtranslate
 urbandict
 pygdrive3fixed
 emoji
+pytube
 google-api-python-client
 lxml
 search-engine_parser

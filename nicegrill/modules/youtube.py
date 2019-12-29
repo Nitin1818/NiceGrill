@@ -14,6 +14,7 @@
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
 from youtube_search import YoutubeSearch
+from pytube import YouTube as YT, exceptions
 from nicegrill import utils
 import os
 import json
@@ -71,3 +72,15 @@ class YouTube:
             await message.client.send_file(message.chat_id, file, reply_to=reply.id if reply else None)
             await message.delete()
             os.remove(file)
+
+    async def ytvidxxx(message):
+        url = utils.get_arg(message)
+        try:
+            await message.edit("<i>Downloading..</i>")
+            vid = YT(url).streams.first().download()
+            await message.edit("<i>Uploading..</i>")
+            await message.client.send_file(message.chat_id, vid, supports_streaming=True
+            await message.delete()
+            os.remove(vid)
+        except exceptions.RegexMatchError:
+            await message.edit("<i>Link might be wrong cuz nothin' found</i>")
