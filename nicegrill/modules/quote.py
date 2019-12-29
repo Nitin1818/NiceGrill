@@ -206,19 +206,19 @@ class Quote:
         for line in text:
             for letter in line:
                 for offset, length in bold.items():
-                    if index in range(offset - 1, length):
+                    if index in range(offset - 2, length):
                         font2 = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in italic.items():
-                    if index in range(offset - 1, length):
+                    if index in range(offset - 2, length):
                         font2 = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in mono.items():
-                    if index in range(offset - 1, length):
+                    if index in range(offset - 2, length):
                         font2 = ImageFont.truetype(".tmp/DroidSansMono.ttf", 29, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in link.items():
-                    if index in range(offset - 1, length):
+                    if index in range(offset - 2, length):
                         font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 29, encoding="utf-16")
                         textcolor = "#898989"
                 if letter in emoji.UNICODE_EMOJI:
