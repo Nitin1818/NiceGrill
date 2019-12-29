@@ -79,7 +79,7 @@ class YouTube:
             await message.edit("<i>Downloading..</i>")
             vid = YT(url).streams.first().download()
             await message.edit("<i>Uploading..</i>")
-            await message.client.send_file(message.chat_id, vid, supports_streaming=True
+            await message.client.send_file(message.chat_id, vid, supports_streaming=True)
             await message.delete()
             os.remove(vid)
         except exceptions.RegexMatchError:
