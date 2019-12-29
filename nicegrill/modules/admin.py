@@ -294,7 +294,6 @@ class Admin:
             await nicedb.add_user(user, False, False, True, message.chat_id)
         else:
             await nicedb.update_user({"User": user}, {"GBan": True})
-        add(command)
         await message.edit("<b>Globally banned</b>")
 
     async def ungbanxxx(message):
