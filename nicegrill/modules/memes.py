@@ -27,7 +27,7 @@ class Memes:
     async def mockxxx(message):
         msg = list(utils.get_arg(message))
         if message.is_reply:
-            msg = list(await message.get_reply_message()).text)
+            msg = list((await message.get_reply_message()).text)
         if not msg:
             await message.edit("<i>Give me a text to mockify</i>")
             return
