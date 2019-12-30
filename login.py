@@ -13,13 +13,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
-from database import mongo
 from telethon.sync import TelegramClient, events
 from telethon.sessions import StringSession
 from nicegrill.main import Main
 from nicegrill.modules import _init
 from config import API_HASH, API_ID, SESSION, MONGO_URI
-import functools
 import asyncio
 import os
 
@@ -41,14 +39,12 @@ if not MONGO_URI:
 
 with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
     client.parse_mode = 'html'
-    _init.loads()
+    asyncio.get_event_loop().create_task(_init.loads())
     asyncio.get_event_loop().create_task(_init.filestorage(client))
-    Main.read(client)
-    client.add_event_handler(
-        functools.partial(Main.outgoing),
+    asyncio.get_event_loop().create_task(Main.read(client))
+    client.add_event_handler((Main.outgoing,
         events.NewMessage(outgoing=True, forwards=False))
-    client.add_event_handler(
-        functools.partial(Main.outgoing),
+    client.add_event_handler(Main.outgoing,
         events.MessageEdited(outgoing=True, forwards=False))
     print(f"Logged in as {(client.get_me()).first_name}")
     client.run_until_disconnected()
