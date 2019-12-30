@@ -25,9 +25,12 @@ class Memes:
     logger.setLevel(logging.ERROR)
 
     async def mockxxx(message):
-        msg = ",".join((utils.get_arg(message))).split(",")
+        msg = list(utils.get_arg(message))
         if message.is_reply:
-            msg = ",".join(((await message.get_reply_message()).text)).split(",")
+            msg = list(await message.get_reply_message()).text)
+        if not msg:
+            await message.edit("<i>Give me a text to mockify</i>")
+            return
         for chr in range(len(msg)):
             if random.randint(0, 1) == 1:
                 msg[chr] = msg[chr].capitalize()
@@ -40,13 +43,6 @@ class Memes:
             await message.edit("<i>Reply to a message first</i>")
             return
         await message.edit(f"<i>This person is {random.randint(0,101)}% gay</i>")
-
-    async def ratexxx(message):
-        if not message.is_reply:
-            await message.edit("<i>Reply to a message first</i>")
-            return
-        await message.edit(f"<i>This person is {random.randint(0,101)}% gay</i>")
-
 
     async def watchout(message):
         if message.text.lower() == "yey":
