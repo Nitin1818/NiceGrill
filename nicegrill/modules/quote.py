@@ -38,8 +38,8 @@ class Quote:
         if not os.path.isdir(".tmp"):
             os.mkdir(".tmp", 0o755)
             urllib.request.urlretrieve(
-                'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed.ttf',
-                '.tmp/DejaVuSansCondensed.ttf')
+                'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Regular.ttf',
+                '.tmp/Roboto-Regular.ttf')
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf',
                 '.tmp/Quivira.otf')
@@ -53,25 +53,37 @@ class Quote:
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Italic.ttf',
                 '.tmp/Roboto-Italic.ttf')
 
+        # Importıng fonts and gettings the size of text
+        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 43, encoding="utf-16")
+        font2 = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 33, encoding="utf-16")
+        mono = ImageFont.truetype(".tmp/DroidSansMono.ttf", 30, encoding="utf-16")
+        italic = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
+
         # Splitting text
         maxlength = 0
+        width = 0
         text = []
         for line in msg.split("\n"):
             length = len(line)
             if length > 43:
                 text += textwrap.wrap(line, 43)
+                maxlength = 43
+                if width < font2.getsize(line[:43])[0] + 60:
+                    if "MessageEntityCode" in str(reply.entities):
+                        width = mono.getsize(line[:43])[0] + 100
+                    else:
+                        width = font2.getsize(line[:43])[0] + 100
                 next
             else:
                 text.append(line + "\n")
-            if length > maxlength:
-                maxlength = length
-                if length > 43:
-                    maxlength = 43
+                if width < font2.getsize(line[:43])[0] + 60:
+                    if "MessageEntityCode" in str(reply.entities):
+                        width = mono.getsize(line[:43])[0] + 100
+                    else:
+                        width = font2.getsize(line[:43])[0] + 100
+                if maxlength < length:
+                    maxlength = length
 
-        # Importıng fonts and gettings the size of text
-        font = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 43, encoding="utf-16")
-        font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 33, encoding="utf-16")
-        width, height = font2.getsize("o"*maxlength)
 
         # Get user name
         lname = "" if not user.last_name else user.last_name
@@ -89,7 +101,7 @@ class Quote:
         pfpbg = Image.new("RGBA", (125, 600), (0, 0, 0, 0))
 
         # Draw Template
-        top, middle, bottom = await Quote.drawer(width + 30, height)
+        top, middle, bottom = await Quote.drawer(width, height)
         # Profile Photo Check and Fetch
         yes = False
         color = random.choice(COLORS)
@@ -114,7 +126,7 @@ class Quote:
 
         # Creating a big canvas to gather all the elements
         canvassize = (
-            middle.width + pfpbg.width, top.height + middle.height + bottom.height)
+            middle.width + 20 + pfpbg.width, top.height + middle.height + bottom.height)
         canvas = Image.new('RGBA', canvassize)
         draw = ImageDraw.Draw(canvas)
 
@@ -183,7 +195,7 @@ class Quote:
             canvas.paste(middle, (pfpbg.width, top.height))
             canvas.paste(bottom, (pfpbg.width, top.height + middle.height))
             canvas = await Quote.doctype(docname, docsize, doctype, canvas)
-            y = 80 if maxlength > 0 else 0
+            y = 80 if text else 0
         else:
             canvas.paste(pfpbg, (0, 0))
             canvas.paste(top, (pfpbg.width, 0))
@@ -202,7 +214,7 @@ class Quote:
             else:
                 if not await Quote.fontTest(letter):
                     draw.text((space, 20), letter, font=namefallback, fill=color)
-                    space += namefallback.getsize(letter)[0] + 2
+                    space += namefallback.getsize(letter)[0]
                 else:
                     draw.text((space, 20), letter, font=font, fill=color)
                     space += font.getsize(letter)[0]
@@ -212,38 +224,41 @@ class Quote:
         bold, mono, italic, link = await Quote.get_entity(reply)
         mdlength = 0
         index = 0
+        emojicount = 0
         textfallback = ImageFont.truetype(".tmp/Quivira.otf", 33, encoding="utf-16")
         textcolor = "white"
         for line in text:
             for letter in line:
+                index = msg.find(letter) if emojicount == 0 else msg.find(letter) + emojicount
                 for offset, length in bold.items():
-                    if index in range(offset - 2, length):
+                    if index in range(offset, length):
                         font2 = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in italic.items():
-                    if index in range(offset - 2, length):
+                    if index in range(offset, length):
                         font2 = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in mono.items():
-                    if index in range(offset - 2, length):
-                        font2 = ImageFont.truetype(".tmp/DroidSansMono.ttf", 29, encoding="utf-16")
+                    if index in range(offset, length):
+                        font2 = ImageFont.truetype(".tmp/DroidSansMono.ttf", 30, encoding="utf-16")
                         textcolor = "white"
                 for offset, length in link.items():
-                    if index in range(offset - 2, length):
-                        font2 = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 29, encoding="utf-16")
+                    if index in range(offset, length):
+                        font2 = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 30, encoding="utf-16")
                         textcolor = "#898989"
                 if letter in emoji.UNICODE_EMOJI:
                     newemoji, mask = await Quote.emoji_fetch(letter)
                     canvas.paste(newemoji, (x, y - 2), mask)
                     x += 45
+                    emojicount += 1
                 else:
                     if not await Quote.fontTest(letter):
                         draw.text((x, y), letter, font=textfallback, fill=textcolor)
-                        x += textfallback.getsize(letter)[0] + 2
+                        x += textfallback.getsize(letter)[0]
                     else:
                         draw.text((x, y), letter, font=font2, fill=textcolor)
                         x += font2.getsize(letter)[0]
-                index += 1
+                msg = msg.replace(letter, "¶", 1)
             y += 40
             x = pfpbg.width + 30
         return True, canvas
@@ -314,7 +329,7 @@ class Quote:
         color = random.choice(COLORS)
         pen.ellipse((0, 0, 105, 105), fill=color)
         letter = "" if not tot else tot[0]
-        font = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 60)
+        font = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 60)
         pen.text((32, 17), letter, font=font, fill="white")
         return pfp, color
 
@@ -341,8 +356,9 @@ class Quote:
     async def replied_user(draw, tot, text, maxlength):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         namefallback= ImageFont.truetype(".tmp/Quivira.otf", 38)
-        textfont = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 32)
+        textfont = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 32)
         textfallback = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
+        maxlength = maxlength + 10 if maxlength < 10 else maxlength
         text = text[:maxlength] + ".." if len(text) > maxlength else text
         draw.line((165, 90, 165, 170), width=5, fill="white")
         space = 0
