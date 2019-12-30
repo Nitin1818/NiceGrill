@@ -18,7 +18,7 @@ from nicegrill import utils
 import logging
 
 
-class settings:
+class Settings:
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
