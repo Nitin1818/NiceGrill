@@ -53,8 +53,9 @@ them later. Check your storage channel."""
     async def watchout(message):
         if not await nicedb.check_afk():
             return
-        msg = await nicedb.check_afk()["Message"]
-        then = datetime.strptime(await nicedb.check_afk()["AFKTime"], '%Y-%m-%d %H:%M:%S.%f')
+        getafk = await nicedb.check_afk()
+        msg = getafk["Message"]
+        then = datetime.strptime(getafk["AFKTime"], '%Y-%m-%d %H:%M:%S.%f')
         if getattr(message, "message") and message.mentioned and await settings.check_asset():
             storage = await message.client.get_entity(await settings.check_asset())
             if await nicedb.check_godark():
