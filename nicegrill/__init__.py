@@ -42,7 +42,7 @@ with TelegramClient(StringSession(SESSION), API_ID, API_HASH) as client:
     asyncio.get_event_loop().create_task(_init.loads())
     asyncio.get_event_loop().create_task(_init.filestorage(client))
     asyncio.get_event_loop().create_task(Main.read(client))
-    client.add_event_handler((Main.outgoing,
+    client.add_event_handler(Main.outgoing,
         events.NewMessage(outgoing=True, forwards=False))
     client.add_event_handler(Main.outgoing,
         events.MessageEdited(outgoing=True, forwards=False))
