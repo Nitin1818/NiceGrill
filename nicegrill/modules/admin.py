@@ -260,7 +260,6 @@ class Admin:
             return
         try:
             await message.client(EditBannedRequest(chat, user, UNBAN))
-
             await message.edit("<b>Alright, fine..All is forgiven, unbanned..</b>")
         except TypeError:
             await message.edit("<b>You need to be in a chat to do this</b>")
@@ -290,6 +289,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
+        try:
+            await message.client(EditBannedRequest(message.chat_id, user, BAN))
+        except TypeError:
+            pass
         if not await nicedb.check_user(user):
             await nicedb.add_user(user, False, False, True, message.chat_id)
         else:
@@ -304,6 +307,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
+        try:
+            await message.client(EditBannedRequest(message.chat_id, user, UNBAN))
+        except TypeError:
+            pass
         if not await nicedb.check_user(user):
             await nicedb.add_user(user, False, False, False, message.chat_id)
         else:
@@ -319,6 +326,10 @@ class Admin:
         except ValueError:
             await message.edit("<b>No user found in that name</b>")
             return
+        try:
+            await message.client(EditBannedRequest(message.chat_id, user, MUTE))
+        except TypeError:
+            pass
         if not await nicedb.check_user(user):
             await nicedb.add_user(user, True, True, False, message.chat_id)
         else:
@@ -334,6 +345,10 @@ class Admin:
         except TypeError:
             await message.edit("<b>No user found in that name</b>")
             return
+        try:
+            await message.client(EditBannedRequest(message.chat_id, user, UNMUTE))
+        except TypeError:
+            pass
         if not await nicedb.check_user(user):
             await nicedb.add_user(user, False, False, False, message.chat_id)
         else:
