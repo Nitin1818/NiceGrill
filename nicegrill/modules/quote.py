@@ -58,6 +58,7 @@ class Quote:
         font2 = ImageFont.truetype(".tmp/Roboto-Regular.ttf", 33, encoding="utf-16")
         mono = ImageFont.truetype(".tmp/DroidSansMono.ttf", 30, encoding="utf-16")
         italic = ImageFont.truetype(".tmp/Roboto-Italic.ttf", 33, encoding="utf-16")
+        fallback = ImageFont.truetype(".tmp/Quivira.otf", 43, encoding="utf-16")
 
         # Splitting text
         maxlength = 0
@@ -89,7 +90,7 @@ class Quote:
         lname = "" if not user.last_name else user.last_name
         tot = user.first_name + " " + lname
 
-        namewidth = font.getsize(tot)[0]
+        namewidth = fallback.getsize(tot)[0] + 10
 
         if namewidth > width:
             width = namewidth + 30
