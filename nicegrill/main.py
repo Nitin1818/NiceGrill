@@ -14,7 +14,6 @@
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-import functools
 import asyncio
 from telethon import events
 from database import settingsdb as settings
@@ -68,12 +67,8 @@ class Main:
     async def read(client):
         watchouts = _init.watchouts
         for watchout in watchouts:
-            client.add_event_handler(
-                functools.partial(watchout),
-                events.NewMessage(
-                    outgoing=True,
-                    incoming=True,
-                    forwards=False))
+            client.add_event_handler(watchout,
+                events.NewMessage(outgoing=True, incoming=True))
         await Main.restart(client)
 
     async def restart(client):
