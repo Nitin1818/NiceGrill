@@ -15,6 +15,8 @@
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon.tl import types
+from fontTools.ttLib import TTFont 
+from fontTools.unicode import Unicode 
 import emoji
 import textwrap
 import urllib
@@ -38,6 +40,9 @@ class Quote:
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/DejaVuSansCondensed.ttf',
                 '.tmp/DejaVuSansCondensed.ttf')
+            urllib.request.urlretrieve(
+                'https://github.com/erenmetesar/modules-repo/raw/master/Quivira.otf',
+                '.tmp/Quivira.otf')
             urllib.request.urlretrieve(
                 'https://github.com/erenmetesar/modules-repo/raw/master/Roboto-Medium.ttf',
                 '.tmp/Roboto-Medium.ttf')
@@ -188,20 +193,26 @@ class Quote:
 
         # Writing User's Name
         space = pfpbg.width + 30
+        namefallback = ImageFont.truetype(".tmp/Quivira.otf", 43, encoding="utf-16")
         for letter in tot:
             if letter in emoji.UNICODE_EMOJI:
                 newemoji, mask = await Quote.emoji_fetch(letter)
                 canvas.paste(newemoji, (space, 24), mask)
                 space += 40
             else:
-                draw.text((space, 20), letter, font=font, fill=color)
-                space += font.getsize(letter)[0]
+                if not await Quote.fontTest(letter):
+                    draw.text((space, 20), letter, font=namefallback, fill=color)
+                    space += namefallback.getsize(letter)[0] + 2
+                else:
+                    draw.text((space, 20), letter, font=font, fill=color)
+                    space += font.getsize(letter)[0]
 
         # Writing all separating emojis and regular texts
         x = pfpbg.width + 30
         bold, mono, italic, link = await Quote.get_entity(reply)
         mdlength = 0
         index = 0
+        textfallback = ImageFont.truetype(".tmp/Quivira.otf", 33, encoding="utf-16")
         textcolor = "white"
         for line in text:
             for letter in line:
@@ -226,8 +237,12 @@ class Quote:
                     canvas.paste(newemoji, (x, y - 2), mask)
                     x += 45
                 else:
-                    draw.text((x, y), letter, font=font2, fill=textcolor)
-                    x += font2.getsize(letter)[0]
+                    if not await Quote.fontTest(letter):
+                        draw.text((x, y), letter, font=textfallback, fill=textcolor)
+                        x += textfallback.getsize(letter)[0] + 2
+                    else:
+                        draw.text((x, y), letter, font=font2, fill=textcolor)
+                        x += font2.getsize(letter)[0]
                 index += 1
             y += 40
             x = pfpbg.width + 30
@@ -248,6 +263,12 @@ class Quote:
         bottom = ImageOps.flip(top)
 
         return top, middle, bottom
+
+    async def fontTest(letter):
+        test = TTFont(".tmp/Roboto-Medium.ttf")
+        for table in test['cmap'].tables:
+            if ord(letter) in table.cmap.keys():
+                return True
 
     async def get_entity(msg):
         bold = {0: 0}
@@ -319,11 +340,27 @@ class Quote:
 
     async def replied_user(draw, tot, text, maxlength):
         namefont = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
+        namefallback= ImageFont.truetype(".tmp/Quivira.otf", 38)
         textfont = ImageFont.truetype(".tmp/DejaVuSansCondensed.ttf", 32)
+        textfallback = ImageFont.truetype(".tmp/Roboto-Medium.ttf", 38)
         text = text[:maxlength] + ".." if len(text) > maxlength else text
         draw.line((165, 90, 165, 170), width=5, fill="white")
-        draw.text((180, 86), tot, font=namefont, fill="#888888")
-        draw.text((180, 132), text, font=textfont, fill="white")
+        space = 0
+        for letter in tot:
+            if not await Quote.fontTest(letter):
+                draw.text((180 + space, 86), letter, font=namefallback, fill="#888888")
+                space += namefallback.getsize(letter)[0]
+            else:
+                draw.text((180 + space, 86), letter, font=namefont, fill="#888888")
+                space += namefont.getsize(letter)[0]
+        space = 0
+        for letter in text:
+            if not await Quote.fontTest(letter):
+                draw.text((180 + space, 132), letter, font=textfallback, fill="#888888")
+                space += textfallback.getsize(letter)[0]
+            else:
+                draw.text((180 + space, 132), letter, font=textfont, fill="white")
+                space += textfont.getsize(letter)[0]
 
     async def quotexxx(message):
         """Converts the replied message into an independent sticker"""
